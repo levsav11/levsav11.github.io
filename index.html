@@ -6,242 +6,143 @@
     <title>Гардероб</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root {
-            --bg: #f2f4f7;
-            --card: #ffffff;
-            --text: #111827;
-            --subtext: #6b7280;
-            --accent: #2563eb;
-            --border: #e5e7eb;
-            --danger: #ef4444;
-            --success: #10b981;
-        }
+        :root { --bg: #f2f4f7; --card: #ffffff; --text: #111827; --subtext: #6b7280; --accent: #2563eb; --border: #e5e7eb; --danger: #ef4444; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg); color: var(--text); padding-bottom: 90px;
-        }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); padding-bottom: 90px; }
 
-        /* Шапка, поиск и фильтр */
-        .header {
-            background: var(--card); padding: 12px 14px 8px;
-            position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-        }
+        .header { background: var(--card); padding: 12px 14px 8px; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
         .search-row { display: flex; gap: 8px; margin-bottom: 10px; }
-        .search-input {
-            flex: 1; padding: 9px 12px; border: 1px solid var(--border);
-            border-radius: 10px; font-size: 14px; background: #f9fafb; outline: none;
-        }
-        .filter-select {
-            padding: 9px 10px; border: 1px solid var(--border);
-            border-radius: 10px; font-size: 13px; background: #f9fafb; outline: none;
-        }
-
-        /* Вкладки групп */
+        .search-input, .filter-select { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; background: #f9fafb; outline: none; }
+        
         .tabs { display: flex; gap: 6px; }
-        .tab {
-            flex: 1; text-align: center; padding: 9px 4px; font-weight: 600; font-size: 13px;
-            color: var(--subtext); border-radius: 8px; cursor: pointer; transition: 0.15s;
-            background: #f3f4f6;
-        }
+        .tab { flex: 1; text-align: center; padding: 9px 4px; font-weight: 600; font-size: 13px; color: var(--subtext); border-radius: 8px; cursor: pointer; background: #f3f4f6; }
         .tab.active { background: var(--accent); color: #fff; }
-        .badge-count {
-            display: inline-block; padding: 1px 6px; border-radius: 10px;
-            font-size: 11px; margin-left: 4px; background: rgba(0,0,0,0.12);
-        }
+        .badge-count { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px; background: rgba(0,0,0,0.12); }
 
-        /* Панель группового действия */
-        .bulk-bar {
-            display: none; justify-content: space-between; align-items: center;
-            padding: 10px 14px; background: #eff6ff; border-bottom: 1px solid #bfdbfe;
-            font-size: 13px; font-weight: 600; color: #1e40af;
-        }
+        .bulk-bar { display: none; justify-content: space-between; align-items: center; padding: 10px 14px; background: #eff6ff; border-bottom: 1px solid #bfdbfe; font-size: 13px; font-weight: 600; color: #1e40af; }
         .bulk-bar.visible { display: flex; }
-        .bulk-btn {
-            background: var(--accent); color: #fff; border: none; padding: 7px 12px;
-            border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer;
-        }
+        .bulk-btn { background: var(--accent); color: #fff; border: none; padding: 7px 12px; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; }
 
-        /* Сетка карточек */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; }
-        .card {
-            background: var(--card); border-radius: 14px; overflow: hidden;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column;
-            border: 1px solid var(--border);
-        }
+        .card { background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 1px solid var(--border); }
         .img-wrap { position: relative; width: 100%; height: 185px; background: #e5e7eb; cursor: pointer; }
         .img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .cat-pill {
-            position: absolute; top: 8px; left: 8px; background: rgba(17,24,39,0.72);
-            backdrop-filter: blur(4px); color: #fff; padding: 3px 8px;
-            border-radius: 6px; font-size: 11px; font-weight: 500;
-        }
-
+        .cat-pill { position: absolute; top: 8px; left: 8px; background: rgba(17,24,39,0.72); backdrop-filter: blur(4px); color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 500; }
         .card-body { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; cursor: pointer; }
         .card-title { font-weight: 700; font-size: 14px; line-height: 1.25; color: var(--text); }
         .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
         .color-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.2); display: inline-block; }
-        .card-notes { font-size: 11px; color: #4b5563; background: #f3f4f6; padding: 4px 6px; border-radius: 6px; margin-top: 2px; }
-
-        /* Кнопки быстрого перемещения между группами */
+        
         .move-bar { display: flex; border-top: 1px solid var(--border); background: #f9fafb; }
-        .move-btn {
-            flex: 1; padding: 10px 4px; font-size: 11px; font-weight: 700;
-            border: none; background: transparent; cursor: pointer; color: var(--accent);
-            border-right: 1px solid var(--border);
-        }
+        .move-btn { flex: 1; padding: 10px 4px; font-size: 11px; font-weight: 700; border: none; background: transparent; cursor: pointer; color: var(--accent); border-right: 1px solid var(--border); }
         .move-btn:last-child { border-right: none; }
-        .move-btn:active { background: #e5e7eb; }
 
-        /* Плавающая кнопка + */
-        .fab {
-            position: fixed; bottom: 20px; right: 20px; width: 58px; height: 58px;
-            border-radius: 29px; background: var(--accent); color: #fff;
-            font-size: 32px; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 6px 16px rgba(37,99,235,0.4); border: none; z-index: 90; cursor: pointer;
-        }
+        .fab { position: fixed; bottom: 20px; right: 20px; width: 58px; height: 58px; border-radius: 29px; background: var(--accent); color: #fff; font-size: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(37,99,235,0.4); border: none; z-index: 90; cursor: pointer; }
 
-        /* Модальное окно редактирования объекта */
-        .modal {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55);
-            z-index: 200; align-items: flex-end; justify-content: center;
-        }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; align-items: flex-end; justify-content: center; }
         .modal.active { display: flex; }
-        .modal-sheet {
-            background: var(--card); width: 100%; max-width: 500px; max-height: 92vh;
-            border-radius: 20px 20px 0 0; padding: 18px; overflow-y: auto;
-            display: flex; flex-direction: column; gap: 12px;
-        }
+        .modal-sheet { background: var(--card); width: 100%; max-width: 500px; max-height: 92vh; border-radius: 20px 20px 0 0; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; }
         .modal-header h3 { margin: 0; font-size: 18px; }
         .close-x { background: none; border: none; font-size: 22px; color: var(--subtext); cursor: pointer; }
-
-        .photo-preview-box {
-            width: 100%; height: 220px; border-radius: 12px; background: #f3f4f6;
-            border: 2px dashed var(--border); display: flex; align-items: center;
-            justify-content: center; overflow: hidden; position: relative; cursor: pointer;
-        }
+        
+        .photo-preview-box { width: 100%; height: 220px; border-radius: 12px; background: #f3f4f6; border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: pointer; }
         .photo-preview-box img { width: 100%; height: 100%; object-fit: contain; background: #111; }
         .photo-placeholder { color: var(--subtext); font-size: 14px; font-weight: 500; text-align: center; }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .field { display: flex; flex-direction: column; gap: 4px; }
         .field label { font-size: 11px; font-weight: 700; color: var(--subtext); text-transform: uppercase; }
-        .field input, .field select {
-            padding: 11px; border: 1px solid var(--border); border-radius: 9px;
-            font-size: 15px; background: #f9fafb; outline: none;
-        }
+        .field input, .field select { padding: 11px; border: 1px solid var(--border); border-radius: 9px; font-size: 15px; background: #f9fafb; outline: none; width: 100%; }
 
         .modal-actions { display: flex; gap: 10px; margin-top: 6px; }
-        .btn-primary {
-            flex: 2; padding: 13px; background: var(--accent); color: #fff;
-            border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer;
-        }
-        .btn-danger {
-            flex: 1; padding: 13px; background: #fee2e2; color: var(--danger);
-            border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer;
-        }
+        .btn-primary { flex: 2; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
+        .btn-danger { flex: 1; padding: 13px; background: #fee2e2; color: var(--danger); border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
 
-        .sync-indicator {
-            position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.8);
-            color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px;
-            display: none; z-index: 100;
-        }
+        .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.8); color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; }
         .empty { grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: var(--subtext); }
+
+        /* Экран блокировки */
+        #authScreen { display: none; position: fixed; inset: 0; background: #fff; z-index: 999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        #authScreen h2 { margin-bottom: 5px; color: var(--text); }
+        #authScreen p { color: var(--subtext); margin-bottom: 20px; }
+        .id-box { background: #f3f4f6; padding: 15px; border-radius: 12px; font-size: 24px; font-weight: bold; color: var(--accent); letter-spacing: 2px; user-select: all; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="search-row">
-            <input type="text" id="searchInput" class="search-input" placeholder="Поиск по названию, бренду, цвету..." oninput="render()">
-            <select id="catFilter" class="filter-select" onchange="render()">
-                <option value="ALL">Все категории</option>
-                <option value="Верх">Верх / Худи</option>
-                <option value="Футболки">Футболки</option>
-                <option value="Штаны">Штаны / Джинсы</option>
-                <option value="Белье/Носки">Белье / Носки</option>
-                <option value="Другое">Другое</option>
-            </select>
-        </div>
-        <div class="tabs">
-            <div class="tab active" data-tab="IN_CLOSET" onclick="setTab('IN_CLOSET')">
-                Шкаф <span class="badge-count" id="cnt-IN_CLOSET">0</span>
-            </div>
-            <div class="tab" data-tab="WASHING" onclick="setTab('WASHING')">
-                Стирка <span class="badge-count" id="cnt-WASHING">0</span>
-            </div>
-            <div class="tab" data-tab="DRYING" onclick="setTab('DRYING')">
-                Сушилка <span class="badge-count" id="cnt-DRYING">0</span>
-            </div>
-        </div>
+    <!-- ЭКРАН БЛОКИРОВКИ -->
+    <div id="authScreen">
+        <h2>🔒 Доступ закрыт</h2>
+        <p>Сервер не узнает тебя. Чтобы доказать, что это твой гардероб, скопируй свой ID и вставь его в переменную OWNER_TG_ID в Google Скрипте.</p>
+        <div class="id-box" id="displayId">ОШИБКА</div>
     </div>
 
-    <div id="bulkBar" class="bulk-bar">
-        <span id="bulkText">Действие с группой</span>
-        <button id="bulkBtn" class="bulk-btn" onclick="executeBulkAction()">Выполнить</button>
+    <!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
+    <div id="appContent">
+        <div class="header">
+            <div class="search-row">
+                <input type="text" id="searchInput" class="search-input" placeholder="Поиск..." oninput="render()">
+                <select id="catFilter" class="filter-select" onchange="render()">
+                    <!-- Опции генерируются динамически -->
+                </select>
+            </div>
+            <div class="tabs">
+                <div class="tab active" data-tab="IN_CLOSET" onclick="setTab('IN_CLOSET')">Шкаф <span class="badge-count" id="cnt-IN_CLOSET">0</span></div>
+                <div class="tab" data-tab="WASHING" onclick="setTab('WASHING')">Стирка <span class="badge-count" id="cnt-WASHING">0</span></div>
+                <div class="tab" data-tab="DRYING" onclick="setTab('DRYING')">Сушилка <span class="badge-count" id="cnt-DRYING">0</span></div>
+            </div>
+        </div>
+
+        <div id="bulkBar" class="bulk-bar"><span id="bulkText">Действие</span><button id="bulkBtn" class="bulk-btn" onclick="executeBulkAction()">Выполнить</button></div>
+        <div id="grid" class="grid"></div>
+        <button class="fab" onclick="openModal()">+</button>
+        <div id="syncStatus" class="sync-indicator">Синхронизация...</div>
     </div>
 
-    <div id="grid" class="grid"></div>
-
-    <button class="fab" onclick="openModal()">+</button>
-    <div id="syncStatus" class="sync-indicator">Синхронизация...</div>
-
-    <!-- Модальное окно создания и редактирования свойств -->
+    <!-- Модальное окно (Карточка вещи) -->
     <div class="modal" id="itemModal" onclick="if(event.target===this) closeModal()">
         <div class="modal-sheet">
-            <div class="modal-header">
-                <h3 id="modalTitle">Свойства вещи</h3>
-                <button class="close-x" onclick="closeModal()">✕</button>
-            </div>
+            <div class="modal-header"><h3 id="modalTitle">Свойства вещи</h3><button class="close-x" onclick="closeModal()">✕</button></div>
 
             <label class="photo-preview-box" id="photoBox">
-                <span class="photo-placeholder" id="photoPlaceholder">📷 Нажми, чтобы сделать или выбрать HD-фото</span>
+                <span class="photo-placeholder" id="photoPlaceholder">📷 Нажми, чтобы сделать фото</span>
                 <img id="photoPreview" style="display:none;" alt="Preview">
                 <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)">
             </label>
 
             <div class="field">
                 <label>Название вещи</label>
-                <input type="text" id="fName" placeholder="Например: Черный свитшот с принтом">
+                <input type="text" id="fName" placeholder="Например: Свитшот с принтом">
             </div>
 
             <div class="form-row">
                 <div class="field">
-                    <label>Категория</label>
-                    <select id="fCategory">
-                        <option value="Верх">Верх / Худи</option>
-                        <option value="Футболки">Футболки</option>
-                        <option value="Штаны">Штаны / Джинсы</option>
-                        <option value="Белье/Носки">Белье / Носки</option>
-                        <option value="Другое">Другое</option>
-                    </select>
+                    <label>Категория (Выбери или введи)</label>
+                    <!-- УМНАЯ КАТЕГОРИЯ: Можно выбрать, а можно вписать свой текст -->
+                    <input type="text" id="fCategory" list="cat-suggestions" placeholder="Впиши или выбери...">
+                    <datalist id="cat-suggestions">
+                        <option value="Верх / Худи">
+                        <option value="Футболки">
+                        <option value="Штаны / Джинсы">
+                        <option value="Обувь">
+                        <option value="Белье / Носки">
+                    </datalist>
                 </div>
                 <div class="field">
-                    <label>Группа (Статус)</label>
+                    <label>Статус</label>
                     <select id="fStatus">
-                        <option value="IN_CLOSET">В шкафу</option>
-                        <option value="WASHING">В стирке</option>
-                        <option value="DRYING">На сушилке</option>
+                        <option value="IN_CLOSET">В шкафу</option><option value="WASHING">В стирке</option><option value="DRYING">На сушилке</option>
                     </select>
                 </div>
             </div>
 
             <div class="form-row">
-                <div class="field">
-                    <label>Фирма (Бренд)</label>
-                    <input type="text" id="fBrand" placeholder="Nike, Uniqlo...">
-                </div>
-                <div class="field">
-                    <label>Цвет</label>
-                    <input type="text" id="fColor" placeholder="Черный, Белый...">
-                </div>
+                <div class="field"><label>Бренд</label><input type="text" id="fBrand" placeholder="Nike, Zara..."></div>
+                <div class="field"><label>Цвет</label><input type="text" id="fColor" placeholder="Черный, Белый..."></div>
             </div>
 
-            <div class="field">
-                <label>Заметки / Режим стирки</label>
-                <input type="text" id="fNotes" placeholder="40°C, наизнанку, не отбеливать">
-            </div>
+            <div class="field"><label>Заметки / Режим стирки</label><input type="text" id="fNotes" placeholder="40°C, стирать наизнанку"></div>
 
             <div class="modal-actions">
                 <button class="btn-danger" id="btnDelete" style="display:none;" onclick="deleteCurrentItem()">Удалить</button>
@@ -254,343 +155,214 @@
         const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
         if (tg) tg.expand();
 
-        // Твоя ссылка на развертывание Google Apps Script
+        // 1. ВСТАВЬ СВОЮ ССЫЛКУ НА GOOGLE СКРИПТ
         const API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
-        const CACHE_KEY = "wardrobe_items_v2";
+        
+        // 2. ДОСТАЕМ ТВОЙ ЛИЧНЫЙ TELEGRAM ID
+        const myTgId = tg?.initDataUnsafe?.user?.id || "BROWSER_TEST";
 
+        const CACHE_KEY = "wardrobe_items_secure";
         let items = JSON.parse(localStorage.getItem(CACHE_KEY) || "[]");
         let currentTab = "IN_CLOSET";
         let editingId = null;
         let currentPhotoData = "";
 
-        const COLOR_MAP = {
-            "черный": "#111827", "чёрный": "#111827", "белый": "#ffffff",
-            "серый": "#9ca3af", "синий": "#2563eb", "голубой": "#38bdf8",
-            "красный": "#ef4444", "зеленый": "#10b981", "зелёный": "#10b981",
-            "желтый": "#facc15", "бежевый": "#e5d3b3", "коричневый": "#78350f",
-            "розовый": "#ec4899", "фиолетовый": "#8b5cf6"
-        };
-
-        function haptic() {
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
-        }
+        const COLOR_MAP = { "черный": "#111827", "белый": "#ffffff", "серый": "#9ca3af", "синий": "#2563eb", "красный": "#ef4444", "зеленый": "#10b981", "желтый": "#facc15", "коричневый": "#78350f", "розовый": "#ec4899" };
 
         function showSync(text) {
             const el = document.getElementById('syncStatus');
             if (!text) { el.style.display = 'none'; return; }
-            el.innerText = text;
-            el.style.display = 'block';
+            el.innerText = text; el.style.display = 'block';
         }
 
-        function saveCache() {
-            localStorage.setItem(CACHE_KEY, JSON.stringify(items));
-        }
-
-        // Фоновая синхронизация с облаком Google
         async function fetchFromCloud() {
-            showSync("Обновление из облака...");
+            showSync("Синхронизация...");
             try {
-                const res = await fetch(API_URL);
-                const cloudItems = await res.json();
-                if (Array.isArray(cloudItems)) {
-                    items = cloudItems;
-                    saveCache();
+                // Передаем твой ID на сервер для проверки
+                const res = await fetch(`${API_URL}?user_id=${myTgId}`);
+                const data = await res.json();
+                
+                // ЕСЛИ СЕРВЕР ОТВЕРГ ЗАПРОС (ID НЕ СОВПАДАЕТ)
+                if (data.error === "unauth") {
+                    document.getElementById('authScreen').style.display = 'flex';
+                    document.getElementById('appContent').style.display = 'none';
+                    document.getElementById('displayId').innerText = data.myId;
+                    return;
+                }
+
+                if (Array.isArray(data)) {
+                    items = data;
+                    localStorage.setItem(CACHE_KEY, JSON.stringify(items));
                     render();
                 }
-            } catch (e) {
-                console.warn("Работаем из кэша:", e);
-            }
+            } catch (e) { console.warn(e); }
             showSync("");
         }
 
-        function updateCounts() {
+        function updateDynamicFilters() {
+            const select = document.getElementById('catFilter');
+            const currentVal = select.value || "ALL";
+            
+            // Собираем все уникальные категории из вещей, которые у тебя есть
+            const uniqueCats = [...new Set(items.map(i => i.category).filter(Boolean))];
+            
+            let html = '<option value="ALL">Все категории</option>';
+            uniqueCats.forEach(cat => { html += `<option value="${cat}">${cat}</option>`; });
+            
+            select.innerHTML = html;
+            if (uniqueCats.includes(currentVal)) select.value = currentVal;
+            else select.value = "ALL";
+        }
+
+        function render() {
+            updateDynamicFilters();
+            
             ["IN_CLOSET", "WASHING", "DRYING"].forEach(st => {
-                const count = items.filter(i => i.status === st).length;
-                document.getElementById(`cnt-${st}`).innerText = count;
+                document.getElementById(`cnt-${st}`).innerText = items.filter(i => i.status === st).length;
             });
 
             const bulkBar = document.getElementById('bulkBar');
             const currentCount = items.filter(i => i.status === currentTab).length;
             if (currentTab === "WASHING" && currentCount > 0) {
-                bulkBar.classList.add('visible');
-                document.getElementById('bulkText').innerText = `Вещей в стирке: ${currentCount}`;
-                document.getElementById('bulkBtn').innerText = `Перевесить всё на сушилку →`;
+                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `В стирке: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё на сушилку →`;
             } else if (currentTab === "DRYING" && currentCount > 0) {
-                bulkBar.classList.add('visible');
-                document.getElementById('bulkText').innerText = `Высохло на сушилке: ${currentCount}`;
-                document.getElementById('bulkBtn').innerText = `Вернуть всё в шкаф ✓`;
-            } else {
-                bulkBar.classList.remove('visible');
-            }
-        }
+                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `Высохло: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё в шкаф ✓`;
+            } else { bulkBar.classList.remove('visible'); }
 
-        function getColorHex(colorName) {
-            if (!colorName) return null;
-            const key = colorName.trim().toLowerCase();
-            return COLOR_MAP[key] || null;
-        }
-
-        function render() {
-            updateCounts();
             const grid = document.getElementById('grid');
             const query = document.getElementById('searchInput').value.trim().toLowerCase();
             const cat = document.getElementById('catFilter').value;
 
             let filtered = items.filter(i => i.status === currentTab);
             if (cat !== "ALL") filtered = filtered.filter(i => i.category === cat);
-            if (query) {
-                filtered = filtered.filter(i =>
-                    (i.name || "").toLowerCase().includes(query) ||
-                    (i.brand || "").toLowerCase().includes(query) ||
-                    (i.color || "").toLowerCase().includes(query) ||
-                    (i.notes || "").toLowerCase().includes(query)
-                );
-            }
+            if (query) filtered = filtered.filter(i => (i.name||"").toLowerCase().includes(query) || (i.brand||"").toLowerCase().includes(query) || (i.category||"").toLowerCase().includes(query));
 
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div class="empty">В этой группе пусто.<br><small>Нажми «+» внизу справа, чтобы добавить вещь</small></div>`;
-                return;
-            }
+            if (filtered.length === 0) { grid.innerHTML = `<div class="empty">Здесь пусто.</div>`; return; }
 
             grid.innerHTML = filtered.map(item => {
-                const hex = getColorHex(item.color);
+                const hex = COLOR_MAP[(item.color||"").toLowerCase()] || null;
                 const colorDot = hex ? `<span class="color-dot" style="background:${hex}"></span>` : '';
-                const metaParts = [item.brand, item.color].filter(Boolean).join(' • ');
-
-                let moveButtons = '';
-                if (item.status === 'IN_CLOSET') {
-                    moveButtons = `
-                        <button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">🧺 В стирку</button>
-                        <button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">☀️ На сушилку</button>
-                    `;
-                } else if (item.status === 'WASHING') {
-                    moveButtons = `
-                        <button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">← В шкаф</button>
-                        <button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">☀️ На сушилку →</button>
-                    `;
-                } else {
-                    moveButtons = `
-                        <button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">← В стирку</button>
-                        <button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">👕 В шкаф ✓</button>
-                    `;
-                }
+                const moveButtons = item.status === 'IN_CLOSET' 
+                    ? `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">🧺 В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">☀️ На сушилку</button>`
+                    : item.status === 'WASHING' 
+                    ? `<button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">← В шкаф</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">☀️ На сушилку →</button>`
+                    : `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">← В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">👕 В шкаф ✓</button>`;
 
                 return `
                     <div class="card">
-                        <div class="img-wrap" onclick="openModal('${item.id}')">
-                            <img src="${item.photo}" loading="lazy" alt="${item.name}">
-                            ${item.category ? `<span class="cat-pill">${item.category}</span>` : ''}
-                        </div>
+                        <div class="img-wrap" onclick="openModal('${item.id}')"><img src="${item.photo}" loading="lazy"><span class="cat-pill">${item.category || 'Без категории'}</span></div>
                         <div class="card-body" onclick="openModal('${item.id}')">
                             <div class="card-title">${item.name || 'Без названия'}</div>
-                            <div class="card-meta">${colorDot}<span>${metaParts || 'Свойства не указаны'}</span></div>
-                            ${item.notes ? `<div class="card-notes">${item.notes}</div>` : ''}
+                            <div class="card-meta">${colorDot}<span>${item.brand || ''} ${item.color || ''}</span></div>
                         </div>
                         <div class="move-bar">${moveButtons}</div>
-                    </div>
-                `;
+                    </div>`;
             }).join('');
         }
 
         window.setTab = function(tab) {
-            haptic();
+            if (tg) tg.HapticFeedback.impactOccurred('light');
             currentTab = tab;
-            document.querySelectorAll('.tab').forEach(t => {
-                t.classList.toggle('active', t.dataset.tab === tab);
-            });
+            document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
             render();
         };
 
-        // Одиночное перемещение вещи
         window.moveItem = async function(id, newStatus) {
-            haptic();
+            if (tg) tg.HapticFeedback.impactOccurred('light');
             const item = items.find(i => String(i.id) === String(id));
             if (!item) return;
-            item.status = newStatus;
-            saveCache();
-            render();
-
-            showSync("Сохранение...");
-            try {
-                await fetch(API_URL, {
-                    method: "POST",
-                    body: JSON.stringify({ action: "statusBatch", ids: [id], status: newStatus })
-                });
-            } catch (e) {}
-            showSync("");
+            item.status = newStatus; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render();
+            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: [id], status: newStatus, user_id: myTgId }) });
         };
 
-        // Групповое перемещение всех вещей во вкладке
         window.executeBulkAction = async function() {
-            haptic();
+            if (tg) tg.HapticFeedback.impactOccurred('light');
             const targetStatus = currentTab === "WASHING" ? "DRYING" : "IN_CLOSET";
             const affectedIds = items.filter(i => i.status === currentTab).map(i => i.id);
             if (affectedIds.length === 0) return;
-
-            items.forEach(i => {
-                if (affectedIds.includes(i.id)) i.status = targetStatus;
-            });
-            saveCache();
-            render();
-
-            showSync("Синхронизация группы...");
-            try {
-                await fetch(API_URL, {
-                    method: "POST",
-                    body: JSON.stringify({ action: "statusBatch", ids: affectedIds, status: targetStatus })
-                });
-            } catch (e) {}
-            showSync("");
+            items.forEach(i => { if (affectedIds.includes(i.id)) i.status = targetStatus; });
+            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render();
+            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: affectedIds, status: targetStatus, user_id: myTgId }) });
         };
 
-        // Открытие модального окна для добавления или редактирования
         window.openModal = function(id = null) {
-            haptic();
+            if (tg) tg.HapticFeedback.impactOccurred('light');
             editingId = id;
-            const modal = document.getElementById('itemModal');
-            const preview = document.getElementById('photoPreview');
-            const placeholder = document.getElementById('photoPlaceholder');
-
             if (id) {
                 const item = items.find(i => String(i.id) === String(id));
-                document.getElementById('modalTitle').innerText = "Редактировать вещь";
+                document.getElementById('modalTitle').innerText = "Редактировать";
                 document.getElementById('fName').value = item.name || "";
-                document.getElementById('fCategory').value = item.category || "Верх";
+                document.getElementById('fCategory').value = item.category || "";
                 document.getElementById('fStatus').value = item.status || "IN_CLOSET";
                 document.getElementById('fBrand').value = item.brand || "";
                 document.getElementById('fColor').value = item.color || "";
                 document.getElementById('fNotes').value = item.notes || "";
-                
                 currentPhotoData = item.photo || "";
-                if (currentPhotoData) {
-                    preview.src = currentPhotoData;
-                    preview.style.display = "block";
-                    placeholder.style.display = "none";
-                }
+                if (currentPhotoData) { document.getElementById('photoPreview').src = currentPhotoData; document.getElementById('photoPreview').style.display = "block"; document.getElementById('photoPlaceholder').style.display = "none"; }
                 document.getElementById('btnDelete').style.display = "block";
             } else {
                 document.getElementById('modalTitle').innerText = "Новая вещь";
-                document.getElementById('fName').value = "";
-                document.getElementById('fCategory').value = "Верх";
-                document.getElementById('fStatus').value = currentTab;
-                document.getElementById('fBrand').value = "";
-                document.getElementById('fColor').value = "";
-                document.getElementById('fNotes').value = "";
-                
-                currentPhotoData = "";
-                preview.style.display = "none";
-                placeholder.style.display = "block";
-                document.getElementById('btnDelete').style.display = "none";
+                document.getElementById('fName').value = ""; document.getElementById('fCategory').value = ""; document.getElementById('fStatus').value = currentTab; document.getElementById('fBrand').value = ""; document.getElementById('fColor').value = ""; document.getElementById('fNotes').value = "";
+                currentPhotoData = ""; document.getElementById('photoPreview').style.display = "none"; document.getElementById('photoPlaceholder').style.display = "block"; document.getElementById('btnDelete').style.display = "none";
             }
-            modal.classList.add('active');
+            document.getElementById('itemModal').classList.add('active');
         };
 
-        window.closeModal = function() {
-            document.getElementById('itemModal').classList.remove('active');
-        };
+        window.closeModal = function() { document.getElementById('itemModal').classList.remove('active'); };
 
-        // Обработка фото в высоком разрешении (1000px, качество 0.88 — четкие логотипы и текстура)
         window.handlePhotoSelect = function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-
+            const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = function(ev) {
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_DIM = 1000;
                     let w = img.width, h = img.height;
-                    if (w > MAX_DIM || h > MAX_DIM) {
-                        if (w > h) { h = Math.round(h * MAX_DIM / w); w = MAX_DIM; }
-                        else { w = Math.round(w * MAX_DIM / h); h = MAX_DIM; }
-                    }
-                    canvas.width = w; canvas.height = h;
-                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    
+                    if (w > 1000 || h > 1000) { if (w > h) { h = Math.round(h * 1000 / w); w = 1000; } else { w = Math.round(w * 1000 / h); h = 1000; } }
+                    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
                     currentPhotoData = canvas.toDataURL('image/jpeg', 0.88);
-                    const preview = document.getElementById('photoPreview');
-                    preview.src = currentPhotoData;
-                    preview.style.display = "block";
-                    document.getElementById('photoPlaceholder').style.display = "none";
+                    document.getElementById('photoPreview').src = currentPhotoData; document.getElementById('photoPreview').style.display = "block"; document.getElementById('photoPlaceholder').style.display = "none";
                 };
                 img.src = ev.target.result;
             };
-            reader.readAsDataURL(file);
-            e.target.value = "";
+            reader.readAsDataURL(file); e.target.value = "";
         };
 
         window.saveCurrentItem = async function() {
-            if (!currentPhotoData) {
-                alert("Добавь фотографию вещи!");
-                return;
-            }
-            haptic();
+            if (!currentPhotoData) { alert("Добавь фото!"); return; }
+            if (tg) tg.HapticFeedback.impactOccurred('light');
 
             const itemObj = {
                 id: editingId ? String(editingId) : String(Date.now()),
                 photo: currentPhotoData,
-                name: document.getElementById('fName').value.trim() || "Без названия",
-                category: document.getElementById('fCategory').value,
+                name: document.getElementById('fName').value.trim(),
+                category: document.getElementById('fCategory').value.trim(),
                 status: document.getElementById('fStatus').value,
                 brand: document.getElementById('fBrand').value.trim(),
                 color: document.getElementById('fColor').value.trim(),
                 notes: document.getElementById('fNotes').value.trim()
             };
 
-            if (editingId) {
-                const idx = items.findIndex(i => String(i.id) === String(editingId));
-                if (idx !== -1) items[idx] = itemObj;
-            } else {
-                items.unshift(itemObj);
-            }
+            if (editingId) { const idx = items.findIndex(i => String(i.id) === String(editingId)); if (idx !== -1) items[idx] = itemObj; } 
+            else { items.unshift(itemObj); }
 
-            saveCache();
-            render();
-            closeModal();
-
-            showSync("Загрузка HD-фото в облако...");
+            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render(); closeModal(); showSync("Сохранение...");
             try {
-                const res = await fetch(API_URL, {
-                    method: "POST",
-                    body: JSON.stringify({ action: "save", item: itemObj })
-                });
+                const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "save", item: itemObj, user_id: myTgId }) });
                 const result = await res.json();
-                if (result.ok && result.photoUrl) {
-                    const saved = items.find(i => String(i.id) === String(itemObj.id));
-                    if (saved) {
-                        saved.photo = result.photoUrl;
-                        saveCache();
-                    }
-                }
-            } catch (e) {
-                console.error("Ошибка сохранения в облако:", e);
-            }
-            showSync("");
+                if (result.ok && result.photoUrl) { const saved = items.find(i => String(i.id) === String(itemObj.id)); if (saved) { saved.photo = result.photoUrl; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); } }
+            } catch (e) {} showSync("");
         };
 
         window.deleteCurrentItem = async function() {
-            if (!editingId || !confirm("Удалить эту вещь из базы?")) return;
-            haptic();
-            const idToDelete = editingId;
-            items = items.filter(i => String(i.id) !== String(idToDelete));
-            saveCache();
-            render();
-            closeModal();
-
-            showSync("Удаление из базы...");
-            try {
-                await fetch(API_URL, {
-                    method: "POST",
-                    body: JSON.stringify({ action: "delete", id: idToDelete })
-                });
-            } catch (e) {}
-            showSync("");
+            if (!editingId || !confirm("Удалить?")) return;
+            if (tg) tg.HapticFeedback.impactOccurred('light');
+            items = items.filter(i => String(i.id) !== String(editingId));
+            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render(); closeModal();
+            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
         };
 
-        // Сначала мгновенно рисуем кэш, затем подтягиваем облако
-        render();
-        fetchFromCloud();
+        render(); fetchFromCloud();
     </script>
 </body>
 </html>
