@@ -2,139 +2,144 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Моя постирочная</title>
-    <!-- Подключаем скрипт Telegram Web Apps -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Мой Гардероб</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        :root {
+            --bg-color: var(--tg-theme-bg-color, #f0f2f5);
+            --text-color: var(--tg-theme-text-color, #000000);
+            --btn-color: var(--tg-theme-button-color, #2481cc);
+            --btn-text: var(--tg-theme-button-text-color, #ffffff);
+            --card-bg: var(--tg-theme-secondary-bg-color, #ffffff);
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            margin: 0;
-            padding: 16px;
+            margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color); color: var(--text-color);
+            -webkit-tap-highlight-color: transparent;
         }
+        /* Вкладки (Навигация) */
+        .tabs {
+            display: flex; background: var(--card-bg); padding: 10px;
+            position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .tab {
+            flex: 1; text-align: center; padding: 12px; font-weight: bold;
+            color: gray; border-radius: 8px; transition: 0.2s;
+        }
+        .tab.active { background: var(--btn-color); color: var(--btn-text); }
+        
+        /* Сетка вещей */
         .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 12px;
-            padding-bottom: 80px; /* Место под кнопку Telegram */
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px;
         }
-        .item-card {
-            background-color: var(--tg-theme-secondary-bg-color, #f0f0f0);
-            border-radius: 12px;
-            padding: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.1s;
-            position: relative;
+        .card {
+            background: var(--card-bg); border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center;
+            display: flex; flex-direction: column; transition: transform 0.1s;
         }
-        .item-card img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
+        .card:active { transform: scale(0.96); }
+        .card .icon {
+            font-size: 50px; padding: 20px 0; background: rgba(36, 129, 204, 0.1);
         }
-        .item-card.selected {
-            border: 3px solid var(--tg-theme-button-color, #2481cc);
-            transform: scale(0.95);
+        .card .name {
+            padding: 12px 10px; font-weight: 500; font-size: 14px;
         }
-        .item-name {
-            font-size: 12px;
-            margin-top: 8px;
-            font-weight: 500;
+        .action-btn {
+            background: var(--btn-color); color: var(--btn-text);
+            padding: 12px; font-weight: bold; text-transform: uppercase; font-size: 12px;
         }
-        .badge {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background: var(--tg-theme-button-color, #2481cc);
-            color: white;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-        .item-card.selected .badge {
-            display: flex;
-        }
+        .action-btn.return { background: #ff9800; }
+        
+        .empty-state { text-align: center; padding: 40px 20px; color: gray; grid-column: 1 / -1; }
+        .loader { text-align: center; padding: 40px; grid-column: 1 / -1; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <h2>В шкафу</h2>
-    <div class="grid" id="wardrobe-grid">
-        <!-- Карточки будут добавлены через JavaScript -->
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('IN_CLOSET')">В шкафу</div>
+        <div class="tab" onclick="switchTab('DRYING')">На сушилке</div>
+    </div>
+
+    <div id="items-grid" class="grid">
+        <div class="loader">Загрузка вещей...</div>
     </div>
 
     <script>
-        // Инициализация Telegram Web App
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Открываем на весь экран
+        tg.expand();
 
-        // Мок-данные (в будущем они будут приходить с твоего Java-бэкенда)
-        const items = [
-            { id: 1, name: "Худи черное", img: "https://via.placeholder.com/100" },
-            { id: 2, name: "Футболка белая", img: "https://via.placeholder.com/100" },
-            { id: 3, name: "Джинсы синие", img: "https://via.placeholder.com/100" },
-            { id: 4, name: "Носки с утками", img: "https://via.placeholder.com/100" }
-        ];
+        // ВСТАВЬ СВОЮ ССЫЛКУ /exec МЕЖДУ КАВЫЧЕК
+        const API_URL = "ВСТАВЬ_СВОЮ_ССЫЛКУ_EXEC_СЮДА";
+        
+        let allItems = [];
+        let currentTab = 'IN_CLOSET';
 
-        let selectedItems = new Set();
-
-        const grid = document.getElementById('wardrobe-grid');
-
-        // Рендер карточек
-        items.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'item-card';
-            card.innerHTML = `
-                <div class="badge">✓</div>
-                <img src="${item.img}" alt="${item.name}">
-                <div class="item-name">${item.name}</div>
-            `;
-            
-            card.onclick = () => toggleSelection(card, item.id);
-            grid.appendChild(card);
-        });
-
-        // Логика выделения
-        function toggleSelection(cardElement, itemId) {
-            tg.HapticFeedback.selectionChanged(); // Легкая вибрация телефона при клике
-            
-            if (selectedItems.has(itemId)) {
-                selectedItems.delete(itemId);
-                cardElement.classList.remove('selected');
-            } else {
-                selectedItems.add(itemId);
-                cardElement.classList.add('selected');
-            }
-
-            updateMainButton();
-        }
-
-        // Управление главной кнопкой Telegram внизу экрана
-        function updateMainButton() {
-            if (selectedItems.size > 0) {
-                tg.MainButton.text = `Отправить на сушилку (${selectedItems.size})`;
-                tg.MainButton.show();
-            } else {
-                tg.MainButton.hide();
+        // Загрузка вещей с сервера
+        async function loadItems() {
+            try {
+                let res = await fetch(API_URL);
+                allItems = await res.json();
+                renderItems();
+            } catch (e) {
+                document.getElementById('items-grid').innerHTML = "<div class='empty-state'>Ошибка сети. Попробуй позже.</div>";
             }
         }
 
-        // Отправка данных боту при нажатии на главную кнопку
-        tg.MainButton.onClick(() => {
-            const data = JSON.stringify({
-                action: "move_to_drying",
-                itemIds: Array.from(selectedItems)
+        // Отрисовка интерфейса
+        function renderItems() {
+            const grid = document.getElementById('items-grid');
+            grid.innerHTML = '';
+            
+            let filtered = allItems.filter(i => i.status === currentTab);
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="empty-state">
+                    ${currentTab === 'IN_CLOSET' ? 'Шкаф пуст. Отправь фото боту!' : 'Сушилка пуста.'}
+                </div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                let isCloset = currentTab === 'IN_CLOSET';
+                let newStatus = isCloset ? 'DRYING' : 'IN_CLOSET';
+                let btnText = isCloset ? 'На сушилку' : 'Вернуть в шкаф';
+                let btnClass = isCloset ? 'action-btn' : 'action-btn return';
+
+                grid.innerHTML += `
+                    <div class="card" onclick="changeStatus(${item.id}, '${newStatus}')">
+                        <div class="icon">👕</div>
+                        <div class="name">${item.name}</div>
+                        <div class="${btnClass}">${btnText}</div>
+                    </div>
+                `;
             });
-            // Отправляем данные в чат боту и закрываем окно
-            tg.sendData(data);
-        });
+        }
+
+        // Смена вкладок
+        window.switchTab = function(tabName) {
+            currentTab = tabName;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            renderItems();
+        }
+
+        // Перемещение вещи
+        window.changeStatus = async function(id, newStatus) {
+            tg.HapticFeedback.impactOccurred('medium');
+            
+            // Визуально меняем сразу (оптимистичный UI)
+            let itemIndex = allItems.findIndex(i => i.id === id);
+            allItems[itemIndex].status = newStatus;
+            renderItems();
+
+            // Фоном отправляем запрос на сервер Гугла
+            await fetch(`${API_URL}?action=setStatus&id=${id}&status=${newStatus}`);
+        }
+
+        // Запускаем при открытии
+        loadItems();
     </script>
 </body>
 </html>
