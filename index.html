@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Гардероб</title>
+    <title>Управление гардеробом</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root { --bg: #f2f4f7; --card: #ffffff; --text: #111827; --subtext: #6b7280; --accent: #2563eb; --border: #e5e7eb; --danger: #ef4444; }
@@ -62,29 +62,24 @@
         .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.8); color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; }
         .empty { grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: var(--subtext); }
 
-        /* Экран блокировки */
-        #authScreen { display: none; position: fixed; inset: 0; background: #fff; z-index: 999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-        #authScreen h2 { margin-bottom: 5px; color: var(--text); }
-        #authScreen p { color: var(--subtext); margin-bottom: 20px; }
-        .id-box { background: #f3f4f6; padding: 15px; border-radius: 12px; font-size: 24px; font-weight: bold; color: var(--accent); letter-spacing: 2px; user-select: all; }
+        /* Экран для браузеров вне Telegram */
+        #telegramOnlyScreen { display: none; position: fixed; inset: 0; background: #fff; z-index: 999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        #telegramOnlyScreen h2 { margin-bottom: 5px; color: var(--text); }
+        #telegramOnlyScreen p { color: var(--subtext); line-height: 1.5; }
     </style>
 </head>
 <body>
 
-    <!-- ЭКРАН БЛОКИРОВКИ -->
-    <div id="authScreen">
-        <h2>🔒 Доступ закрыт</h2>
-        <p>Unaothorised access denied.</p>
-        <div class="id-box" id="displayId">ОШИБКА</div>
+    <div id="telegramOnlyScreen">
+        <h2>Доступ ограничен</h2>
+        <p>Пожалуйста, откройте это приложение через Telegram.<br>Авторизация происходит автоматически и безопасно.</p>
     </div>
 
-    <!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
-    <div id="appContent">
+    <div id="appContent" style="display:none;">
         <div class="header">
             <div class="search-row">
                 <input type="text" id="searchInput" class="search-input" placeholder="Поиск..." oninput="render()">
                 <select id="catFilter" class="filter-select" onchange="render()">
-                    <!-- Опции генерируются динамически -->
                 </select>
             </div>
             <div class="tabs">
@@ -100,7 +95,7 @@
         <div id="syncStatus" class="sync-indicator">Синхронизация...</div>
     </div>
 
-    <!-- Модальное окно (Карточка вещи) -->
+    <!-- Модальное окно (Свойства) -->
     <div class="modal" id="itemModal" onclick="if(event.target===this) closeModal()">
         <div class="modal-sheet">
             <div class="modal-header"><h3 id="modalTitle">Свойства вещи</h3><button class="close-x" onclick="closeModal()">✕</button></div>
@@ -119,7 +114,6 @@
             <div class="form-row">
                 <div class="field">
                     <label>Категория (Выбери или введи)</label>
-                    <!-- УМНАЯ КАТЕГОРИЯ: Можно выбрать, а можно вписать свой текст -->
                     <input type="text" id="fCategory" list="cat-suggestions" placeholder="Впиши или выбери...">
                     <datalist id="cat-suggestions">
                         <option value="Верх / Худи">
@@ -138,11 +132,11 @@
             </div>
 
             <div class="form-row">
-                <div class="field"><label>Бренд</label><input type="text" id="fBrand" placeholder="Nike, Zara..."></div>
-                <div class="field"><label>Цвет</label><input type="text" id="fColor" placeholder="Черный, Белый..."></div>
+                <div class="field"><label>Бренд</label><input type="text" id="fBrand" placeholder="Например: Nike, Zara"></div>
+                <div class="field"><label>Цвет</label><input type="text" id="fColor" placeholder="Например: Черный"></div>
             </div>
 
-            <div class="field"><label>Заметки / Режим стирки</label><input type="text" id="fNotes" placeholder="40°C, стирать наизнанку"></div>
+            <div class="field"><label>Заметки / Инструкции по уходу</label><input type="text" id="fNotes" placeholder="Например: 40°C, стирать наизнанку"></div>
 
             <div class="modal-actions">
                 <button class="btn-danger" id="btnDelete" style="display:none;" onclick="deleteCurrentItem()">Удалить</button>
@@ -158,14 +152,21 @@
         // 1. ВСТАВЬ СВОЮ ССЫЛКУ НА GOOGLE СКРИПТ
         const API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
-        // 2. ДОСТАЕМ ТВОЙ ЛИЧНЫЙ TELEGRAM ID
-        const myTgId = tg?.initDataUnsafe?.user?.id || "BROWSER_TEST";
+        // 2. Инициализация пользователя
+        const myTgId = tg?.initDataUnsafe?.user?.id;
+        
+        if (!myTgId) {
+            document.getElementById('telegramOnlyScreen').style.display = 'flex';
+        } else {
+            document.getElementById('appContent').style.display = 'block';
+            initializeApp();
+        }
 
-        const CACHE_KEY = "wardrobe_items_secure";
-        let items = JSON.parse(localStorage.getItem(CACHE_KEY) || "[]");
+        let items = [];
         let currentTab = "IN_CLOSET";
         let editingId = null;
         let currentPhotoData = "";
+        let CACHE_KEY = "";
 
         const COLOR_MAP = { "черный": "#111827", "белый": "#ffffff", "серый": "#9ca3af", "синий": "#2563eb", "красный": "#ef4444", "зеленый": "#10b981", "желтый": "#facc15", "коричневый": "#78350f", "розовый": "#ec4899" };
 
@@ -175,35 +176,30 @@
             el.innerText = text; el.style.display = 'block';
         }
 
+        function initializeApp() {
+            CACHE_KEY = `wardrobe_v3_${myTgId}`;
+            items = JSON.parse(localStorage.getItem(CACHE_KEY) || "[]");
+            render();
+            fetchFromCloud();
+        }
+
         async function fetchFromCloud() {
             showSync("Синхронизация...");
             try {
-                // Передаем твой ID на сервер для проверки
                 const res = await fetch(`${API_URL}?user_id=${myTgId}`);
                 const data = await res.json();
-                
-                // ЕСЛИ СЕРВЕР ОТВЕРГ ЗАПРОС (ID НЕ СОВПАДАЕТ)
-                if (data.error === "unauth") {
-                    document.getElementById('authScreen').style.display = 'flex';
-                    document.getElementById('appContent').style.display = 'none';
-                    document.getElementById('displayId').innerText = data.myId;
-                    return;
-                }
-
                 if (Array.isArray(data)) {
                     items = data;
                     localStorage.setItem(CACHE_KEY, JSON.stringify(items));
                     render();
                 }
-            } catch (e) { console.warn(e); }
+            } catch (e) { console.warn("Работа оффлайн", e); }
             showSync("");
         }
 
         function updateDynamicFilters() {
             const select = document.getElementById('catFilter');
             const currentVal = select.value || "ALL";
-            
-            // Собираем все уникальные категории из вещей, которые у тебя есть
             const uniqueCats = [...new Set(items.map(i => i.category).filter(Boolean))];
             
             let html = '<option value="ALL">Все категории</option>';
@@ -237,7 +233,7 @@
             if (cat !== "ALL") filtered = filtered.filter(i => i.category === cat);
             if (query) filtered = filtered.filter(i => (i.name||"").toLowerCase().includes(query) || (i.brand||"").toLowerCase().includes(query) || (i.category||"").toLowerCase().includes(query));
 
-            if (filtered.length === 0) { grid.innerHTML = `<div class="empty">Здесь пусто.</div>`; return; }
+            if (filtered.length === 0) { grid.innerHTML = `<div class="empty">Список пуст.</div>`; return; }
 
             grid.innerHTML = filtered.map(item => {
                 const hex = COLOR_MAP[(item.color||"").toLowerCase()] || null;
@@ -329,7 +325,7 @@
         };
 
         window.saveCurrentItem = async function() {
-            if (!currentPhotoData) { alert("Добавь фото!"); return; }
+            if (!currentPhotoData) { alert("Необходимо добавить фото"); return; }
             if (tg) tg.HapticFeedback.impactOccurred('light');
 
             const itemObj = {
@@ -355,14 +351,12 @@
         };
 
         window.deleteCurrentItem = async function() {
-            if (!editingId || !confirm("Удалить?")) return;
+            if (!editingId || !confirm("Удалить вещь безвозвратно?")) return;
             if (tg) tg.HapticFeedback.impactOccurred('light');
             items = items.filter(i => String(i.id) !== String(editingId));
             localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render(); closeModal();
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
         };
-
-        render(); fetchFromCloud();
     </script>
 </body>
 </html>
