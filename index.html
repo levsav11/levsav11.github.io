@@ -88,7 +88,7 @@
             <div class="modal-header"><h3 id="modalTitle">Свойства вещи</h3><button class="close-x" onclick="closeModal()">✕</button></div>
 
             <label class="photo-preview-box" id="photoBox">
-                <span class="photo-placeholder" id="photoPlaceholder">📷 Нажми, чтобы сделать фото</span>
+                <span class="photo-placeholder" id="photoPlaceholder"Нажмите, чтобы сделать фото</span>
                 <img id="photoPreview" style="display:none;" alt="Preview">
                 <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)">
             </label>
@@ -100,7 +100,7 @@
 
             <div class="form-row">
                 <div class="field">
-                    <label>Категория (Выбери или введи)</label>
+                    <label>Категория (Выберите или введите)</label>
                     <input type="text" id="fCategory" list="cat-suggestions" placeholder="Впиши или выбери...">
                     <datalist id="cat-suggestions">
                         <option value="Верх / Худи"></option><option value="Футболки"></option><option value="Штаны / Джинсы"></option><option value="Обувь"></option><option value="Белье / Носки"></option>
@@ -109,7 +109,7 @@
                 <div class="field">
                     <label>Статус</label>
                     <select id="fStatus">
-                        <option value="IN_CLOSET">В шкафу</option><option value="WASHING">В стирке</option><option value="DRYING">На сушилке</option>
+                        <option value="IN_CLOSET">Шкаф</option><option value="WASHING">Стика</option><option value="DRYING">Сушилка</option>
                     </select>
                 </div>
             </div>
@@ -143,7 +143,194 @@
         let editingId = null;
         let currentPhotoData = "";
 
-        const COLOR_MAP = { "черный": "#111827", "белый": "#ffffff", "серый": "#9ca3af", "синий": "#2563eb", "красный": "#ef4444", "зеленый": "#10b981", "желтый": "#facc15", "коричневый": "#78350f", "розовый": "#ec4899" };
+        const COLOR_MAP = {
+  // --- ЧЕРНЫЙ И ТЕМНЫЕ ТОНА ---
+  "черный": "#111827",
+  "черная": "#111827",
+  "черное": "#111827",
+  "черные": "#111827",
+  "black": "#111827",
+  "графит": "#27272a",
+  "графитовый": "#27272a",
+  "антрацит": "#374151",
+  "угольный": "#18181b",
+  "темный": "#1f2937",
+  "темно": "#1f2937",
+
+  // --- БЕЛЫЙ И СВЕТЛЫЕ ТОНА ---
+  "белый": "#ffffff",
+  "белая": "#ffffff",
+  "белое": "#ffffff",
+  "белые": "#ffffff",
+  "white": "#ffffff",
+  "молочный": "#fdfbf7",
+  "слоновая кость": "#fdf6e2",
+  "айвори": "#fffff0",
+  "кремовый": "#fef3c7",
+  "светлый": "#f3f4f6",
+
+  // --- СЕРЫЕ ТОНА ---
+  "серый": "#9ca3af",
+  "серая": "#9ca3af",
+  "серое": "#9ca3af",
+  "серые": "#9ca3af",
+  "grey": "#9ca3af",
+  "gray": "#9ca3af",
+  "светло-серый": "#d1d5db",
+  "светло серый": "#d1d5db",
+  "темно-серый": "#4b5563",
+  "темно серый": "#4b5563",
+  "мокрый асфальт": "#3f3f46",
+  "стальной": "#71717a",
+  "пепельный": "#a1a1aa",
+  "серебристый": "#cbd5e1",
+  "серебро": "#cbd5e1",
+
+  // --- СИНИЕ И ГОЛУБЫЕ ТОНА ---
+  "синий": "#2563eb",
+  "синяя": "#2563eb",
+  "синее": "#2563eb",
+  "синие": "#2563eb",
+  "blue": "#2563eb",
+  "темно-синий": "#1e3a8a",
+  "темно синий": "#1e3a8a",
+  "глубокий синий": "#172554",
+  "индиго": "#4338ca",
+  "васильковый": "#3b82f6",
+  "электрик": "#1d4ed8",
+  "navy": "#0f172a",
+  "голубой": "#38bdf8",
+  "голубая": "#38bdf8",
+  "голубое": "#38bdf8",
+  "голубые": "#38bdf8",
+  "небесный": "#0ea5e9",
+  "небесно-голубой": "#0ea5e9",
+  "бирюзовый": "#06b6d4",
+  "бирюза": "#06b6d4",
+  "аквамарин": "#7dd3fc",
+  "морской": "#0369a1",
+  "морская волна": "#0e7490",
+  "лазурный": "#0284c7",
+
+  // --- ЗЕЛЕНЫЕ И ОЛИВКОВЫЕ ТОНА ---
+  "зеленый": "#16a34a",
+  "зеленая": "#16a34a",
+  "зеленое": "#16a34a",
+  "зеленые": "#16a34a",
+  "зелёный": "#16a34a",
+  "зелёная": "#16a34a",
+  "зелёное": "#16a34a",
+  "зелёные": "#16a34a",
+  "green": "#16a34a",
+  "темно-зеленый": "#14532d",
+  "темно зеленый": "#14532d",
+  "светло-зеленый": "#86efac",
+  "салатовый": "#84cc16",
+  "лайм": "#a3e635",
+  "изумрудный": "#059669",
+  "изумруд": "#059669",
+  "мятный": "#6ee7b7",
+  "мята": "#6ee7b7",
+  "оливковый": "#65a30d",
+  "олива": "#65a30d",
+  "хаки": "#78716c",
+  "болотный": "#3f4f2c",
+  "хвойный": "#064e3b",
+  "фисташковый": "#bef264",
+
+  // --- КРАСНЫЕ И БОРДОВЫЕ ТОНА ---
+  "красный": "#ef4444",
+  "красная": "#ef4444",
+  "красное": "#ef4444",
+  "красные": "#ef4444",
+  "red": "#ef4444",
+  "алый": "#f43f5e",
+  "темно-красный": "#7f1d1d",
+  "бордовый": "#881337",
+  "бордо": "#881337",
+  "вишневый": "#9f1239",
+  "вишня": "#9f1239",
+  "винный": "#4c0519",
+  "марсала": "#581c87",
+  "рубиновый": "#b91c1c",
+
+  // --- РОЗОВЫЕ И ФИОЛЕТОВЫЕ ТОНА ---
+  "розовый": "#ec4899",
+  "розовая": "#ec4899",
+  "розовое": "#ec4899",
+  "розовые": "#ec4899",
+  "pink": "#ec4899",
+  "светло-розовый": "#fbcfe8",
+  "пыльная роза": "#d88b9d",
+  "пудровый": "#fce7f3",
+  "фуксия": "#d946ef",
+  "малиновый": "#e11d48",
+  "фиолетовый": "#7c3aed",
+  "фиолетовая": "#7c3aed",
+  "purple": "#7c3aed",
+  "темно-фиолетовый": "#4c1d95",
+  "сиреневый": "#c084fc",
+  "лавандовый": "#a78bfa",
+  "лаванда": "#a78bfa",
+  "лиловый": "#d8b4fe",
+  "баклажановый": "#3b0764",
+
+  // --- ЖЕЛТЫЕ И ОРАНЖЕВЫЕ ТОНА ---
+  "желтый": "#facc15",
+  "желтая": "#facc15",
+  "желтое": "#facc15",
+  "желтые": "#facc15",
+  "жёлтый": "#facc15",
+  "yellow": "#facc15",
+  "лимонный": "#fef08a",
+  "горчичный": "#ca8a04",
+  "золотой": "#eab308",
+  "золотистый": "#eab308",
+  "золото": "#eab308",
+  "янтарный": "#d97706",
+  "оранжевый": "#f97316",
+  "оранжевая": "#f97316",
+  "orange": "#f97316",
+  "рыжий": "#ea580c",
+  "морковный": "#f97316",
+  "коралловый": "#fb7185",
+  "коралл": "#fb7185",
+  "персиковый": "#fdba74",
+  "персик": "#fdba74",
+
+  // --- КОРИЧНЕВЫЕ И БЕЖЕВЫЕ ТОНА ---
+  "коричневый": "#78350f",
+  "коричневая": "#78350f",
+  "коричневое": "#78350f",
+  "коричневые": "#78350f",
+  "brown": "#78350f",
+  "темно-коричневый": "#451a03",
+  "шоколадный": "#3b1e08",
+  "шоколад": "#3b1e08",
+  "кофейный": "#543310",
+  "кофе": "#543310",
+  "терракотовый": "#9a3412",
+  "бежевый": "#e5d3b3",
+  "бежевая": "#e5d3b3",
+  "бежевое": "#e5d3b3",
+  "беж": "#e5d3b3",
+  "beige": "#e5d3b3",
+  "песочный": "#d4b996",
+  "песок": "#d4b996",
+  "верблюжий": "#c19a6b",
+  "camel": "#c19a6b",
+  "карамельный": "#b45309",
+  "карамель": "#b45309",
+  "нюдовый": "#e7c8b0",
+  "нюд": "#e7c8b0",
+
+  // --- МЕТАЛЛ И ЭФФЕКТЫ ---
+  "бронзовый": "#cd7f32",
+  "бронза": "#cd7f32",
+  "медный": "#b87333",
+  "медь": "#b87333",
+  "металлик": "#94a3b8"
+};
 
         function showSync(text) {
             const el = document.getElementById('syncStatus');
@@ -192,7 +379,7 @@
             if (currentTab === "WASHING" && currentCount > 0) {
                 bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `В стирке: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё на сушилку →`;
             } else if (currentTab === "DRYING" && currentCount > 0) {
-                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `Высохло: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё в шкаф ✓`;
+                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `На сушилке: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё в шкаф ✓`;
             } else { bulkBar.classList.remove('visible'); }
 
             const grid = document.getElementById('grid');
@@ -216,9 +403,9 @@
                 const colorDot = hex ? `<span class="color-dot" style="background:${hex}"></span>` : '';
                 
                 let moveButtons = '';
-                if (item.status === 'IN_CLOSET') moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">🧺 В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">☀️ На сушилку</button>`;
-                else if (item.status === 'WASHING') moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">← В шкаф</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">☀️ На сушилку →</button>`;
-                else moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">← В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">👕 В шкаф ✓</button>`;
+                if (item.status === 'IN_CLOSET') moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">На сушилку</button>`;
+                else if (item.status === 'WASHING') moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">← В шкаф</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">На сушилку →</button>`;
+                else moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">← В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">В шкаф ✓</button>`;
 
                 return `
                     <div class="card">
