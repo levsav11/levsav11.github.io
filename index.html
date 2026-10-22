@@ -79,8 +79,7 @@
         <div class="header">
             <div class="search-row">
                 <input type="text" id="searchInput" class="search-input" placeholder="Поиск..." oninput="render()">
-                <select id="catFilter" class="filter-select" onchange="render()">
-                </select>
+                <select id="catFilter" class="filter-select" onchange="render()"></select>
             </div>
             <div class="tabs">
                 <div class="tab active" data-tab="IN_CLOSET" onclick="setTab('IN_CLOSET')">Шкаф <span class="badge-count" id="cnt-IN_CLOSET">0</span></div>
@@ -101,7 +100,7 @@
             <div class="modal-header"><h3 id="modalTitle">Свойства вещи</h3><button class="close-x" onclick="closeModal()">✕</button></div>
 
             <label class="photo-preview-box" id="photoBox">
-                <span class="photo-placeholder" id="photoPlaceholder">Нажмите, чтобы добавить фото</span>
+                <span class="photo-placeholder" id="photoPlaceholder">📷 Нажми, чтобы сделать фото</span>
                 <img id="photoPreview" style="display:none;" alt="Preview">
                 <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)">
             </label>
@@ -113,7 +112,7 @@
 
             <div class="form-row">
                 <div class="field">
-                    <label>Категория (Выберите или введите)</label>
+                    <label>Категория (Выбери или введи)</label>
                     <input type="text" id="fCategory" list="cat-suggestions" placeholder="Впиши или выбери...">
                     <datalist id="cat-suggestions">
                         <option value="Верх / Худи">
@@ -126,7 +125,7 @@
                 <div class="field">
                     <label>Статус</label>
                     <select id="fStatus">
-                        <option value="IN_CLOSET">В шкафу</option><option value="WASHING">Стирка</option><option value="DRYING">Сушилка</option>
+                        <option value="IN_CLOSET">В шкафу</option><option value="WASHING">В стирке</option><option value="DRYING">На сушилке</option>
                     </select>
                 </div>
             </div>
@@ -149,26 +148,17 @@
         const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
         if (tg) tg.expand();
 
-        // 1. ВСТАВЬ СВОЮ ССЫЛКУ НА GOOGLE СКРИПТ
         const API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
-        // 2. Инициализация пользователя
-        const myTgId = tg?.initDataUnsafe?.user?.id;
-        
-        if (!myTgId) {
-            document.getElementById('telegramOnlyScreen').style.display = 'flex';
-        } else {
-            document.getElementById('appContent').style.display = 'block';
-            initializeApp();
-        }
-
+        // ПЕРЕМЕННЫЕ ДОЛЖНЫ БЫТЬ ОБЪЯВЛЕНЫ ДО ИХ ИСПОЛЬЗОВАНИЯ
         let items = [];
         let currentTab = "IN_CLOSET";
         let editingId = null;
         let currentPhotoData = "";
         let CACHE_KEY = "";
-
         const COLOR_MAP = { "черный": "#111827", "белый": "#ffffff", "серый": "#9ca3af", "синий": "#2563eb", "красный": "#ef4444", "зеленый": "#10b981", "желтый": "#facc15", "коричневый": "#78350f", "розовый": "#ec4899" };
+
+        const myTgId = tg?.initDataUnsafe?.user?.id;
 
         function showSync(text) {
             const el = document.getElementById('syncStatus');
@@ -222,7 +212,7 @@
             if (currentTab === "WASHING" && currentCount > 0) {
                 bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `В стирке: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё на сушилку →`;
             } else if (currentTab === "DRYING" && currentCount > 0) {
-                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `В сушке вещей: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё в шкаф ✓`;
+                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `Высохло: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё в шкаф ✓`;
             } else { bulkBar.classList.remove('visible'); }
 
             const grid = document.getElementById('grid');
@@ -239,10 +229,10 @@
                 const hex = COLOR_MAP[(item.color||"").toLowerCase()] || null;
                 const colorDot = hex ? `<span class="color-dot" style="background:${hex}"></span>` : '';
                 const moveButtons = item.status === 'IN_CLOSET' 
-                    ? `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">На сушилку</button>`
+                    ? `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">🧺 В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">☀️ На сушилку</button>`
                     : item.status === 'WASHING' 
-                    ? `<button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">← В шкаф</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">На сушилку →</button>`
-                    : `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">← В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">В шкаф ✓</button>`;
+                    ? `<button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">← В шкаф</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">☀️ На сушилку →</button>`
+                    : `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">← В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">👕 В шкаф ✓</button>`;
 
                 return `
                     <div class="card">
@@ -357,6 +347,14 @@
             localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render(); closeModal();
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
         };
+
+        // ЗАПУСК ПРИЛОЖЕНИЯ
+        if (!myTgId) {
+            document.getElementById('telegramOnlyScreen').style.display = 'flex';
+        } else {
+            document.getElementById('appContent').style.display = 'block';
+            initializeApp();
+        }
     </script>
 </body>
 </html>
