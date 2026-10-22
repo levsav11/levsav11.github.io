@@ -5,13 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Управление гардеробом</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <!-- Встроенный отлов критических ошибок (чтобы больше не гадать) -->
-    <script>
-        window.onerror = function(msg, url, line) {
-            alert("Системная ошибка: " + msg + " (строка " + line + ")");
-        };
-    </script>
 
     <style>
         :root { --bg: #f2f4f7; --card: #ffffff; --text: #111827; --subtext: #6b7280; --accent: #2563eb; --border: #e5e7eb; --danger: #ef4444; }
@@ -82,12 +75,11 @@
         <p>Пожалуйста, откройте это приложение через Telegram.<br>Авторизация происходит автоматически.</p>
     </div>
 
-    <!-- По умолчанию блок скрыт, мы покажем его только после проверок -->
     <div id="appContent" style="display:none;">
         <div class="header">
             <div class="search-row">
-                <input type="text" id="searchInput" class="search-input" placeholder="Поиск..." oninput="render()">
-                <select id="catFilter" class="filter-select" onchange="render()"></select>
+                <input type="text" id="searchInput" class="search-input" placeholder="Поиск..." oninput="tryRender()">
+                <select id="catFilter" class="filter-select" onchange="tryRender()"></select>
             </div>
             <div class="tabs">
                 <div class="tab active" data-tab="IN_CLOSET" onclick="setTab('IN_CLOSET')">Шкаф <span class="badge-count" id="cnt-IN_CLOSET">0</span></div>
@@ -123,11 +115,7 @@
                     <label>Категория (Выбери или введи)</label>
                     <input type="text" id="fCategory" list="cat-suggestions" placeholder="Впиши или выбери...">
                     <datalist id="cat-suggestions">
-                        <option value="Верх / Худи"></option>
-                        <option value="Футболки"></option>
-                        <option value="Штаны / Джинсы"></option>
-                        <option value="Обувь"></option>
-                        <option value="Белье / Носки"></option>
+                        <option value="Верх / Худи"></option><option value="Футболки"></option><option value="Штаны / Джинсы"></option><option value="Обувь"></option><option value="Белье / Носки"></option>
                     </datalist>
                 </div>
                 <div class="field">
@@ -153,13 +141,13 @@
     </div>
 
     <script>
-        // 1. ВСТАВЬ СВОЮ ССЫЛКУ СЮДА
+        // --- 1. ТВОЯ ССЫЛКА НА БЭКЕНД GOOGLE ---
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
         var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
         if (tg) tg.expand();
 
-        // 2. БЕЗОПАСНО ДОСТАЕМ ID (без ломающего синтаксиса ?.)
+        // 2. БЕЗОПАСНО ДОСТАЕМ ID ТЕЛЕГРАМА
         var myTgId = null;
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
             myTgId = tg.initDataUnsafe.user.id;
@@ -170,9 +158,15 @@
         var editingId = null;
         var currentPhotoData = "";
         
-        // Меняем ключ кэша на v5, чтобы гарантированно сбросить сломанные данные
-        var CACHE_KEY = "wardrobe_v5_" + myTgId;
+        // Меняем ключ кэша на v6, чтобы гарантированно стереть ошибки прошлых запусков
+        var CACHE_KEY = "wardrobe_v6_" + myTgId;
         var COLOR_MAP = { "черный": "#111827", "белый": "#ffffff", "серый": "#9ca3af", "синий": "#2563eb", "красный": "#ef4444", "зеленый": "#10b981", "желтый": "#facc15", "коричневый": "#78350f", "розовый": "#ec4899" };
+
+        function showError(msg) {
+            var grid = document.getElementById('grid');
+            if (grid) grid.innerHTML = '<div class="empty" style="color:red; font-weight:bold;">Ошибка: ' + msg + '</div>';
+            else alert(msg);
+        }
 
         function showSync(text) {
             var el = document.getElementById('syncStatus');
@@ -180,45 +174,61 @@
             el.innerText = text; el.style.display = 'block';
         }
 
-        async function fetchFromCloud() {
+        function fetchFromCloud() {
+            if (typeof fetch === 'undefined') { showError("Браузер устарел. Обновите WebView."); return; }
+            
             showSync("Синхронизация...");
-            try {
-                var res = await fetch(API_URL + "?user_id=" + myTgId);
-                var data = await res.json();
+            fetch(API_URL + "?user_id=" + myTgId)
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
                 if (Array.isArray(data)) {
                     items = data;
                     localStorage.setItem(CACHE_KEY, JSON.stringify(items));
-                    render();
+                    tryRender();
                 }
-            } catch (e) { console.log("Работаем оффлайн", e); }
-            showSync("");
+                showSync("");
+            })
+            .catch(function(e) {
+                showSync("");
+                console.log("Оффлайн", e);
+            });
         }
 
         function updateDynamicFilters() {
             var select = document.getElementById('catFilter');
             var currentVal = select.value || "ALL";
             
-            var allCats = items.map(function(i) { return i.category; }).filter(Boolean);
-            var uniqueCats = Array.from(new Set(allCats));
+            var uniqueCats = [];
+            for (var i = 0; i < items.length; i++) {
+                var cat = items[i].category;
+                if (cat && uniqueCats.indexOf(cat) === -1) uniqueCats.push(cat);
+            }
             
             var html = '<option value="ALL">Все категории</option>';
-            uniqueCats.forEach(function(cat) { html += '<option value="' + cat + '">' + cat + '</option>'; });
+            for (var j = 0; j < uniqueCats.length; j++) {
+                html += '<option value="' + uniqueCats[j] + '">' + uniqueCats[j] + '</option>';
+            }
             
             select.innerHTML = html;
-            if (uniqueCats.includes(currentVal)) select.value = currentVal;
+            if (uniqueCats.indexOf(currentVal) !== -1) select.value = currentVal;
             else select.value = "ALL";
         }
 
         function render() {
             updateDynamicFilters();
             
-            ["IN_CLOSET", "WASHING", "DRYING"].forEach(function(st) {
-                var count = items.filter(function(i) { return i.status === st; }).length;
+            var states = ["IN_CLOSET", "WASHING", "DRYING"];
+            for (var s = 0; s < states.length; s++) {
+                var st = states[s];
+                var count = 0;
+                for(var i = 0; i < items.length; i++) { if(items[i].status === st) count++; }
                 document.getElementById('cnt-' + st).innerText = count;
-            });
+            }
 
             var bulkBar = document.getElementById('bulkBar');
-            var currentCount = items.filter(function(i) { return i.status === currentTab; }).length;
+            var currentCount = 0;
+            for(var i = 0; i < items.length; i++) { if(items[i].status === currentTab) currentCount++; }
+            
             if (currentTab === "WASHING" && currentCount > 0) {
                 bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = "В стирке: " + currentCount; document.getElementById('bulkBtn').innerText = "Всё на сушилку →";
             } else if (currentTab === "DRYING" && currentCount > 0) {
@@ -229,165 +239,24 @@
             var query = document.getElementById('searchInput').value.trim().toLowerCase();
             var cat = document.getElementById('catFilter').value;
 
-            var filtered = items.filter(function(i) { return i.status === currentTab; });
-            if (cat !== "ALL") filtered = filtered.filter(function(i) { return i.category === cat; });
-            if (query) {
-                filtered = filtered.filter(function(i) {
-                    return (i.name||"").toLowerCase().includes(query) || (i.brand||"").toLowerCase().includes(query) || (i.category||"").toLowerCase().includes(query);
-                });
+            var filtered = [];
+            for(var i = 0; i < items.length; i++) {
+                var it = items[i];
+                if (it.status !== currentTab) continue;
+                if (cat !== "ALL" && it.category !== cat) continue;
+                if (query) {
+                    var n = (it.name || "").toLowerCase();
+                    var b = (it.brand || "").toLowerCase();
+                    var c = (it.category || "").toLowerCase();
+                    if (n.indexOf(query) === -1 && b.indexOf(query) === -1 && c.indexOf(query) === -1) continue;
+                }
+                filtered.push(it);
             }
 
             if (filtered.length === 0) { grid.innerHTML = '<div class="empty">Список пуст.</div>'; return; }
 
-            grid.innerHTML = filtered.map(function(item) {
+            var htmlResult = '';
+            for(var k = 0; k < filtered.length; k++) {
+                var item = filtered[k];
                 var colorKey = (item.color || "").toLowerCase();
                 var hex = COLOR_MAP[colorKey] || null;
-                var colorDot = hex ? '<span class="color-dot" style="background:' + hex + '"></span>' : '';
-                
-                var moveButtons = '';
-                if (item.status === 'IN_CLOSET') {
-                    moveButtons = '<button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'WASHING\')">🧺 В стирку</button><button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'DRYING\')">☀️ На сушилку</button>';
-                } else if (item.status === 'WASHING') {
-                    moveButtons = '<button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\')">← В шкаф</button><button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'DRYING\')">☀️ На сушилку →</button>';
-                } else {
-                    moveButtons = '<button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'WASHING\')">← В стирку</button><button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\')">👕 В шкаф ✓</button>';
-                }
-
-                return '<div class="card">' +
-                            '<div class="img-wrap" onclick="openModal(\'' + item.id + '\')"><img src="' + item.photo + '" loading="lazy"><span class="cat-pill">' + (item.category || 'Без категории') + '</span></div>' +
-                            '<div class="card-body" onclick="openModal(\'' + item.id + '\')">' +
-                                '<div class="card-title">' + (item.name || 'Без названия') + '</div>' +
-                                '<div class="card-meta">' + colorDot + '<span>' + (item.brand || '') + ' ' + (item.color || '') + '</span></div>' +
-                            '</div>' +
-                            '<div class="move-bar">' + moveButtons + '</div>' +
-                        '</div>';
-            }).join('');
-        }
-
-        window.setTab = function(tab) {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            currentTab = tab;
-            document.querySelectorAll('.tab').forEach(function(t) {
-                t.classList.toggle('active', t.dataset.tab === tab);
-            });
-            render();
-        };
-
-        window.moveItem = async function(id, newStatus) {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            var item = items.find(function(i) { return String(i.id) === String(id); });
-            if (!item) return;
-            item.status = newStatus; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render();
-            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: [id], status: newStatus, user_id: myTgId }) });
-        };
-
-        window.executeBulkAction = async function() {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            var targetStatus = currentTab === "WASHING" ? "DRYING" : "IN_CLOSET";
-            var affectedIds = items.filter(function(i) { return i.status === currentTab; }).map(function(i) { return i.id; });
-            if (affectedIds.length === 0) return;
-            items.forEach(function(i) { if (affectedIds.includes(i.id)) i.status = targetStatus; });
-            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render();
-            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: affectedIds, status: targetStatus, user_id: myTgId }) });
-        };
-
-        window.openModal = function(id) {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            editingId = id || null;
-            if (id) {
-                var item = items.find(function(i) { return String(i.id) === String(id); });
-                document.getElementById('modalTitle').innerText = "Редактировать";
-                document.getElementById('fName').value = item.name || "";
-                document.getElementById('fCategory').value = item.category || "";
-                document.getElementById('fStatus').value = item.status || "IN_CLOSET";
-                document.getElementById('fBrand').value = item.brand || "";
-                document.getElementById('fColor').value = item.color || "";
-                document.getElementById('fNotes').value = item.notes || "";
-                currentPhotoData = item.photo || "";
-                if (currentPhotoData) { document.getElementById('photoPreview').src = currentPhotoData; document.getElementById('photoPreview').style.display = "block"; document.getElementById('photoPlaceholder').style.display = "none"; }
-                document.getElementById('btnDelete').style.display = "block";
-            } else {
-                document.getElementById('modalTitle').innerText = "Новая вещь";
-                document.getElementById('fName').value = ""; document.getElementById('fCategory').value = ""; document.getElementById('fStatus').value = currentTab; document.getElementById('fBrand').value = ""; document.getElementById('fColor').value = ""; document.getElementById('fNotes').value = "";
-                currentPhotoData = ""; document.getElementById('photoPreview').style.display = "none"; document.getElementById('photoPlaceholder').style.display = "block"; document.getElementById('btnDelete').style.display = "none";
-            }
-            document.getElementById('itemModal').classList.add('active');
-        };
-
-        window.closeModal = function() { document.getElementById('itemModal').classList.remove('active'); };
-
-        window.handlePhotoSelect = function(e) {
-            var file = e.target.files[0]; if (!file) return;
-            var reader = new FileReader();
-            reader.onload = function(ev) {
-                var img = new Image();
-                img.onload = function() {
-                    var canvas = document.createElement('canvas');
-                    var w = img.width, h = img.height;
-                    if (w > 1000 || h > 1000) { if (w > h) { h = Math.round(h * 1000 / w); w = 1000; } else { w = Math.round(w * 1000 / h); h = 1000; } }
-                    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    currentPhotoData = canvas.toDataURL('image/jpeg', 0.88);
-                    document.getElementById('photoPreview').src = currentPhotoData; document.getElementById('photoPreview').style.display = "block"; document.getElementById('photoPlaceholder').style.display = "none";
-                };
-                img.src = ev.target.result;
-            };
-            reader.readAsDataURL(file); e.target.value = "";
-        };
-
-        window.saveCurrentItem = async function() {
-            if (!currentPhotoData) { alert("Необходимо добавить фото"); return; }
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-
-            var itemObj = {
-                id: editingId ? String(editingId) : String(Date.now()),
-                photo: currentPhotoData,
-                name: document.getElementById('fName').value.trim(),
-                category: document.getElementById('fCategory').value.trim(),
-                status: document.getElementById('fStatus').value,
-                brand: document.getElementById('fBrand').value.trim(),
-                color: document.getElementById('fColor').value.trim(),
-                notes: document.getElementById('fNotes').value.trim()
-            };
-
-            if (editingId) { 
-                var idx = items.findIndex(function(i) { return String(i.id) === String(editingId); }); 
-                if (idx !== -1) items[idx] = itemObj; 
-            } else { items.unshift(itemObj); }
-
-            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render(); closeModal(); showSync("Сохранение...");
-            try {
-                var res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "save", item: itemObj, user_id: myTgId }) });
-                var result = await res.json();
-                if (result.ok && result.photoUrl) { 
-                    var saved = items.find(function(i) { return String(i.id) === String(itemObj.id); }); 
-                    if (saved) { saved.photo = result.photoUrl; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); } 
-                }
-            } catch (e) {} showSync("");
-        };
-
-        window.deleteCurrentItem = async function() {
-            if (!editingId || !confirm("Удалить вещь безвозвратно?")) return;
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            items = items.filter(function(i) { return String(i.id) !== String(editingId); });
-            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render(); closeModal();
-            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
-        };
-
-        // Запуск логики
-        try {
-            if (!myTgId) {
-                document.getElementById('telegramOnlyScreen').style.display = 'flex';
-            } else {
-                document.getElementById('appContent').style.display = 'block';
-                var savedData = localStorage.getItem(CACHE_KEY);
-                items = savedData ? JSON.parse(savedData) : [];
-                if (!Array.isArray(items)) items = [];
-                render();
-                fetchFromCloud();
-            }
-        } catch(e) {
-            alert("Ошибка запуска: " + e.message);
-        }
-    </script>
-</body>
-</html>
