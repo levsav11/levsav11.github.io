@@ -41,7 +41,7 @@
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; align-items: flex-end; justify-content: center; }
         .modal.active { display: flex; }
-        .modal-sheet { background: var(--card); width: 100%; max-width: 500px; max-height: 92vh; border-radius: 20px 20px 0 0; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; transform: translateY(0); }
+        .modal-sheet { background: var(--card); width: 100%; max-width: 500px; max-height: 92vh; border-radius: 20px 20px 0 0; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; }
         .modal-header h3 { margin: 0; font-size: 18px; }
         .close-x { background: none; border: none; font-size: 22px; color: var(--subtext); cursor: pointer; }
@@ -61,37 +61,26 @@
 
         .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.8); color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; }
         .empty { grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: var(--subtext); }
-
-        #errorOverlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 999; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <!-- Защитный экран ошибок, чтобы больше никаких белых экранов -->
-    <div id="errorOverlay">
-        <h2 style="color:var(--danger)">Внимание</h2>
-        <p id="errorText" style="color:var(--subtext)"></p>
-    </div>
-
-    <!-- Основной интерфейс рендерится всегда -->
-    <div id="appContent">
-        <div class="header">
-            <div class="search-row">
-                <input type="text" id="searchInput" class="search-input" placeholder="Поиск..." oninput="render()">
-                <select id="catFilter" class="filter-select" onchange="render()"></select>
-            </div>
-            <div class="tabs">
-                <div class="tab active" data-tab="IN_CLOSET" onclick="setTab('IN_CLOSET')">Шкаф <span class="badge-count" id="cnt-IN_CLOSET">0</span></div>
-                <div class="tab" data-tab="WASHING" onclick="setTab('WASHING')">Стирка <span class="badge-count" id="cnt-WASHING">0</span></div>
-                <div class="tab" data-tab="DRYING" onclick="setTab('DRYING')">Сушилка <span class="badge-count" id="cnt-DRYING">0</span></div>
-            </div>
+    <div class="header">
+        <div class="search-row">
+            <input type="text" id="searchInput" class="search-input" placeholder="Поиск..." oninput="render()">
+            <select id="catFilter" class="filter-select" onchange="render()"></select>
         </div>
-
-        <div id="bulkBar" class="bulk-bar"><span id="bulkText">Действие</span><button id="bulkBtn" class="bulk-btn" onclick="executeBulkAction()">Выполнить</button></div>
-        <div id="grid" class="grid"></div>
-        <button class="fab" onclick="openModal()">+</button>
-        <div id="syncStatus" class="sync-indicator">Синхронизация...</div>
+        <div class="tabs">
+            <div class="tab active" data-tab="IN_CLOSET" onclick="setTab('IN_CLOSET')">Шкаф <span class="badge-count" id="cnt-IN_CLOSET">0</span></div>
+            <div class="tab" data-tab="WASHING" onclick="setTab('WASHING')">Стирка <span class="badge-count" id="cnt-WASHING">0</span></div>
+            <div class="tab" data-tab="DRYING" onclick="setTab('DRYING')">Сушилка <span class="badge-count" id="cnt-DRYING">0</span></div>
+        </div>
     </div>
+
+    <div id="bulkBar" class="bulk-bar"><span id="bulkText">Действие</span><button id="bulkBtn" class="bulk-btn" onclick="executeBulkAction()">Выполнить</button></div>
+    <div id="grid" class="grid"></div>
+    <button class="fab" onclick="openModal()">+</button>
+    <div id="syncStatus" class="sync-indicator">Синхронизация...</div>
 
     <!-- Модальное окно свойств -->
     <div class="modal" id="itemModal" onclick="if(event.target===this) closeModal()">
@@ -140,17 +129,15 @@
     </div>
 
     <script>
-        // 1. ВСТАВЬ СВОЮ ССЫЛКУ МЕЖДУ КАВЫЧЕК
-        const API_URL = "ВСТАВЬ_СВОЮ_ССЫЛКУ_EXEC_СЮДА";
+        const API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
         const tg = window.Telegram?.WebApp;
         if (tg) tg.expand();
 
-        // 2. Получаем ID (или ставим заглушку, если открыто в браузере для теста)
-        const myTgId = tg?.initDataUnsafe?.user?.id || "browser_test_user";
+        const myTgId = tg?.initDataUnsafe?.user?.id || "default_user";
 
-        // Кэш обновлен на v7, чтобы 100% сбросить старые ошибки
-        const CACHE_KEY = `wardrobe_v7_${myTgId}`;
+        // Кэш v8 сбрасывает старые следы сбоев
+        const CACHE_KEY = `wardrobe_v8_${myTgId}`;
         let items = JSON.parse(localStorage.getItem(CACHE_KEY) || "[]");
         let currentTab = "IN_CLOSET";
         let editingId = null;
@@ -175,7 +162,7 @@
                     render();
                 }
             } catch (e) {
-                console.warn("Работа оффлайн", e);
+                console.warn("Оффлайн режим", e);
             }
             showSync("");
         }
@@ -347,14 +334,8 @@
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
         };
 
-        // Запуск
-        try {
-            render();
-            fetchFromCloud();
-        } catch (e) {
-            document.getElementById('errorOverlay').style.display = 'flex';
-            document.getElementById('errorText').innerText = e.message;
-        }
+        render();
+        fetchFromCloud();
     </script>
 </body>
 </html>
