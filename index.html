@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Мой Гардероб</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>
-        window.onerror = function(msg, url, line) {
-            alert("Системная ошибка: " + msg);
-        };
-    </script>
     <style>
         :root { --bg: #f2f4f7; --card: #ffffff; --text: #111827; --subtext: #6b7280; --accent: #2563eb; --border: #e5e7eb; --danger: #ef4444; --input-bg: #f9fafb; --overlay: rgba(0,0,0,0.55); }
         @media (prefers-color-scheme: dark) {
@@ -50,7 +45,6 @@
 
         .fab { position: fixed; bottom: 20px; right: 20px; width: 58px; height: 58px; border-radius: 29px; background: var(--accent); color: #fff; font-size: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(37,99,235,0.4); border: none; z-index: 90; cursor: pointer; }
 
-        /* Модалки */
         .modal { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 200; align-items: flex-end; justify-content: center; }
         .modal.active { display: flex; }
         .modal-sheet { background: var(--card); width: 100%; max-width: 500px; max-height: 92vh; border-radius: 20px 20px 0 0; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
@@ -68,14 +62,8 @@
         .field label { font-size: 11px; font-weight: 700; color: var(--subtext); text-transform: uppercase; }
         .field input, .field select { padding: 11px; border: 1px solid var(--border); border-radius: 9px; font-size: 15px; background: var(--input-bg); color: var(--text); outline: none; width: 100%; }
 
-        /* ИДЕАЛЬНЫЕ НАПРАВЛЯЮЩИЕ ЦВЕТОВ (Без лишних оберток) */
         .color-controls { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
-        .pipette { 
-            -webkit-appearance: none; appearance: none;
-            width: 38px; height: 38px; border: none; padding: 0; 
-            border-radius: 50%; overflow: hidden; cursor: pointer; 
-            background: none; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
+        .pipette { -webkit-appearance: none; appearance: none; width: 38px; height: 38px; border: none; padding: 0; border-radius: 50%; overflow: hidden; cursor: pointer; background: none; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .pipette::-webkit-color-swatch-wrapper { padding: 0; }
         .pipette::-webkit-color-swatch { border: 1px solid var(--border); border-radius: 50%; }
         
@@ -104,7 +92,6 @@
     </style>
 </head>
 <body>
-
     <div id="imageViewer">
         <div class="viewer-close" onclick="document.getElementById('imageViewer').classList.remove('active')">✕</div>
         <img id="viewerImg" src="" alt="Fullscreen">
@@ -133,7 +120,6 @@
                 <div class="tab" data-tab="DRYING" onclick="setTab('DRYING')">Сушилка <span class="badge-count" id="cnt-DRYING">0</span></div>
             </div>
         </div>
-
         <div id="bulkBar" class="bulk-bar"><span id="bulkText">Действие</span><button id="bulkBtn" class="bulk-btn" onclick="executeBulkAction()">Выполнить</button></div>
         <div id="grid" class="grid"></div>
         <button class="fab" onclick="openModal()">+</button>
@@ -180,20 +166,15 @@
             <div class="field">
                 <label>Точные цвета (Палитра)</label>
                 <div class="color-controls">
-                    <!-- Цвет 1 -->
                     <div class="color-block-wrap" id="wrapColor1">
                         <input type="color" id="fColorHex1" class="pipette" value="#ffffff" onchange="markCustomColorUsed()">
                     </div>
-                    
                     <button id="btnToggleColor2" class="btn-color-action" onclick="toggleColor2()">+ 2-й цвет</button>
                     
-                    <!-- Цвет 2 (скрыт по умолчанию) -->
                     <div class="color-block-wrap" id="wrapColor2" style="display:none;">
                         <input type="color" id="fColorHex2" class="pipette" value="#ffffff" onchange="markCustomColorUsed()">
                         <div style="cursor:pointer; padding:0 4px; color:var(--danger); font-weight:bold;" onclick="toggleColor2()">✕</div>
                     </div>
-                    
-                    <!-- Сброс всех цветов (возврат к словарю) -->
                     <button id="btnClearColors" class="btn-color-action danger" style="display:none;" onclick="clearCustomColors()">Сбросить</button>
                 </div>
                 <input type="hidden" id="fHasCustomColors" value="false">
@@ -209,7 +190,6 @@
     </div>
 
     <script>
-        // 1. ВСТАВЬ СВОЮ ССЫЛКУ МЕЖДУ КАВЫЧЕК
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
         var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
@@ -219,7 +199,7 @@
         var myTgId = "default_user";
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { myTgId = tg.initDataUnsafe.user.id; }
 
-        var CACHE_KEY = "wardrobe_v12_" + myTgId; // Новый ключ кэша для безопасного старта
+        var CACHE_KEY = "wardrobe_v13_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var editingId = null;
@@ -240,16 +220,14 @@
             el.innerText = text; el.style.display = 'block';
         }
 
-        // Парсинг цвета
         function parseColorField(colorStr) {
             if (!colorStr) return { text: "", dot: "", hex1: "#ffffff", hex2: "#ffffff", hasCustom: false, isColor2Active: false };
             var parts = colorStr.split("||");
             var text = parts[0] || "";
             var h1 = parts[1];
             var h2 = parts[2];
-            
             var bgStyle = "";
-            var isTwo = (h1 && h2 && h1 !== h2); // Строго 2 разных цвета для градиента
+            var isTwo = (h1 && h2 && h1 !== h2);
             
             if (isTwo) bgStyle = "background: linear-gradient(135deg, " + h1 + " 50%, " + h2 + " 50%)";
             else if (h1) bgStyle = "background: " + h1;
@@ -257,7 +235,6 @@
                 var clean = text.toLowerCase().trim().replace(/ё/g, "е");
                 if (COLOR_MAP[clean]) bgStyle = "background: " + COLOR_MAP[clean];
             }
-            
             var dotHtml = bgStyle ? '<span class="color-dot" style="' + bgStyle + '"></span>' : '';
             return { text: text, dot: dotHtml, hex1: h1 || "#ffffff", hex2: h2 || "#ffffff", hasCustom: !!h1, isColor2Active: isTwo };
         }
@@ -265,13 +242,24 @@
         function fetchFromCloud() {
             showSync("Синхронизация...");
             fetch(API_URL + "?user_id=" + myTgId)
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    if (Array.isArray(data)) {
-                        items = data; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render();
+            .then(function(res) { 
+                if(!res.ok) throw new Error("Сервер не ответил"); 
+                return res.json(); 
+            })
+            .then(function(data) {
+                if (Array.isArray(data)) {
+                    if (data.length === 0 && items.length === 0) {
+                        alert("База Гугла подключена, но она вернула 0 вещей.\n\nСкорее всего вы забыли выбрать «Новая версия» при публикации Скрипта в Google.");
                     }
-                    showSync("");
-                }).catch(function(e) { showSync(""); });
+                    items = data; 
+                    localStorage.setItem(CACHE_KEY, JSON.stringify(items)); 
+                    render();
+                }
+                showSync("");
+            }).catch(function(e) { 
+                showSync(""); 
+                alert("Сетевая ошибка: " + e.message); 
+            });
         }
 
         function updateDynamicFilters() {
@@ -338,7 +326,7 @@
                             '<div class="move-bar">' + moveButtons + '</div>' +
                         '</div>';
             }
-            if (!hasItems) grid.innerHTML = '<div class="empty">В этой группе пока пусто.</div>';
+            if (!hasItems) grid.innerHTML = '<div class="empty">Список пуст.</div>';
             else grid.innerHTML = htmlResult;
         }
 
@@ -369,7 +357,6 @@
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: affectedIds, status: targetStatus, user_id: myTgId }) });
         };
 
-        // --- ЛОГИКА ЦВЕТОВ ---
         function checkResetBtnVisibility() {
             var isCustom = document.getElementById('fHasCustomColors').value === "true";
             document.getElementById('btnClearColors').style.display = isCustom ? 'inline-block' : 'none';
@@ -402,7 +389,6 @@
             document.getElementById('imageViewer').classList.add('active');
         };
 
-        // --- ОКНО УДАЛЕНИЯ ---
         window.requestDelete = function() {
             if (tg) tg.HapticFeedback.impactOccurred('light');
             document.getElementById('confirmDialog').classList.add('active');
@@ -456,3 +442,95 @@
                     prev.style.display = "none"; placeholder.style.display = "flex"; changeBtn.style.display = "none";
                 }
                 document.getElementById('btnDelete').style.display = "block";
+            } else {
+                document.getElementById('modalTitle').innerText = "Новая вещь";
+                document.getElementById('fName').value = ""; document.getElementById('fCategory').value = ""; document.getElementById('fStatus').value = currentTab; document.getElementById('fBrand').value = ""; document.getElementById('fColorText').value = ""; document.getElementById('fNotes').value = "";
+                
+                clearCustomColors();
+                
+                currentPhotoData = ""; 
+                prev.style.display = "none"; placeholder.style.display = "flex"; changeBtn.style.display = "none";
+                document.getElementById('btnDelete').style.display = "none";
+            }
+            document.getElementById('itemModal').classList.add('active');
+        };
+
+        window.closeModal = function() { document.getElementById('itemModal').classList.remove('active'); };
+
+        window.handlePhotoSelect = function(e) {
+            var file = e.target.files[0]; if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+                var img = new Image();
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    var w = img.width, h = img.height;
+                    if (w > 1000 || h > 1000) { if (w > h) { h = Math.round(h * 1000 / w); w = 1000; } else { w = Math.round(w * 1000 / h); h = 1000; } }
+                    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    currentPhotoData = canvas.toDataURL('image/jpeg', 0.88);
+                    
+                    document.getElementById('photoPreview').src = currentPhotoData; 
+                    document.getElementById('photoPreview').style.display = "block"; 
+                    document.getElementById('photoPlaceholder').style.display = "none";
+                    document.getElementById('btnChangePhoto').style.display = "block";
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file); e.target.value = "";
+        };
+
+        window.saveCurrentItem = function() {
+            if (tg) tg.HapticFeedback.impactOccurred('light');
+            var colorText = document.getElementById('fColorText').value.trim();
+            var finalColorField = colorText;
+            
+            if (document.getElementById('fHasCustomColors').value === "true") {
+                var h1 = document.getElementById('fColorHex1').value;
+                if (isColor2Active) {
+                    var h2 = document.getElementById('fColorHex2').value;
+                    finalColorField = colorText + "||" + h1 + "||" + h2;
+                } else {
+                    finalColorField = colorText + "||" + h1;
+                }
+            }
+
+            var itemObj = {
+                id: editingId ? String(editingId) : String(Date.now()),
+                photo: currentPhotoData,
+                name: document.getElementById('fName').value.trim(),
+                category: document.getElementById('fCategory').value.trim(),
+                status: document.getElementById('fStatus').value,
+                brand: document.getElementById('fBrand').value.trim(),
+                color: finalColorField,
+                notes: document.getElementById('fNotes').value.trim()
+            };
+
+            if (editingId) { 
+                var idx = -1;
+                for(var i=0; i<items.length; i++) { if(String(items[i].id) === String(editingId)) { idx = i; break; } }
+                if (idx !== -1) items[idx] = itemObj; 
+            } else { items.unshift(itemObj); }
+
+            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render(); closeModal(); showSync("Сохранение...");
+            
+            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "save", item: itemObj, user_id: myTgId }) })
+            .then(function(res) { return res.json(); }).then(function(result) {
+                if (result.ok && result.photoUrl) { 
+                    for(var j=0; j<items.length; j++) {
+                        if(String(items[j].id) === String(itemObj.id)) { items[j].photo = result.photoUrl; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); break; }
+                    }
+                    render();
+                }
+                showSync("");
+            }).catch(function(e) { showSync(""); });
+        };
+
+        try {
+            var savedData = localStorage.getItem(CACHE_KEY);
+            if (savedData) items = JSON.parse(savedData);
+            if (!Array.isArray(items)) items = [];
+            render(); fetchFromCloud();
+        } catch(e) {}
+    </script>
+</body>
+</html>
