@@ -310,9 +310,9 @@
             const bulkBar = document.getElementById('bulkBar');
             const currentCount = items.filter(i => i.status === currentTab).length;
             if (currentTab === "WASHING" && currentCount > 0) {
-                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `В стирке: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё на сушилку →`;
+                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `В стирке: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё на сушилку`;
             } else if (currentTab === "DRYING" && currentCount > 0) {
-                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `Высохло: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё в шкаф ✓`;
+                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `Сохнет: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё в шкаф`;
             } else { bulkBar.classList.remove('visible'); }
 
             const grid = document.getElementById('grid');
@@ -333,9 +333,9 @@
                 const colorObj = parseColorField(item.color);
                 
                 let moveButtons = '';
-                if (item.status === 'IN_CLOSET') moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">🧺 В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">☀️ На сушилку</button>`;
-                else if (item.status === 'WASHING') moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">← В шкаф</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">☀️ На сушилку →</button>`;
-                else moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">← В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">👕 В шкаф ✓</button>`;
+                if (item.status === 'IN_CLOSET') moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">На сушилку</button>`;
+                else if (item.status === 'WASHING') moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">В шкаф</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">На сушилку</button>`;
+                else moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">В шкаф</button>`;
 
                 const photoSrc = item.photo || NO_PHOTO_SVG;
                 const photoPadding = item.photo ? '0' : '30px'; // Отступ для иконки заглушки
