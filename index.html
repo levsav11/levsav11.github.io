@@ -20,7 +20,10 @@
             --active-light: var(--bg-closet-light);
 
             --bg: #f2f4f7; --card: #ffffff; --text: #111827; --subtext: #6b7280; 
-            --border: #e5e7eb; --danger: #ef4444; --input-bg: #f9fafb; --overlay: rgba(0,0,0,0.55); 
+            --border: #e5e7eb; --danger: #ef4444; --input-bg: #f9fafb; --overlay: rgba(0,0,0,0.55);
+            
+            /* Адаптивная обводка для цветовых кружков */
+            --circle-border: rgba(0, 0, 0, 0.15); 
         }
 
         @media (prefers-color-scheme: dark) {
@@ -29,6 +32,7 @@
                 --border: #374151; --danger: #f87171; --input-bg: #111827; --overlay: rgba(0,0,0,0.75); 
                 --theme-closet: #f59e0b; --theme-washing: #3b82f6; --theme-drying: #a855f7;
                 --bg-closet-light: rgba(245, 158, 11, 0.15); --bg-washing-light: rgba(59, 130, 246, 0.15); --bg-drying-light: rgba(168, 85, 247, 0.15);
+                --circle-border: rgba(255, 255, 255, 0.25);
             }
         }
         body.dark-theme { 
@@ -37,6 +41,7 @@
             --border: #374151; --danger: #f87171; --input-bg: #111827; --overlay: rgba(0,0,0,0.75); 
             --theme-closet: #f59e0b; --theme-washing: #3b82f6; --theme-drying: #a855f7;
             --bg-closet-light: rgba(245, 158, 11, 0.15); --bg-washing-light: rgba(59, 130, 246, 0.15); --bg-drying-light: rgba(168, 85, 247, 0.15);
+            --circle-border: rgba(255, 255, 255, 0.25);
         }
 
         body.tab-IN_CLOSET { --active-accent: var(--theme-closet); --active-light: var(--bg-closet-light); }
@@ -46,11 +51,12 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); padding-bottom: 90px; transition: background-color 0.3s; }
 
-        /* УМНАЯ ЗАСТАВКА */
+        /* ЗАСТАВКА С ВЕРСИЕЙ */
         #splashScreen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.4s ease; }
         .splash-icon { width: 64px; height: 64px; color: var(--text); margin-bottom: 16px; opacity: 0; animation: fadeUp 0.5s ease forwards; }
         .splash-title { font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: 1px; opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards; }
         .splash-loader { margin-top: 24px; width: 30px; height: 30px; border: 3px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 1s linear infinite, fadeUp 0.5s ease 0.2s forwards; opacity: 0; }
+        .splash-version { position: absolute; bottom: 24px; font-size: 13px; font-weight: 600; color: var(--subtext); opacity: 0; animation: fadeUp 0.5s ease 0.3s forwards; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -96,10 +102,10 @@
         .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; overflow: hidden; width: 100%; }
         .card-meta span.meta-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
         
-        /* ЧЕТКАЯ ОБВОДКА ДЛЯ ЦВЕТОВЫХ КРУЖКОВ */
+        /* ОБНОВЛЕННЫЕ ЦВЕТОВЫЕ КРУЖКИ */
         .color-dot { 
-            width: 14px; height: 14px; flex: 0 0 14px; border-radius: 50%; display: block; 
-            border: 1px solid rgba(128,128,128,0.4); box-shadow: inset 0 0 2px rgba(0,0,0,0.1); 
+            width: 16px; height: 16px; flex: 0 0 16px; border-radius: 50%; display: block; 
+            border: 2px solid var(--circle-border); 
             -webkit-mask-image: -webkit-radial-gradient(white, black); 
         }
         
@@ -115,7 +121,6 @@
         .fab svg { width: 28px; height: 28px; stroke-width: 2; }
         .fab:active { transform: scale(0.95); }
 
-        /* МОДАЛЬНЫЕ ОКНА И СКРОЛЛ */
         .modal { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 200; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
         .modal.active { display: flex; opacity: 1; }
         .modal-sheet { background: var(--card); width: 100%; max-width: 500px; height: 92vh; border-radius: 20px 20px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.1, 0.9, 0.2, 1); }
@@ -125,13 +130,12 @@
         .modal-header h3 { margin: 0; font-size: 17px; font-weight: 700; color: var(--text); }
         .close-btn-icon { background: var(--input-bg); border: none; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 16px; color: var(--subtext); cursor: pointer; }
 
-        /* КОНТЕЙНЕРЫ ДЛЯ ИСПРАВЛЕНИЯ СКРОЛЛА КНОПОК */
         .view-mode, .edit-mode { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; min-height: 0; }
         .edit-mode { display: none; }
 
         .view-photo-area { position: relative; width: 100%; height: 280px; background: var(--card); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
         .view-blur-bg { position: absolute; inset: -20px; background-size: cover; background-position: center; filter: blur(15px); opacity: 0.35; z-index: 0; }
-        .view-photo-area img { position: relative; z-index: 1; max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .view-photo-area img { position: relative; z-index: 1; max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
         
         .view-info-area { padding: 20px 20px 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; flex-grow: 1; }
         .view-title { font-size: 22px; font-weight: 800; color: var(--text); margin: 0; line-height: 1.2; }
@@ -148,7 +152,7 @@
 
         .modal-top { padding: 15px 18px; flex-shrink: 0; background: var(--card); z-index: 10; border-bottom: 1px solid var(--border); }
         .photo-preview-box { width: 100%; height: 160px; border-radius: 12px; background: var(--input-bg); border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
+        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; }
         .photo-placeholder { color: var(--subtext); font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.2s; }
         .photo-placeholder svg { width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.4; }
         .btn-change-photo { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; backdrop-filter: blur(4px); cursor: pointer; display: flex; align-items: center; gap: 6px; }
@@ -163,8 +167,8 @@
 
         .color-controls { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
         .color-circle { 
-            width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; position: relative; overflow: hidden; 
-            border: 1px solid rgba(128,128,128,0.4); box-shadow: inset 0 0 2px rgba(0,0,0,0.1); 
+            width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; position: relative; overflow: hidden; 
+            border: 2px solid var(--circle-border); 
         }
         .color-circle input[type="color"] { position: absolute; top: -10px; left: -10px; width: 60px; height: 60px; opacity: 0; cursor: pointer; }
         
@@ -179,13 +183,13 @@
         .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.85); color: #fff; padding: 8px 14px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; font-weight: 500; backdrop-filter: blur(4px); }
         .empty { width: 100%; text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 14px; display: none; }
 
-        /* ИСПРАВЛЕННЫЙ ПОЛНОЭКРАННЫЙ ZOOM */
+        /* ИДЕАЛЬНЫЙ ПОЛНОЭКРАННЫЙ ZOOM (С МУЛЬТИТАЧЕМ) */
         #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; opacity: 0; transition: opacity 0.3s ease; }
         #imageViewer.active { display: flex; opacity: 1; }
         .viewer-header { height: 60px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; background: linear-gradient(rgba(0,0,0,0.6), transparent); z-index: 1001; }
         .viewer-close { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; backdrop-filter: blur(4px); }
         .viewer-img-container { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; touch-action: none; }
-        #viewerImg { max-width: 100%; max-height: 100%; object-fit: contain; }
+        #viewerImg { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: 50% 50%; transition: transform 0.1s linear; }
 
         #confirmDialog { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 300; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
         #confirmDialog.active { display: flex; opacity: 1; }
@@ -198,16 +202,17 @@
 </head>
 <body class="tab-IN_CLOSET">
 
-    <!-- ЗАСТАВКА -->
+    <!-- ЗАСТАВКА С ВЕРСИЕЙ -->
     <div id="splashScreen">
         <svg class="splash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
         </svg>
         <div class="splash-title">Мой Гардероб</div>
         <div class="splash-loader"></div>
+        <div class="splash-version">Версия 1.0</div>
     </div>
 
-    <!-- ПОЛНОЭКРАННЫЙ ZOOM -->
+    <!-- ПОЛНОЭКРАННЫЙ МУЛЬТИТАЧ ZOOM -->
     <div id="imageViewer">
         <div class="viewer-header">
             <button class="viewer-close" onclick="closeFullscreen()">Закрыть</button>
@@ -372,7 +377,7 @@
         var myTgId = "default_user";
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { myTgId = tg.initDataUnsafe.user.id; }
 
-        var CACHE_KEY = "wardrobe_v20_" + myTgId;
+        var CACHE_KEY = "wardrobe_v21_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var editingId = null;
@@ -394,7 +399,7 @@
             if (splash && splash.style.display !== 'none') {
                 splash.style.opacity = '0';
                 if(main) main.style.opacity = '1';
-                setTimeout(function(){ splash.style.display = 'none'; }, 300);
+                setTimeout(function(){ splash.style.display = 'none'; }, 400);
             }
         }
         setTimeout(hideSplash, 1500); 
@@ -633,15 +638,13 @@
         // --- НАТИВНЫЙ МУЛЬТИТАЧ ZOOM ---
         var viewerImg = document.getElementById('viewerImg');
         var viewerContainer = document.getElementById('viewerContainer');
-        var zoomScale = 1; 
-        var panX = 0, panY = 0;
-        var startPanX = 0, startPanY = 0;
-        var isPanning = false; 
-        var lastTap = 0;
+        var scale = 1, currentX = 0, currentY = 0;
+        var startX = 0, startY = 0, startScale = 1, startDistance = 0;
+        var isPanning = false; var lastTap = 0;
 
         function resetZoomState() {
-            zoomScale = 1; panX = 0; panY = 0;
-            viewerImg.style.transition = 'transform 0.25s ease';
+            scale = 1; currentX = 0; currentY = 0;
+            viewerImg.style.transition = 'transform 0.25s cubic-bezier(0.1, 0.9, 0.2, 1)';
             viewerImg.style.transform = "translate(0px, 0px) scale(1)";
         }
 
@@ -654,46 +657,56 @@
         window.closeFullscreen = function() { document.getElementById('imageViewer').classList.remove('active'); };
 
         viewerContainer.addEventListener('touchstart', function(e) {
-            if (e.touches.length === 1 && zoomScale > 1) {
+            viewerImg.style.transition = 'none';
+            if (e.touches.length === 2) {
+                isPanning = false;
+                startDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                startScale = scale;
+            } else if (e.touches.length === 1 && scale > 1) {
                 isPanning = true;
-                startPanX = e.touches[0].pageX - panX;
-                startPanY = e.touches[0].pageY - panY;
-                viewerImg.style.transition = 'none'; 
+                startX = e.touches[0].clientX - currentX;
+                startY = e.touches[0].clientY - currentY;
             }
         }, {passive: false});
 
         viewerContainer.addEventListener('touchmove', function(e) {
-            if (e.touches.length === 1 && isPanning) {
-                e.preventDefault();
-                panX = e.touches[0].pageX - startPanX;
-                panY = e.touches[0].pageY - startPanY;
-                viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + zoomScale + ")";
+            e.preventDefault();
+            if (e.touches.length === 2) {
+                var dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                scale = Math.max(1, Math.min(startScale * (dist / startDistance), 5));
+                viewerImg.style.transform = "translate(" + currentX + "px, " + currentY + "px) scale(" + scale + ")";
+            } else if (e.touches.length === 1 && isPanning && scale > 1) {
+                currentX = e.touches[0].clientX - startX;
+                currentY = e.touches[0].clientY - startY;
+                viewerImg.style.transform = "translate(" + currentX + "px, " + currentY + "px) scale(" + scale + ")";
             }
         }, {passive: false});
 
         viewerContainer.addEventListener('touchend', function(e) {
-            isPanning = false;
+            if (e.touches.length < 2) isPanning = false;
+            if (e.touches.length === 0 && scale <= 1) resetZoomState();
+            
+            // Двойной быстрый тап
             if (e.changedTouches.length === 1) {
-                var currentTime = new Date().getTime();
-                var tapLength = currentTime - lastTap;
-                if (tapLength < 300 && tapLength > 0) {
+                var now = new Date().getTime();
+                if (now - lastTap < 300 && now - lastTap > 0) {
                     e.preventDefault();
-                    if (zoomScale > 1) { 
+                    if (scale > 1) { 
                         resetZoomState(); 
                     } else { 
-                        zoomScale = 2.5;
+                        scale = 3;
                         var rect = viewerContainer.getBoundingClientRect();
                         var touchX = e.changedTouches[0].clientX - rect.left;
                         var touchY = e.changedTouches[0].clientY - rect.top;
                         
-                        panX = (rect.width / 2 - touchX) * 1.5;
-                        panY = (rect.height / 2 - touchY) * 1.5;
+                        currentX = (rect.width / 2 - touchX) * 2;
+                        currentY = (rect.height / 2 - touchY) * 2;
                         
-                        viewerImg.style.transition = 'transform 0.25s ease';
-                        viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + zoomScale + ")"; 
+                        viewerImg.style.transition = 'transform 0.25s cubic-bezier(0.1, 0.9, 0.2, 1)';
+                        viewerImg.style.transform = "translate(" + currentX + "px, " + currentY + "px) scale(" + scale + ")"; 
                     }
                 }
-                lastTap = currentTime;
+                lastTap = now;
             }
         });
 
