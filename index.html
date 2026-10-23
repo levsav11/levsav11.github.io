@@ -6,6 +6,7 @@
     <title>Мой Гардероб</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* ПЕРЕМЕННЫЕ И ТЕМНАЯ ТЕМА */
         :root { --bg: #f2f4f7; --card: #ffffff; --text: #111827; --subtext: #6b7280; --accent: #2563eb; --border: #e5e7eb; --danger: #ef4444; --input-bg: #f9fafb; --overlay: rgba(0,0,0,0.55); }
         @media (prefers-color-scheme: dark) {
             :root { --bg: #111827; --card: #1f2937; --text: #f9fafb; --subtext: #9ca3af; --accent: #3b82f6; --border: #374151; --danger: #f87171; --input-bg: #111827; --overlay: rgba(0,0,0,0.75); }
@@ -17,7 +18,7 @@
 
         .header { background: var(--card); padding: 12px 14px 8px; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-bottom: 1px solid var(--border); }
         .search-row { display: flex; gap: 8px; margin-bottom: 10px; }
-        .search-input, .filter-select { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; background: var(--input-bg); color: var(--text); outline: none; }
+        .search-input, .filter-select { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; background: var(--input-bg); color: var(--text); outline: none; transition: 0.2s; }
         
         .tabs { display: flex; gap: 6px; }
         .tab { flex: 1; text-align: center; padding: 9px 4px; font-weight: 600; font-size: 13px; color: var(--subtext); border-radius: 8px; cursor: pointer; background: var(--input-bg); transition: 0.2s; }
@@ -29,7 +30,11 @@
         .bulk-btn { background: var(--accent); color: #fff; border: none; padding: 7px 12px; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; }
-        .card { background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 1px solid var(--border); }
+        
+        /* Плавное появление карточек */
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 1px solid var(--border); opacity: 0; animation: slideUp 0.4s ease-out forwards; }
+        
         .img-wrap { position: relative; width: 100%; height: 185px; background: var(--input-bg); cursor: pointer; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .cat-pill { position: absolute; top: 8px; left: 8px; background: rgba(17,24,39,0.72); backdrop-filter: blur(4px); color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 500; }
@@ -37,70 +42,93 @@
         .card-title { font-weight: 700; font-size: 14px; line-height: 1.25; color: var(--text); }
         .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
         
-        .color-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(128,128,128,0.25); display: inline-block; flex-shrink: 0; }
+        /* Идеально ровный круг для цвета */
+        .color-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(128,128,128,0.25); display: inline-block; flex-shrink: 0; overflow: hidden; background-clip: padding-box; }
         
         .move-bar { display: flex; border-top: 1px solid var(--border); background: var(--input-bg); }
-        .move-btn { flex: 1; padding: 10px 4px; font-size: 11px; font-weight: 700; border: none; background: transparent; cursor: pointer; color: var(--accent); border-right: 1px solid var(--border); }
+        .move-btn { flex: 1; padding: 10px 4px; font-size: 11px; font-weight: 700; border: none; background: transparent; cursor: pointer; color: var(--accent); border-right: 1px solid var(--border); transition: 0.2s; }
         .move-btn:last-child { border-right: none; }
+        .move-btn:active { background: rgba(0,0,0,0.05); }
 
-        .fab { position: fixed; bottom: 20px; right: 20px; width: 58px; height: 58px; border-radius: 29px; background: var(--accent); color: #fff; font-size: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(37,99,235,0.4); border: none; z-index: 90; cursor: pointer; }
+        .fab { position: fixed; bottom: 20px; right: 20px; width: 58px; height: 58px; border-radius: 29px; background: var(--accent); color: #fff; font-size: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(37,99,235,0.4); border: none; z-index: 90; cursor: pointer; transition: 0.2s; }
+        .fab:active { transform: scale(0.95); }
 
-        .modal { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 200; align-items: flex-end; justify-content: center; }
-        .modal.active { display: flex; }
-        .modal-sheet { background: var(--card); width: 100%; max-width: 500px; max-height: 92vh; border-radius: 20px 20px 0 0; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h3 { margin: 0; font-size: 18px; color: var(--text); }
-        .close-x { background: none; border: none; font-size: 22px; color: var(--subtext); cursor: pointer; }
+        /* МОДАЛЬНОЕ ОКНО С ЖЕСТКОЙ ФИКСАЦИЕЙ ФОТО */
+        .modal { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 200; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+        .modal.active { display: flex; opacity: 1; }
+        .modal-sheet { background: var(--card); width: 100%; max-width: 500px; height: 92vh; border-radius: 20px 20px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .modal.active .modal-sheet { transform: translateY(0); }
         
-        .photo-preview-box { width: 100%; height: 220px; border-radius: 12px; background: var(--input-bg); border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .modal-header { padding: 18px 18px 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+        .modal-header h3 { margin: 0; font-size: 18px; color: var(--text); }
+        .close-x { background: none; border: none; font-size: 14px; font-weight: 600; color: var(--subtext); cursor: pointer; text-transform: uppercase; }
+        
+        /* Зона фото закреплена наверху */
+        .modal-top { padding: 15px 18px; flex-shrink: 0; background: var(--card); z-index: 10; border-bottom: 1px solid var(--border); }
+        .photo-preview-box { width: 100%; height: 160px; border-radius: 12px; background: var(--input-bg); border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
-        .photo-placeholder { color: var(--subtext); font-size: 14px; font-weight: 500; text-align: center; cursor: pointer; padding: 20px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-        .btn-change-photo { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; font-size: 12px; backdrop-filter: blur(4px); cursor: pointer; }
+        .photo-placeholder { color: var(--subtext); font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; padding: 20px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .photo-placeholder:active { background: rgba(0,0,0,0.02); }
+        .btn-change-photo { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; backdrop-filter: blur(4px); cursor: pointer; }
+
+        /* Зона прокрутки для свойств */
+        .modal-body { padding: 15px 18px 24px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .field { display: flex; flex-direction: column; gap: 4px; }
-        .field label { font-size: 11px; font-weight: 700; color: var(--subtext); text-transform: uppercase; }
-        .field input, .field select { padding: 11px; border: 1px solid var(--border); border-radius: 9px; font-size: 15px; background: var(--input-bg); color: var(--text); outline: none; width: 100%; }
+        .field label { font-size: 11px; font-weight: 700; color: var(--subtext); text-transform: uppercase; letter-spacing: 0.3px; }
+        .field input, .field select { padding: 12px; border: 1px solid var(--border); border-radius: 9px; font-size: 15px; background: var(--input-bg); color: var(--text); outline: none; width: 100%; transition: 0.2s; }
+        .field input:focus { border-color: var(--accent); }
 
+        /* ИДЕАЛЬНЫЕ ПИПЕТКИ */
         .color-controls { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
-        .pipette { -webkit-appearance: none; appearance: none; width: 38px; height: 38px; border: none; padding: 0; border-radius: 50%; overflow: hidden; cursor: pointer; background: none; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .pipette::-webkit-color-swatch-wrapper { padding: 0; }
-        .pipette::-webkit-color-swatch { border: 1px solid var(--border); border-radius: 50%; }
+        .color-circle { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border); position: relative; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-shrink: 0; }
+        .color-circle input[type="color"] { position: absolute; top: -10px; left: -10px; width: 60px; height: 60px; opacity: 0; cursor: pointer; }
         
-        .btn-color-action { background: var(--input-bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 12px; cursor: pointer; font-weight: 600; }
-        .btn-color-action.danger { color: var(--danger); }
-        .color-block-wrap { display: flex; align-items: center; gap: 8px; background: var(--input-bg); border: 1px solid var(--border); padding: 4px 8px; border-radius: 20px; }
+        .btn-color-action { background: var(--input-bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .btn-color-action.danger { color: var(--danger); border-color: rgba(239,68,68,0.3); }
 
         .modal-actions { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-primary { flex: 2; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
-        .btn-danger { flex: 1; padding: 13px; background: rgba(239,68,68,0.1); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
+        .btn-primary { flex: 2; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; }
+        .btn-danger { flex: 1; padding: 14px; background: rgba(239,68,68,0.1); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
+        .btn-primary:active, .btn-danger:active { transform: scale(0.98); }
 
-        .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.8); color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; }
-        .empty { grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: var(--subtext); }
+        .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.85); color: #fff; padding: 8px 14px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; font-weight: 500; backdrop-filter: blur(4px); }
+        .empty { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 14px; }
 
-        #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; justify-content: center; align-items: center; flex-direction: column; }
-        #imageViewer.active { display: flex; }
-        #imageViewer img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .viewer-close { position: absolute; top: 15px; right: 15px; color: white; background: rgba(255,255,255,0.2); width: 40px; height: 40px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; z-index: 1000; backdrop-filter: blur(4px); }
+        /* ПОЛНОЭКРАННЫЙ ПРОСМОТР С ZOOM */
+        #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; opacity: 0; transition: opacity 0.3s ease; }
+        #imageViewer.active { display: flex; opacity: 1; }
+        .viewer-header { height: 60px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; background: linear-gradient(rgba(0,0,0,0.6), transparent); z-index: 1001; }
+        .viewer-close { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; backdrop-filter: blur(4px); }
+        .viewer-img-container { flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center; }
+        #viewerImg { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; transition: transform 0.25s cubic-bezier(0.1, 0.9, 0.2, 1); transform-origin: center center; }
 
-        #confirmDialog { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 300; align-items: center; justify-content: center; }
-        #confirmDialog.active { display: flex; }
-        .confirm-box { background: var(--card); padding: 22px; border-radius: 16px; width: 290px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .confirm-box h3 { margin: 0 0 10px 0; color: var(--text); }
-        .confirm-box p { color: var(--subtext); font-size: 14px; margin-bottom: 22px; line-height: 1.4; }
-        .confirm-buttons { display: flex; gap: 10px; }
+        /* КРАСИВОЕ ОКНО ПОДТВЕРЖДЕНИЯ */
+        #confirmDialog { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 300; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
+        #confirmDialog.active { display: flex; opacity: 1; }
+        .confirm-box { background: var(--card); padding: 24px; border-radius: 16px; width: 300px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        #confirmDialog.active .confirm-box { transform: scale(1); }
+        .confirm-box h3 { margin: 0 0 12px 0; color: var(--text); font-size: 18px; }
+        .confirm-box p { color: var(--subtext); font-size: 14px; margin-bottom: 24px; line-height: 1.5; }
+        .confirm-buttons { display: flex; gap: 12px; }
     </style>
 </head>
 <body>
+
     <div id="imageViewer">
-        <div class="viewer-close" onclick="document.getElementById('imageViewer').classList.remove('active')">✕</div>
-        <img id="viewerImg" src="" alt="Fullscreen">
+        <div class="viewer-header">
+            <button class="viewer-close" onclick="closeFullscreen()">Закрыть</button>
+        </div>
+        <div class="viewer-img-container" id="viewerContainer">
+            <img id="viewerImg" src="" alt="Fullscreen" onclick="toggleZoom(event)">
+        </div>
     </div>
 
     <div id="confirmDialog">
         <div class="confirm-box">
-            <h3>Удалить вещь?</h3>
-            <p>Это действие нельзя отменить, вещь пропадет из базы навсегда.</p>
+            <h3>Удаление вещи</h3>
+            <p>Вы уверены, что хотите безвозвратно удалить эту вещь? Данное действие необратимо.</p>
             <div class="confirm-buttons">
                 <button class="btn-primary" style="background:var(--input-bg); color:var(--text); flex:1;" onclick="document.getElementById('confirmDialog').classList.remove('active')">Отмена</button>
                 <button class="btn-danger" style="flex:1; background:var(--danger); color:#fff; border:none;" onclick="executeDelete()">Удалить</button>
@@ -115,81 +143,94 @@
                 <select id="catFilter" class="filter-select" onchange="render()"></select>
             </div>
             <div class="tabs">
-                <div class="tab active" data-tab="IN_CLOSET" onclick="setTab('IN_CLOSET')">Шкаф <span class="badge-count" id="cnt-IN_CLOSET">0</span></div>
-                <div class="tab" data-tab="WASHING" onclick="setTab('WASHING')">Стирка <span class="badge-count" id="cnt-WASHING">0</span></div>
-                <div class="tab" data-tab="DRYING" onclick="setTab('DRYING')">Сушилка <span class="badge-count" id="cnt-DRYING">0</span></div>
+                <div class="tab active" data-tab="IN_CLOSET" onclick="setTab('IN_CLOSET')">В шкафу <span class="badge-count" id="cnt-IN_CLOSET">0</span></div>
+                <div class="tab" data-tab="WASHING" onclick="setTab('WASHING')">В стирке <span class="badge-count" id="cnt-WASHING">0</span></div>
+                <div class="tab" data-tab="DRYING" onclick="setTab('DRYING')">На сушилке <span class="badge-count" id="cnt-DRYING">0</span></div>
             </div>
         </div>
-        <div id="bulkBar" class="bulk-bar"><span id="bulkText">Действие</span><button id="bulkBtn" class="bulk-btn" onclick="executeBulkAction()">Выполнить</button></div>
+
+        <div id="bulkBar" class="bulk-bar"><span id="bulkText">Действие:</span><button id="bulkBtn" class="bulk-btn" onclick="executeBulkAction()">Применить</button></div>
         <div id="grid" class="grid"></div>
         <button class="fab" onclick="openModal()">+</button>
         <div id="syncStatus" class="sync-indicator">Синхронизация...</div>
     </div>
 
+    <!-- МОДАЛЬНОЕ ОКНО -->
     <div class="modal" id="itemModal" onclick="if(event.target===this) closeModal()">
         <div class="modal-sheet">
-            <div class="modal-header"><h3 id="modalTitle">Свойства вещи</h3><button class="close-x" onclick="closeModal()">✕</button></div>
-
-            <div class="photo-preview-box" id="photoBox">
-                <div class="photo-placeholder" id="photoPlaceholder" onclick="document.getElementById('photoInput').click()">📷 Добавить фото (необязательно)</div>
-                <img id="photoPreview" style="display:none;" alt="Preview" onclick="openFullscreen(this.src)">
-                <button id="btnChangePhoto" class="btn-change-photo" style="display:none;" onclick="document.getElementById('photoInput').click()">🔄 Изменить</button>
-                <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)">
+            <div class="modal-header">
+                <h3 id="modalTitle">Свойства вещи</h3>
+                <button class="close-x" onclick="closeModal()">Закрыть</button>
             </div>
 
-            <div class="field">
-                <label>Название вещи</label>
-                <input type="text" id="fName" placeholder="Например: Свитшот с принтом">
+            <!-- Верхняя часть с фото (ЗАФИКСИРОВАНА) -->
+            <div class="modal-top">
+                <div class="photo-preview-box" id="photoBox">
+                    <div class="photo-placeholder" id="photoPlaceholder" onclick="document.getElementById('photoInput').click()">Добавить фотографию (необязательно)</div>
+                    <img id="photoPreview" style="display:none;" alt="Preview" onclick="openFullscreen(this.src)">
+                    <button id="btnChangePhoto" class="btn-change-photo" style="display:none;" onclick="document.getElementById('photoInput').click()">Изменить</button>
+                    <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)">
+                </div>
             </div>
 
-            <div class="form-row">
+            <!-- Нижняя часть с полями (ПРОКРУЧИВАЕТСЯ) -->
+            <div class="modal-body">
                 <div class="field">
-                    <label>Категория</label>
-                    <input type="text" id="fCategory" list="cat-suggestions" placeholder="Впиши или выбери...">
-                    <datalist id="cat-suggestions">
-                        <option value="Верх / Худи"></option><option value="Футболки"></option><option value="Штаны / Джинсы"></option><option value="Обувь"></option><option value="Белье / Носки"></option>
-                    </datalist>
+                    <label>Название вещи</label>
+                    <input type="text" id="fName" placeholder="Например: Свитшот с принтом">
                 </div>
+
+                <div class="form-row">
+                    <div class="field">
+                        <label>Категория</label>
+                        <input type="text" id="fCategory" list="cat-suggestions" placeholder="Введите или выберите...">
+                        <datalist id="cat-suggestions">
+                            <option value="Верх / Худи"></option><option value="Футболки"></option><option value="Штаны / Джинсы"></option><option value="Обувь"></option><option value="Белье / Носки"></option>
+                        </datalist>
+                    </div>
+                    <div class="field">
+                        <label>Статус</label>
+                        <select id="fStatus">
+                            <option value="IN_CLOSET">В шкафу</option><option value="WASHING">В стирке</option><option value="DRYING">На сушилке</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="field"><label>Бренд</label><input type="text" id="fBrand" placeholder="Например: Nike"></div>
+                    <div class="field"><label>Цвет (Текст)</label><input type="text" id="fColorText" placeholder="Например: Черно-белый"></div>
+                </div>
+
                 <div class="field">
-                    <label>Статус</label>
-                    <select id="fStatus">
-                        <option value="IN_CLOSET">В шкафу</option><option value="WASHING">В стирке</option><option value="DRYING">На сушилке</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="field"><label>Бренд</label><input type="text" id="fBrand" placeholder="Например: Nike"></div>
-                <div class="field"><label>Цвет (Текст)</label><input type="text" id="fColorText" placeholder="Например: Черно-белый"></div>
-            </div>
-
-            <div class="field">
-                <label>Точные цвета (Палитра)</label>
-                <div class="color-controls">
-                    <div class="color-block-wrap" id="wrapColor1">
-                        <input type="color" id="fColorHex1" class="pipette" value="#ffffff" onchange="markCustomColorUsed()">
+                    <label>Точные оттенки (Выбор вручную)</label>
+                    <div class="color-controls">
+                        <div class="color-circle" id="circle1" style="background-color: #ffffff;">
+                            <input type="color" id="fColorHex1" value="#ffffff" oninput="updateCircle(1)" onchange="markCustomColorUsed()">
+                        </div>
+                        
+                        <button id="btnToggleColor2" class="btn-color-action" onclick="toggleColor2()">Добавить второй цвет</button>
+                        
+                        <div class="color-circle" id="circle2" style="background-color: #ffffff; display:none;">
+                            <input type="color" id="fColorHex2" value="#ffffff" oninput="updateCircle(2)" onchange="markCustomColorUsed()">
+                        </div>
+                        <button id="btnRemoveColor2" class="btn-color-action danger" style="display:none;" onclick="toggleColor2()">Убрать второй цвет</button>
                     </div>
-                    <button id="btnToggleColor2" class="btn-color-action" onclick="toggleColor2()">+ 2-й цвет</button>
-                    
-                    <div class="color-block-wrap" id="wrapColor2" style="display:none;">
-                        <input type="color" id="fColorHex2" class="pipette" value="#ffffff" onchange="markCustomColorUsed()">
-                        <div style="cursor:pointer; padding:0 4px; color:var(--danger); font-weight:bold;" onclick="toggleColor2()">✕</div>
-                    </div>
-                    <button id="btnClearColors" class="btn-color-action danger" style="display:none;" onclick="clearCustomColors()">Сбросить</button>
+                    <button id="btnClearColors" class="btn-color-action danger" style="display:none; width: 100%; margin-top: 8px;" onclick="clearCustomColors()">Сбросить ручные настройки цвета</button>
+                    <input type="hidden" id="fHasCustomColors" value="false">
                 </div>
-                <input type="hidden" id="fHasCustomColors" value="false">
-            </div>
 
-            <div class="field"><label>Заметки / Уход</label><input type="text" id="fNotes" placeholder="Например: 40°C"></div>
+                <div class="field"><label>Уход / Заметки</label><input type="text" id="fNotes" placeholder="Например: 40°C"></div>
 
-            <div class="modal-actions">
-                <button class="btn-danger" id="btnDelete" style="display:none;" onclick="requestDelete()">Удалить</button>
-                <button class="btn-primary" id="btnSave" onclick="saveCurrentItem()">Сохранить</button>
+                <div class="modal-actions">
+                    <button class="btn-danger" id="btnDelete" style="display:none;" onclick="requestDelete()">Удалить</button>
+                    <button class="btn-primary" id="btnSave" onclick="saveCurrentItem()">Сохранить</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // 1. ВСТАВЬ СВОЮ ССЫЛКУ СЮДА
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
         var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
@@ -199,14 +240,14 @@
         var myTgId = "default_user";
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { myTgId = tg.initDataUnsafe.user.id; }
 
-        var CACHE_KEY = "wardrobe_v13_" + myTgId;
+        var CACHE_KEY = "wardrobe_v14_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var editingId = null;
         var currentPhotoData = "";
         var isColor2Active = false;
 
-        var NO_PHOTO_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%239ca3af"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>';
+        var NO_PHOTO_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%239ca3af"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>';
 
         var COLOR_MAP = {
             "черный": "#111827", "белый": "#ffffff", "серый": "#9ca3af", "синий": "#2563eb", "голубой": "#38bdf8", "небесный": "#0ea5e9",
@@ -229,7 +270,7 @@
             var bgStyle = "";
             var isTwo = (h1 && h2 && h1 !== h2);
             
-            if (isTwo) bgStyle = "background: linear-gradient(135deg, " + h1 + " 50%, " + h2 + " 50%)";
+            if (isTwo) bgStyle = "background: linear-gradient(90deg, " + h1 + " 50%, " + h2 + " 50%)";
             else if (h1) bgStyle = "background: " + h1;
             else {
                 var clean = text.toLowerCase().trim().replace(/ё/g, "е");
@@ -241,25 +282,10 @@
 
         function fetchFromCloud() {
             showSync("Синхронизация...");
-            fetch(API_URL + "?user_id=" + myTgId)
-            .then(function(res) { 
-                if(!res.ok) throw new Error("Сервер не ответил"); 
-                return res.json(); 
-            })
-            .then(function(data) {
-                if (Array.isArray(data)) {
-                    if (data.length === 0 && items.length === 0) {
-                        alert("База Гугла подключена, но она вернула 0 вещей.\n\nСкорее всего вы забыли выбрать «Новая версия» при публикации Скрипта в Google.");
-                    }
-                    items = data; 
-                    localStorage.setItem(CACHE_KEY, JSON.stringify(items)); 
-                    render();
-                }
+            fetch(API_URL + "?user_id=" + myTgId).then(function(res) { return res.json(); }).then(function(data) {
+                if (Array.isArray(data)) { items = data; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render(); }
                 showSync("");
-            }).catch(function(e) { 
-                showSync(""); 
-                alert("Сетевая ошибка: " + e.message); 
-            });
+            }).catch(function(e) { showSync(""); });
         }
 
         function updateDynamicFilters() {
@@ -287,9 +313,9 @@
             for(var i = 0; i < items.length; i++) { if(items[i].status === currentTab) currentCount++; }
             
             if (currentTab === "WASHING" && currentCount > 0) {
-                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = "В стирке: " + currentCount; document.getElementById('bulkBtn').innerText = "Всё на сушилку →";
+                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = "В стирке: " + currentCount; document.getElementById('bulkBtn').innerText = "Переместить всё на сушилку";
             } else if (currentTab === "DRYING" && currentCount > 0) {
-                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = "Высохло: " + currentCount; document.getElementById('bulkBtn').innerText = "Всё в шкаф ✓";
+                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = "На сушилке: " + currentCount; document.getElementById('bulkBtn').innerText = "Вернуть всё в шкаф";
             } else { bulkBar.classList.remove('visible'); }
 
             var grid = document.getElementById('grid');
@@ -310,15 +336,19 @@
                 var colorObj = parseColorField(item.color);
                 
                 var moveButtons = '';
-                if (item.status === 'IN_CLOSET') moveButtons = '<button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'WASHING\')">🧺 В стирку</button><button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'DRYING\')">☀️ На сушилку</button>';
-                else if (item.status === 'WASHING') moveButtons = '<button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\')">← В шкаф</button><button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'DRYING\')">☀️ На сушилку →</button>';
-                else moveButtons = '<button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'WASHING\')">← В стирку</button><button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\')">👕 В шкаф ✓</button>';
+                if (item.status === 'IN_CLOSET') moveButtons = '<button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'WASHING\')">В стирку</button><button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'DRYING\')">На сушилку</button>';
+                else if (item.status === 'WASHING') moveButtons = '<button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\')">В шкаф</button><button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'DRYING\')">На сушилку</button>';
+                else moveButtons = '<button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'WASHING\')">В стирку</button><button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\')">В шкаф</button>';
 
                 var photoSrc = item.photo || NO_PHOTO_SVG;
+                var thumbSrc = photoSrc;
+                if (thumbSrc.indexOf('sz=w1000') !== -1) thumbSrc = thumbSrc.replace('sz=w1000', 'sz=w300'); // Экономия трафика для миниатюр
+                
                 var pPadding = item.photo ? '0' : '40px';
+                var animDelay = Math.min(k, 12) * 0.04; // Каскадная анимация
 
-                htmlResult += '<div class="card">' +
-                            '<div class="img-wrap" onclick="openModal(\'' + item.id + '\')"><img src="' + photoSrc + '" style="padding:' + pPadding + '" loading="lazy"><span class="cat-pill">' + (item.category || 'Без категории') + '</span></div>' +
+                htmlResult += '<div class="card" style="animation-delay: ' + animDelay + 's;">' +
+                            '<div class="img-wrap" onclick="openModal(\'' + item.id + '\')"><img src="' + thumbSrc + '" style="padding:' + pPadding + '" loading="lazy"><span class="cat-pill">' + (item.category || 'Без категории') + '</span></div>' +
                             '<div class="card-body" onclick="openModal(\'' + item.id + '\')">' +
                                 '<div class="card-title">' + (item.name || 'Без названия') + '</div>' +
                                 '<div class="card-meta">' + colorObj.dot + '<span>' + (item.brand || '') + ' ' + colorObj.text + '</span></div>' +
@@ -326,7 +356,7 @@
                             '<div class="move-bar">' + moveButtons + '</div>' +
                         '</div>';
             }
-            if (!hasItems) grid.innerHTML = '<div class="empty">Список пуст.</div>';
+            if (!hasItems) grid.innerHTML = '<div class="empty">В этой группе пока пусто.</div>';
             else grid.innerHTML = htmlResult;
         }
 
@@ -357,6 +387,12 @@
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: affectedIds, status: targetStatus, user_id: myTgId }) });
         };
 
+        // --- ЛОГИКА ЦВЕТОВ ---
+        window.updateCircle = function(num) {
+            var hex = document.getElementById('fColorHex' + num).value;
+            document.getElementById('circle' + num).style.backgroundColor = hex;
+        };
+
         function checkResetBtnVisibility() {
             var isCustom = document.getElementById('fHasCustomColors').value === "true";
             document.getElementById('btnClearColors').style.display = isCustom ? 'inline-block' : 'none';
@@ -369,26 +405,44 @@
 
         window.toggleColor2 = function() {
             isColor2Active = !isColor2Active;
-            document.getElementById('wrapColor2').style.display = isColor2Active ? 'flex' : 'none';
+            document.getElementById('circle2').style.display = isColor2Active ? 'block' : 'none';
+            document.getElementById('btnRemoveColor2').style.display = isColor2Active ? 'inline-block' : 'none';
             document.getElementById('btnToggleColor2').style.display = isColor2Active ? 'none' : 'inline-block';
             if (isColor2Active) markCustomColorUsed();
         };
 
         window.clearCustomColors = function() {
             document.getElementById('fHasCustomColors').value = "false";
-            document.getElementById('fColorHex1').value = "#ffffff";
-            document.getElementById('fColorHex2').value = "#ffffff";
+            document.getElementById('fColorHex1').value = "#ffffff"; updateCircle(1);
+            document.getElementById('fColorHex2').value = "#ffffff"; updateCircle(2);
             isColor2Active = false;
-            document.getElementById('wrapColor2').style.display = 'none';
+            document.getElementById('circle2').style.display = 'none';
+            document.getElementById('btnRemoveColor2').style.display = 'none';
             document.getElementById('btnToggleColor2').style.display = 'inline-block';
             checkResetBtnVisibility();
         };
 
+        // --- ПОЛНОЭКРАННЫЙ ZOOM ---
         window.openFullscreen = function(src) {
-            document.getElementById('viewerImg').src = src;
+            var img = document.getElementById('viewerImg');
+            img.src = src; 
+            img.dataset.zoomed = "0";
+            img.style.transform = "scale(1)";
+            img.style.cursor = "zoom-in";
             document.getElementById('imageViewer').classList.add('active');
         };
+        window.closeFullscreen = function() { document.getElementById('imageViewer').classList.remove('active'); };
 
+        window.toggleZoom = function(e) {
+            var img = e.target;
+            if (!img.dataset.zoomed || img.dataset.zoomed === "0") {
+                img.dataset.zoomed = "1"; img.style.transform = "scale(2.5)"; img.style.cursor = "zoom-out";
+            } else {
+                img.dataset.zoomed = "0"; img.style.transform = "scale(1)"; img.style.cursor = "zoom-in";
+            }
+        };
+
+        // --- УДАЛЕНИЕ ---
         window.requestDelete = function() {
             if (tg) tg.HapticFeedback.impactOccurred('light');
             document.getElementById('confirmDialog').classList.add('active');
@@ -404,6 +458,7 @@
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
         };
 
+        // --- МОДАЛЬНОЕ ОКНО ---
         window.openModal = function(id) {
             if (tg) tg.HapticFeedback.impactOccurred('light');
             editingId = id || null;
@@ -417,7 +472,6 @@
                 for(var i=0; i<items.length; i++) { if(String(items[i].id) === String(id)) { item = items[i]; break; } }
                 var cObj = parseColorField(item.color);
                 
-                document.getElementById('modalTitle').innerText = "Редактировать";
                 document.getElementById('fName').value = item.name || "";
                 document.getElementById('fCategory').value = item.category || "";
                 document.getElementById('fStatus').value = item.status || "IN_CLOSET";
@@ -425,16 +479,17 @@
                 document.getElementById('fNotes').value = item.notes || "";
                 
                 document.getElementById('fColorText').value = cObj.text;
-                document.getElementById('fColorHex1').value = cObj.hex1;
-                document.getElementById('fColorHex2').value = cObj.hex2;
+                document.getElementById('fColorHex1').value = cObj.hex1; updateCircle(1);
+                document.getElementById('fColorHex2').value = cObj.hex2; updateCircle(2);
                 document.getElementById('fHasCustomColors').value = cObj.hasCustom ? "true" : "false";
                 
                 isColor2Active = cObj.isColor2Active;
-                document.getElementById('wrapColor2').style.display = isColor2Active ? 'flex' : 'none';
+                document.getElementById('circle2').style.display = isColor2Active ? 'block' : 'none';
+                document.getElementById('btnRemoveColor2').style.display = isColor2Active ? 'inline-block' : 'none';
                 document.getElementById('btnToggleColor2').style.display = isColor2Active ? 'none' : 'inline-block';
                 checkResetBtnVisibility();
 
-                currentPhotoData = item.photo || "";
+                currentPhotoData = item.photo || ""; // В модалке грузим HD оригинал
                 if (currentPhotoData) { 
                     prev.src = currentPhotoData; prev.style.display = "block"; 
                     placeholder.style.display = "none"; changeBtn.style.display = "block";
@@ -443,11 +498,17 @@
                 }
                 document.getElementById('btnDelete').style.display = "block";
             } else {
-                document.getElementById('modalTitle').innerText = "Новая вещь";
                 document.getElementById('fName').value = ""; document.getElementById('fCategory').value = ""; document.getElementById('fStatus').value = currentTab; document.getElementById('fBrand').value = ""; document.getElementById('fColorText').value = ""; document.getElementById('fNotes').value = "";
                 
-                clearCustomColors();
-                
+                document.getElementById('fColorHex1').value = "#ffffff"; updateCircle(1);
+                document.getElementById('fColorHex2').value = "#ffffff"; updateCircle(2);
+                document.getElementById('fHasCustomColors').value = "false";
+                isColor2Active = false;
+                document.getElementById('circle2').style.display = 'none';
+                document.getElementById('btnRemoveColor2').style.display = 'none';
+                document.getElementById('btnToggleColor2').style.display = 'inline-block';
+                checkResetBtnVisibility();
+
                 currentPhotoData = ""; 
                 prev.style.display = "none"; placeholder.style.display = "flex"; changeBtn.style.display = "none";
                 document.getElementById('btnDelete').style.display = "none";
@@ -481,6 +542,7 @@
 
         window.saveCurrentItem = function() {
             if (tg) tg.HapticFeedback.impactOccurred('light');
+
             var colorText = document.getElementById('fColorText').value.trim();
             var finalColorField = colorText;
             
