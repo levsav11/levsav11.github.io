@@ -6,57 +6,90 @@
     <title>Мой Гардероб</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --bg: #f2f4f7; --card: #ffffff; --text: #111827; --subtext: #6b7280; --accent: #2563eb; --border: #e5e7eb; --danger: #ef4444; --input-bg: #f9fafb; --overlay: rgba(0,0,0,0.55); }
-        @media (prefers-color-scheme: dark) {
-            :root { --bg: #111827; --card: #1f2937; --text: #f9fafb; --subtext: #9ca3af; --accent: #3b82f6; --border: #374151; --danger: #f87171; --input-bg: #111827; --overlay: rgba(0,0,0,0.75); }
+        /* ЦВЕТОВЫЕ ТЕМЫ ПАПОК */
+        :root { 
+            --theme-closet: #2563eb;     /* Синий */
+            --theme-washing: #0891b2;    /* Бирюзовый */
+            --theme-drying: #d97706;     /* Оранжевый */
+            
+            --bg-closet-light: rgba(37,99,235,0.08);
+            --bg-washing-light: rgba(8,145,178,0.08);
+            --bg-drying-light: rgba(217,119,6,0.08);
+
+            --active-accent: var(--theme-closet); 
+            --active-light: var(--bg-closet-light);
+
+            /* БАЗОВЫЕ ЦВЕТА СВЕТЛОЙ ТЕМЫ */
+            --bg: #f2f4f7; --card: #ffffff; --text: #111827; --subtext: #6b7280; 
+            --border: #e5e7eb; --danger: #ef4444; --input-bg: #f9fafb; --overlay: rgba(0,0,0,0.55); 
         }
-        body.dark-theme { --bg: #111827; --card: #1f2937; --text: #f9fafb; --subtext: #9ca3af; --accent: #3b82f6; --border: #374151; --danger: #f87171; --input-bg: #111827; --overlay: rgba(0,0,0,0.75); }
+
+        /* ТЕМНАЯ ТЕМА */
+        @media (prefers-color-scheme: dark) {
+            :root { 
+                --bg: #111827; --card: #1f2937; --text: #f9fafb; --subtext: #9ca3af; 
+                --border: #374151; --danger: #f87171; --input-bg: #111827; --overlay: rgba(0,0,0,0.75); 
+                --theme-closet: #3b82f6; --theme-washing: #06b6d4; --theme-drying: #f59e0b;
+                --bg-closet-light: rgba(59,130,246,0.15); --bg-washing-light: rgba(6,182,212,0.15); --bg-drying-light: rgba(245,158,11,0.15);
+            }
+        }
+        body.dark-theme { 
+            --bg: #111827; --card: #1f2937; --text: #f9fafb; --subtext: #9ca3af; 
+            --border: #374151; --danger: #f87171; --input-bg: #111827; --overlay: rgba(0,0,0,0.75); 
+            --theme-closet: #3b82f6; --theme-washing: #06b6d4; --theme-drying: #f59e0b;
+            --bg-closet-light: rgba(59,130,246,0.15); --bg-washing-light: rgba(6,182,212,0.15); --bg-drying-light: rgba(245,158,11,0.15);
+        }
+
+        /* ПЕРЕКЛЮЧЕНИЕ ТЕМЫ ИНТЕРФЕЙСА */
+        body.tab-IN_CLOSET { --active-accent: var(--theme-closet); --active-light: var(--bg-closet-light); }
+        body.tab-WASHING { --active-accent: var(--theme-washing); --active-light: var(--bg-washing-light); }
+        body.tab-DRYING { --active-accent: var(--theme-drying); --active-light: var(--bg-drying-light); }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); padding-bottom: 90px; }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); padding-bottom: 90px; transition: background-color 0.3s; }
 
         .header { background: var(--card); padding: 12px 14px 8px; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-bottom: 1px solid var(--border); }
         .search-row { display: flex; gap: 8px; margin-bottom: 10px; }
-        .search-input, .filter-select { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; background: var(--input-bg); color: var(--text); outline: none; transition: 0.2s; }
+        .search-input, .filter-select { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; background: var(--input-bg); color: var(--text); outline: none; transition: border-color 0.2s; }
+        .search-input:focus, .filter-select:focus { border-color: var(--active-accent); }
         
         .tabs { display: flex; gap: 6px; }
-        .tab { flex: 1; text-align: center; padding: 9px 4px; font-weight: 600; font-size: 13px; color: var(--subtext); border-radius: 8px; cursor: pointer; background: var(--input-bg); transition: 0.2s; }
-        .tab.active { background: var(--accent); color: #fff; }
-        .badge-count { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px; background: rgba(0,0,0,0.12); }
+        .tab { flex: 1; text-align: center; padding: 9px 4px; font-weight: 600; font-size: 13px; color: var(--subtext); border-radius: 8px; cursor: pointer; background: var(--input-bg); transition: 0.3s ease; }
+        .tab.active { background: var(--active-accent); color: #fff; }
+        .badge-count { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px; background: rgba(0,0,0,0.15); }
 
-        .bulk-bar { display: none; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(37,99,235,0.1); border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600; color: var(--accent); }
+        .bulk-bar { display: none; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--active-light); border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600; color: var(--active-accent); transition: 0.3s ease; }
         .bulk-bar.visible { display: flex; }
-        .bulk-btn { background: var(--accent); color: #fff; border: none; padding: 7px 12px; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.2s; }
-        .bulk-btn:active { transform: scale(0.95); }
+        .bulk-btn { background: var(--active-accent); color: #fff; border: none; padding: 7px 12px; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.2s; }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; }
         
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .card { background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 1px solid var(--border); animation: slideUp 0.4s ease-out forwards; }
+        .card { background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 1px solid var(--border); animation: slideUp 0.3s ease-out forwards; }
         
         .img-wrap { position: relative; width: 100%; height: 185px; background: var(--input-bg); cursor: pointer; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .placeholder-img { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--input-bg); color: var(--subtext); }
+        .placeholder-img svg { width: 40px; height: 40px; opacity: 0.3; }
+        
         .cat-pill { position: absolute; top: 8px; left: 8px; background: rgba(17,24,39,0.72); backdrop-filter: blur(4px); color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 500; }
         .card-body { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; cursor: pointer; }
         .card-title { font-weight: 700; font-size: 14px; line-height: 1.25; color: var(--text); }
         .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
         
-        /* ИДЕАЛЬНЫЙ КРУЖОК ЦВЕТА (Без зазоров и рамок) */
-        .color-dot { 
-            width: 14px; height: 14px; 
-            border-radius: 50%; 
-            box-shadow: inset 0 0 0 1px rgba(128,128,128,0.25); 
-            display: inline-block; 
-            flex-shrink: 0;
-            -webkit-mask-image: -webkit-radial-gradient(white, black); /* Убирает лесенки на краях */
-        }
+        /* Идеальный кружок цвета */
+        .color-dot { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(128,128,128,0.25); display: inline-block; flex-shrink: 0; -webkit-mask-image: -webkit-radial-gradient(white, black); }
         
+        /* КНОПКИ ПЕРЕМЕЩЕНИЯ */
         .move-bar { display: flex; border-top: 1px solid var(--border); background: var(--input-bg); }
-        .move-btn { flex: 1; padding: 10px 4px; font-size: 11px; font-weight: 700; border: none; background: transparent; cursor: pointer; color: var(--accent); border-right: 1px solid var(--border); transition: 0.2s; }
+        .move-btn { flex: 1; padding: 10px 2px; font-size: 11px; font-weight: 700; border: none; background: transparent; cursor: pointer; border-right: 1px solid var(--border); transition: 0.2s; }
         .move-btn:last-child { border-right: none; }
-        .move-btn:active { background: rgba(0,0,0,0.05); }
+        .move-btn.to-closet { color: var(--theme-closet); background: var(--bg-closet-light); }
+        .move-btn.to-washing { color: var(--theme-washing); background: var(--bg-washing-light); }
+        .move-btn.to-drying { color: var(--theme-drying); background: var(--bg-drying-light); }
+        .move-btn:active { opacity: 0.7; }
 
-        .fab { position: fixed; bottom: 20px; right: 20px; width: 58px; height: 58px; border-radius: 29px; background: var(--accent); color: #fff; font-size: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(37,99,235,0.4); border: none; z-index: 90; cursor: pointer; transition: 0.2s; }
+        .fab { position: fixed; bottom: 20px; right: 20px; width: 58px; height: 58px; border-radius: 29px; background: var(--active-accent); color: #fff; font-size: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(0,0,0,0.2); border: none; z-index: 90; cursor: pointer; transition: 0.3s; }
         .fab:active { transform: scale(0.95); }
 
         /* МОДАЛЬНОЕ ОКНО */
@@ -67,26 +100,23 @@
         
         .modal-header { padding: 18px 18px 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-shrink: 0; }
         .modal-header h3 { margin: 0; font-size: 18px; color: var(--text); }
-        .close-x { background: none; border: none; font-size: 14px; font-weight: 600; color: var(--subtext); cursor: pointer; text-transform: uppercase; padding: 4px; }
+        .close-x { background: var(--input-bg); border: 1px solid var(--border); font-size: 12px; font-weight: 700; color: var(--text); cursor: pointer; padding: 6px 12px; border-radius: 8px; }
         
-        /* Зона фото закреплена наверху */
         .modal-top { padding: 15px 18px; flex-shrink: 0; background: var(--card); z-index: 10; border-bottom: 1px solid var(--border); }
         .photo-preview-box { width: 100%; height: 160px; border-radius: 12px; background: var(--input-bg); border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
-        .photo-placeholder { color: var(--subtext); font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; padding: 20px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .photo-placeholder:active { background: rgba(0,0,0,0.02); }
+        .photo-placeholder { color: var(--subtext); font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.2s; }
+        .photo-placeholder svg { width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.4; }
         .btn-change-photo { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; backdrop-filter: blur(4px); cursor: pointer; }
 
-        /* Зона прокрутки для свойств */
         .modal-body { padding: 15px 18px 24px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .field { display: flex; flex-direction: column; gap: 4px; }
         .field label { font-size: 11px; font-weight: 700; color: var(--subtext); text-transform: uppercase; letter-spacing: 0.3px; }
         .field input, .field select { padding: 12px; border: 1px solid var(--border); border-radius: 9px; font-size: 15px; background: var(--input-bg); color: var(--text); outline: none; width: 100%; transition: 0.2s; }
-        .field input:focus { border-color: var(--accent); }
+        .field input:focus, .field select:focus { border-color: var(--active-accent); }
 
-        /* ЦВЕТА И ПИПЕТКИ */
         .color-controls { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
         .color-circle { width: 38px; height: 38px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(128,128,128,0.3); position: relative; overflow: hidden; flex-shrink: 0; }
         .color-circle input[type="color"] { position: absolute; top: -10px; left: -10px; width: 60px; height: 60px; opacity: 0; cursor: pointer; }
@@ -95,14 +125,13 @@
         .btn-color-action.danger { color: var(--danger); border-color: rgba(239,68,68,0.3); }
 
         .modal-actions { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-primary { flex: 2; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; }
+        .btn-primary { flex: 2; padding: 14px; background: var(--active-accent); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s ease; }
         .btn-danger { flex: 1; padding: 14px; background: rgba(239,68,68,0.1); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
         .btn-primary:active, .btn-danger:active { transform: scale(0.98); }
 
         .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.85); color: #fff; padding: 8px 14px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; font-weight: 500; backdrop-filter: blur(4px); }
         .empty { text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 14px; display: none; }
 
-        /* ПОЛНОЭКРАННЫЙ ПРОСМОТР С ZOOM */
         #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; opacity: 0; transition: opacity 0.3s ease; }
         #imageViewer.active { display: flex; opacity: 1; }
         .viewer-header { height: 60px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; background: linear-gradient(rgba(0,0,0,0.6), transparent); z-index: 1001; }
@@ -110,7 +139,6 @@
         .viewer-img-container { flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center; }
         #viewerImg { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; transition: transform 0.25s cubic-bezier(0.1, 0.9, 0.2, 1); transform-origin: center center; }
 
-        /* ОКНО ПОДТВЕРЖДЕНИЯ */
         #confirmDialog { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 300; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
         #confirmDialog.active { display: flex; opacity: 1; }
         .confirm-box { background: var(--card); padding: 24px; border-radius: 16px; width: 300px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1); }
@@ -120,13 +148,13 @@
         .confirm-buttons { display: flex; gap: 12px; }
     </style>
 </head>
-<body>
+<body class="tab-IN_CLOSET">
 
     <div id="imageViewer">
         <div class="viewer-header">
             <button class="viewer-close" onclick="closeFullscreen()">Закрыть</button>
         </div>
-        <div class="viewer-img-container">
+        <div class="viewer-img-container" id="viewerContainer">
             <img id="viewerImg" src="" alt="Fullscreen" onclick="toggleZoom(event)">
         </div>
     </div>
@@ -158,12 +186,13 @@
         <div id="bulkBar" class="bulk-bar"><span id="bulkText">Действие:</span><button id="bulkBtn" class="bulk-btn" onclick="executeBulkAction()">Применить</button></div>
         
         <div id="grid" class="grid"></div>
-        <div id="emptyState" class="empty">В этой группе пока нет вещей.</div>
+        <div id="emptyState" class="empty">В данной группе пока нет вещей.</div>
         
         <button class="fab" onclick="openModal()">+</button>
         <div id="syncStatus" class="sync-indicator">Синхронизация данных...</div>
     </div>
 
+    <!-- МОДАЛЬНОЕ ОКНО -->
     <div class="modal" id="itemModal" onclick="if(event.target===this) closeModal()">
         <div class="modal-sheet">
             <div class="modal-header">
@@ -171,33 +200,37 @@
                 <button class="close-x" onclick="closeModal()">Закрыть</button>
             </div>
 
-            <!-- Зона фото (Закреплена) -->
+            <!-- Зона фото -->
             <div class="modal-top">
                 <div class="photo-preview-box" id="photoBox">
-                    <div class="photo-placeholder" id="photoPlaceholder" onclick="document.getElementById('photoInput').click()">Добавить фотографию (необязательно)</div>
+                    <div class="photo-placeholder" id="photoPlaceholder" onclick="document.getElementById('photoInput').click()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 4.5a2.5 2.5 0 0 0-2.5 2.5v.5L3 13a1 1 0 0 0 .7 1.7h16.6a1 1 0 0 0 .7-1.7L14.5 7.5v-.5A2.5 2.5 0 0 0 12 4.5z"></path>
+                            <path d="M12 7v10"></path><path d="M9 17h6"></path>
+                        </svg>
+                        <span>Добавить фотографию</span>
+                    </div>
                     <img id="photoPreview" style="display:none;" alt="Preview" onclick="openFullscreen(this.src)">
                     <button id="btnChangePhoto" class="btn-change-photo" style="display:none;" onclick="document.getElementById('photoInput').click()">Изменить фото</button>
                     <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)">
                 </div>
             </div>
 
-            <!-- Зона свойств (Прокручивается) -->
+            <!-- Зона свойств -->
             <div class="modal-body">
                 <div class="field">
                     <label>Название вещи</label>
-                    <input type="text" id="fName" placeholder="Укажите название">
+                    <input type="text" id="fName" placeholder="Введите название">
                 </div>
 
                 <div class="form-row">
                     <div class="field">
                         <label>Категория</label>
-                        <input type="text" id="fCategory" list="cat-suggestions" placeholder="Выберите или введите">
-                        <datalist id="cat-suggestions">
-                            <option value="Верх / Худи"></option><option value="Футболки"></option><option value="Штаны / Джинсы"></option><option value="Обувь"></option><option value="Белье / Носки"></option>
-                        </datalist>
+                        <input type="text" id="fCategory" list="cat-suggestions" placeholder="Введите или выберите">
+                        <datalist id="cat-suggestions"></datalist>
                     </div>
                     <div class="field">
-                        <label>Статус</label>
+                        <label>Группа</label>
                         <select id="fStatus">
                             <option value="IN_CLOSET">В шкафу</option><option value="WASHING">В стирке</option><option value="DRYING">На сушилке</option>
                         </select>
@@ -248,14 +281,12 @@
         var myTgId = "default_user";
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { myTgId = tg.initDataUnsafe.user.id; }
 
-        var CACHE_KEY = "wardrobe_v15_" + myTgId;
+        var CACHE_KEY = "wardrobe_v16_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var editingId = null;
         var currentPhotoData = "";
         var isColor2Active = false;
-
-        var NO_PHOTO_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%239ca3af"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>';
 
         var COLOR_MAP = {
             "черный": "#111827", "белый": "#ffffff", "серый": "#9ca3af", "синий": "#2563eb", "голубой": "#38bdf8", "небесный": "#0ea5e9",
@@ -288,7 +319,6 @@
             return { text: text, dot: dotHtml, hex1: h1 || "#ffffff", hex2: h2 || "#ffffff", hasCustom: !!h1, isColor2Active: isTwo };
         }
 
-        // --- УМНОЕ КЭШИРОВАНИЕ: СТРОИМ СЕТКУ 1 РАЗ ---
         function initGrid() {
             var select = document.getElementById('catFilter');
             var currentVal = select.value || "ALL";
@@ -309,8 +339,13 @@
             document.getElementById('cnt-DRYING').innerText = cntDRY;
 
             var html = '<option value="ALL">Все категории</option>';
-            for (var j = 0; j < uniqueCats.length; j++) { html += '<option value="' + uniqueCats[j] + '">' + uniqueCats[j] + '</option>'; }
+            var datalistHtml = '';
+            for (var j = 0; j < uniqueCats.length; j++) { 
+                html += '<option value="' + uniqueCats[j] + '">' + uniqueCats[j] + '</option>'; 
+                datalistHtml += '<option value="' + uniqueCats[j] + '"></option>';
+            }
             select.innerHTML = html; select.value = uniqueCats.indexOf(currentVal) !== -1 ? currentVal : "ALL";
+            document.getElementById('cat-suggestions').innerHTML = datalistHtml;
 
             var grid = document.getElementById('grid');
             var htmlResult = '';
@@ -321,17 +356,24 @@
                 var searchStr = ((item.name || "") + " " + (item.brand || "") + " " + (item.category || "")).toLowerCase();
                 
                 var moveButtons = '';
-                if (item.status === 'IN_CLOSET') moveButtons = '<button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'WASHING\')">В стирку</button><button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'DRYING\')">На сушилку</button>';
-                else if (item.status === 'WASHING') moveButtons = '<button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\')">В шкаф</button><button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'DRYING\')">На сушилку</button>';
-                else moveButtons = '<button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'WASHING\')">В стирку</button><button class="move-btn" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\')">В шкаф</button>';
+                if (item.status === 'IN_CLOSET') {
+                    moveButtons = '<button class="move-btn to-washing" onclick="moveItem(\'' + item.id + '\', \'WASHING\')">В стирку</button><button class="move-btn to-drying" onclick="moveItem(\'' + item.id + '\', \'DRYING\')">На сушилку</button>';
+                } else if (item.status === 'WASHING') {
+                    moveButtons = '<button class="move-btn to-closet" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\')">В шкаф</button><button class="move-btn to-drying" onclick="moveItem(\'' + item.id + '\', \'DRYING\')">На сушилку</button>';
+                } else {
+                    moveButtons = '<button class="move-btn to-washing" onclick="moveItem(\'' + item.id + '\', \'WASHING\')">В стирку</button><button class="move-btn to-closet" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\')">В шкаф</button>';
+                }
 
-                var photoSrc = item.photo || NO_PHOTO_SVG;
-                // SD превью для меню (Экономия трафика)
-                var thumbSrc = photoSrc.indexOf('sz=w1000') !== -1 ? photoSrc.replace('sz=w1000', 'sz=w400') : photoSrc;
-                var pPadding = item.photo ? '0' : '40px';
+                var imgContent = '';
+                if (item.photo) {
+                    var thumbSrc = item.photo.indexOf('sz=w1000') !== -1 ? item.photo.replace('sz=w1000', 'sz=w400') : item.photo;
+                    imgContent = '<img src="' + thumbSrc + '" loading="lazy">';
+                } else {
+                    imgContent = '<div class="placeholder-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5a2.5 2.5 0 0 0-2.5 2.5v.5L3 13a1 1 0 0 0 .7 1.7h16.6a1 1 0 0 0 .7-1.7L14.5 7.5v-.5A2.5 2.5 0 0 0 12 4.5z"></path><path d="M12 7v10"></path><path d="M9 17h6"></path></svg></div>';
+                }
 
                 htmlResult += '<div class="card" id="card-' + item.id + '" data-status="' + item.status + '" data-category="' + (item.category || '') + '" data-search="' + searchStr + '">' +
-                            '<div class="img-wrap" onclick="openModal(\'' + item.id + '\')"><img src="' + thumbSrc + '" style="padding:' + pPadding + '"><span class="cat-pill">' + (item.category || 'Без категории') + '</span></div>' +
+                            '<div class="img-wrap" onclick="openModal(\'' + item.id + '\')">' + imgContent + '<span class="cat-pill">' + (item.category || 'Без категории') + '</span></div>' +
                             '<div class="card-body" onclick="openModal(\'' + item.id + '\')">' +
                                 '<div class="card-title">' + (item.name || 'Без названия') + '</div>' +
                                 '<div class="card-meta">' + colorObj.dot + '<span>' + (item.brand || '') + ' ' + colorObj.text + '</span></div>' +
@@ -343,13 +385,12 @@
             applyFilters();
         }
 
-        // --- МГНОВЕННОЕ СКРЫТИЕ (БЕЗ ПЕРЕЗАГРУЗКИ ФОТО) ---
         window.applyFilters = function() {
             var query = document.getElementById('searchInput').value.trim().toLowerCase();
             var cat = document.getElementById('catFilter').value;
             var cards = document.querySelectorAll('.card');
             var visibleCount = 0;
-            var statusCount = 0; // Для кнопок массовых действий
+            var statusCount = 0; 
             
             for(var i = 0; i < cards.length; i++) {
                 var card = cards[i];
@@ -381,6 +422,10 @@
         window.setTab = function(tab) {
             if (tg) tg.HapticFeedback.impactOccurred('light');
             currentTab = tab;
+            
+            document.body.className = document.body.className.replace(/tab-\w+/g, '');
+            document.body.classList.add('tab-' + tab);
+            
             var tabs = document.querySelectorAll('.tab');
             for(var i=0; i<tabs.length; i++) {
                 if (tabs[i].getAttribute('data-tab') === tab) tabs[i].classList.add('active'); else tabs[i].classList.remove('active');
@@ -400,7 +445,7 @@
             if (tg) tg.HapticFeedback.impactOccurred('light');
             for(var i=0; i<items.length; i++) { if(String(items[i].id) === String(id)) { items[i].status = newStatus; break; } }
             localStorage.setItem(CACHE_KEY, JSON.stringify(items)); 
-            initGrid(); // Пересобираем сетку для обновления кнопок и счетчиков
+            initGrid(); 
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: [id], status: newStatus, user_id: myTgId }) });
         };
 
@@ -415,7 +460,6 @@
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: affectedIds, status: targetStatus, user_id: myTgId }) });
         };
 
-        // --- ЛОГИКА ЦВЕТОВ ---
         window.updateCircle = function(num) {
             var hex = document.getElementById('fColorHex' + num).value;
             document.getElementById('circle' + num).style.backgroundColor = hex;
@@ -450,13 +494,11 @@
             checkResetBtnVisibility();
         };
 
-        // --- ПОЛНОЭКРАННЫЙ ZOOM ---
         window.openFullscreen = function(src) {
             var img = document.getElementById('viewerImg');
             img.src = src; 
             img.dataset.zoomed = "0";
             img.style.transform = "scale(1)";
-            img.style.cursor = "zoom-in";
             document.getElementById('imageViewer').classList.add('active');
         };
         window.closeFullscreen = function() { document.getElementById('imageViewer').classList.remove('active'); };
@@ -464,13 +506,12 @@
         window.toggleZoom = function(e) {
             var img = e.target;
             if (!img.dataset.zoomed || img.dataset.zoomed === "0") {
-                img.dataset.zoomed = "1"; img.style.transform = "scale(2.5)"; img.style.cursor = "zoom-out";
+                img.dataset.zoomed = "1"; img.style.transform = "scale(2.5)";
             } else {
-                img.dataset.zoomed = "0"; img.style.transform = "scale(1)"; img.style.cursor = "zoom-in";
+                img.dataset.zoomed = "0"; img.style.transform = "scale(1)";
             }
         };
 
-        // --- УДАЛЕНИЕ ---
         window.requestDelete = function() {
             if (tg) tg.HapticFeedback.impactOccurred('light');
             document.getElementById('confirmDialog').classList.add('active');
@@ -486,7 +527,6 @@
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
         };
 
-        // --- МОДАЛЬНОЕ ОКНО ---
         window.openModal = function(id) {
             if (tg) tg.HapticFeedback.impactOccurred('light');
             editingId = id || null;
@@ -500,6 +540,7 @@
                 for(var i=0; i<items.length; i++) { if(String(items[i].id) === String(id)) { item = items[i]; break; } }
                 var cObj = parseColorField(item.color);
                 
+                document.getElementById('modalTitle').innerText = "Свойства вещи";
                 document.getElementById('fName').value = item.name || "";
                 document.getElementById('fCategory').value = item.category || "";
                 document.getElementById('fStatus').value = item.status || "IN_CLOSET";
@@ -517,7 +558,7 @@
                 document.getElementById('btnToggleColor2').style.display = isColor2Active ? 'none' : 'inline-block';
                 checkResetBtnVisibility();
 
-                currentPhotoData = item.photo || ""; // В модалке грузим HD оригинал
+                currentPhotoData = item.photo || ""; 
                 if (currentPhotoData) { 
                     prev.src = currentPhotoData; prev.style.display = "block"; 
                     placeholder.style.display = "none"; changeBtn.style.display = "block";
@@ -526,6 +567,7 @@
                 }
                 document.getElementById('btnDelete').style.display = "block";
             } else {
+                document.getElementById('modalTitle').innerText = "Новая вещь";
                 document.getElementById('fName').value = ""; document.getElementById('fCategory').value = ""; document.getElementById('fStatus').value = currentTab; document.getElementById('fBrand').value = ""; document.getElementById('fColorText').value = ""; document.getElementById('fNotes').value = "";
                 
                 document.getElementById('fColorHex1').value = "#ffffff"; updateCircle(1);
@@ -601,7 +643,7 @@
                 if (idx !== -1) items[idx] = itemObj; 
             } else { items.unshift(itemObj); }
 
-            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); initGrid(); closeModal(); showSync("Сохранение...");
+            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); initGrid(); closeModal(); showSync("Сохранение данных...");
             
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "save", item: itemObj, user_id: myTgId }) })
             .then(function(res) { return res.json(); }).then(function(result) {
