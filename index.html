@@ -46,13 +46,16 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); padding-bottom: 90px; transition: background-color 0.3s; }
 
-        /* ЗАСТАВКА */
-        #splashScreen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease, visibility 0.5s; }
-        .splash-icon { width: 64px; height: 64px; color: var(--text); margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s ease forwards; }
-        .splash-title { font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: 1px; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
-        .splash-loader { margin-top: 24px; width: 30px; height: 30px; border: 3px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 1s linear infinite, fadeUp 0.6s ease 0.4s forwards; opacity: 0; }
+        /* ИДЕАЛЬНАЯ ЗАСТАВКА (СКРЫВАЕТ ИНТЕРФЕЙС БЕЗ МЕЛЬКАНИЙ) */
+        #splashScreen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.3s ease; }
+        .splash-icon { width: 64px; height: 64px; color: var(--text); margin-bottom: 16px; opacity: 0; animation: fadeUp 0.5s ease forwards; }
+        .splash-title { font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: 1px; opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards; }
+        .splash-loader { margin-top: 24px; width: 30px; height: 30px; border: 3px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 1s linear infinite, fadeUp 0.5s ease 0.2s forwards; opacity: 0; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Обертка для скрытия основного UI при загрузке */
+        #mainWrapper { opacity: 0; transition: opacity 0.4s ease; }
 
         .header { background: var(--card); padding: 12px 14px 8px; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-bottom: 1px solid var(--border); }
         
@@ -65,9 +68,7 @@
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat; background-position: right 10px center; background-size: 16px; padding-right: 32px;
         }
-        body.dark-theme .filter-select {
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-        }
+        body.dark-theme .filter-select { background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
 
         .search-input:focus, .filter-select:focus { border-color: var(--active-accent); }
         
@@ -97,7 +98,6 @@
         .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; overflow: hidden; width: 100%; }
         .card-meta span.meta-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
         
-        /* Исправленный идеальный круг */
         .color-dot { width: 14px; height: 14px; flex: 0 0 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(128,128,128,0.25); display: block; -webkit-mask-image: -webkit-radial-gradient(white, black); }
         
         .move-bar { display: flex; border-top: 1px solid var(--border); background: var(--input-bg); }
@@ -136,7 +136,8 @@
         .detail-label { color: var(--subtext); font-weight: 500; }
         .detail-value { color: var(--text); font-weight: 600; text-align: right; }
         
-        .btn-edit-mode { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--text); color: var(--card); border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 8px; }
+        .btn-edit-mode { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--text); color: var(--card); border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 8px; transition: 0.2s; }
+        .btn-edit-mode:active { transform: scale(0.98); }
         .btn-edit-mode svg { width: 18px; height: 18px; }
 
         /* РЕЖИМ РЕДАКТИРОВАНИЯ */
@@ -170,13 +171,13 @@
         .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.85); color: #fff; padding: 8px 14px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; font-weight: 500; backdrop-filter: blur(4px); }
         .empty { width: 100%; text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 14px; display: none; }
 
-        /* ПОЛНОЭКРАННЫЙ УМНЫЙ ZOOM */
+        /* ПОЛНОЭКРАННЫЙ УМНЫЙ ZOOM С МУЛЬТИТАЧЕМ */
         #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; opacity: 0; transition: opacity 0.3s ease; }
         #imageViewer.active { display: flex; opacity: 1; }
         .viewer-header { height: 60px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; background: linear-gradient(rgba(0,0,0,0.6), transparent); z-index: 1001; }
         .viewer-close { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; backdrop-filter: blur(4px); }
-        .viewer-img-container { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        #viewerImg { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        .viewer-img-container { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; touch-action: none; }
+        #viewerImg { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: top left; transition: transform 0.1s; }
 
         #confirmDialog { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 300; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
         #confirmDialog.active { display: flex; opacity: 1; }
@@ -198,15 +199,17 @@
         <div class="splash-loader"></div>
     </div>
 
+    <!-- ПОЛНОЭКРАННЫЙ МУЛЬТИТАЧ ZOOM -->
     <div id="imageViewer">
         <div class="viewer-header">
             <button class="viewer-close" onclick="closeFullscreen()">Закрыть</button>
         </div>
         <div class="viewer-img-container" id="viewerContainer">
-            <img id="viewerImg" src="" alt="Fullscreen" onclick="toggleZoom(event)">
+            <img id="viewerImg" src="" alt="Fullscreen">
         </div>
     </div>
 
+    <!-- ОКНО ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ -->
     <div id="confirmDialog">
         <div class="confirm-box">
             <h3>Удаление вещи</h3>
@@ -218,7 +221,8 @@
         </div>
     </div>
 
-    <div id="appContent">
+    <!-- ОСНОВНОЙ ИНТЕРФЕЙС (СКРЫТ ВО ВРЕМЯ ЗАСТАВКИ) -->
+    <div id="mainWrapper">
         <div class="header">
             <div class="search-container">
                 <input type="text" id="searchInput" class="search-input" placeholder="Поиск по гардеробу..." oninput="applyFilters()">
@@ -252,7 +256,7 @@
         <div id="syncStatus" class="sync-indicator">Синхронизация данных...</div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО -->
+    <!-- МОДАЛЬНОЕ ОКНО СВОЙСТВ -->
     <div class="modal" id="itemModal" onclick="if(event.target===this) closeModal()">
         <div class="modal-sheet">
             <div class="modal-header">
@@ -264,9 +268,9 @@
 
             <!-- РЕЖИМ ПРОСМОТРА -->
             <div class="view-mode" id="viewMode">
-                <div class="view-photo-area">
+                <div class="view-photo-area" onclick="openFullscreen(document.getElementById('viewPhotoImg').src)">
                     <div class="view-blur-bg" id="viewBlurBg"></div>
-                    <img id="viewPhotoImg" src="" onclick="openFullscreen(this.src)">
+                    <img id="viewPhotoImg" src="">
                 </div>
                 <div class="view-info-area">
                     <h2 class="view-title" id="viewName"></h2>
@@ -350,6 +354,7 @@
     </div>
 
     <script>
+        // --- 1. ВАША ССЫЛКА ---
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
         var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
@@ -359,7 +364,7 @@
         var myTgId = "default_user";
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { myTgId = tg.initDataUnsafe.user.id; }
 
-        var CACHE_KEY = "wardrobe_v18_" + myTgId;
+        var CACHE_KEY = "wardrobe_v19_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var editingId = null;
@@ -373,6 +378,18 @@
             "красный": "#ef4444", "зеленый": "#10b981", "желтый": "#facc15", "коричневый": "#78350f", "розовый": "#ec4899", 
             "фиолетовый": "#7c3aed", "оранжевый": "#f97316", "бордовый": "#881337", "хаки": "#78716c", "оливковый": "#65a30d"
         };
+
+        // БЕЗОПАСНОЕ СОКРЫТИЕ ЗАСТАВКИ
+        function hideSplash() {
+            var splash = document.getElementById('splashScreen');
+            var main = document.getElementById('mainWrapper');
+            if (splash && splash.style.display !== 'none') {
+                splash.style.opacity = '0';
+                if(main) main.style.opacity = '1';
+                setTimeout(function(){ splash.style.display = 'none'; }, 300);
+            }
+        }
+        setTimeout(hideSplash, 1500); // Предохранитель от вечной загрузки
 
         function showSync(text) {
             var el = document.getElementById('syncStatus');
@@ -441,11 +458,11 @@
                 
                 var moveButtons = '';
                 if (item.status === 'IN_CLOSET') {
-                    moveButtons = '<button class="move-btn to-washing" onclick="moveItem(\'' + item.id + '\', \'WASHING\')">В стирку</button><button class="move-btn to-drying" onclick="moveItem(\'' + item.id + '\', \'DRYING\')">На сушилку</button>';
+                    moveButtons = '<button class="move-btn to-washing" onclick="moveItem(\'' + item.id + '\', \'WASHING\', event)">В стирку</button><button class="move-btn to-drying" onclick="moveItem(\'' + item.id + '\', \'DRYING\', event)">На сушилку</button>';
                 } else if (item.status === 'WASHING') {
-                    moveButtons = '<button class="move-btn to-closet" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\')">В шкаф</button><button class="move-btn to-drying" onclick="moveItem(\'' + item.id + '\', \'DRYING\')">На сушилку</button>';
+                    moveButtons = '<button class="move-btn to-closet" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\', event)">В шкаф</button><button class="move-btn to-drying" onclick="moveItem(\'' + item.id + '\', \'DRYING\', event)">На сушилку</button>';
                 } else {
-                    moveButtons = '<button class="move-btn to-washing" onclick="moveItem(\'' + item.id + '\', \'WASHING\')">В стирку</button><button class="move-btn to-closet" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\')">В шкаф</button>';
+                    moveButtons = '<button class="move-btn to-washing" onclick="moveItem(\'' + item.id + '\', \'WASHING\', event)">В стирку</button><button class="move-btn to-closet" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\', event)">В шкаф</button>';
                 }
 
                 var imgContent = '';
@@ -535,11 +552,6 @@
             applyFilters();
         };
 
-        function hideSplash() {
-            var splash = document.getElementById('splashScreen');
-            if (splash) { splash.style.opacity = '0'; setTimeout(function(){ splash.style.visibility = 'hidden'; }, 500); }
-        }
-
         function fetchFromCloud() {
             fetch(API_URL + "?user_id=" + myTgId).then(function(res) { return res.json(); }).then(function(data) {
                 if (Array.isArray(data)) { items = data; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); initGrid(); }
@@ -547,7 +559,8 @@
             }).catch(function(e) { hideSplash(); });
         }
 
-        window.moveItem = function(id, newStatus) {
+        window.moveItem = function(id, newStatus, event) {
+            if (event) event.stopPropagation(); // Чтобы при клике не открывалась карточка
             if (tg) tg.HapticFeedback.impactOccurred('light');
             for(var i=0; i<items.length; i++) { if(String(items[i].id) === String(id)) { items[i].status = newStatus; break; } }
             localStorage.setItem(CACHE_KEY, JSON.stringify(items)); initGrid(); 
@@ -597,26 +610,81 @@
             checkResetBtnVisibility();
         };
 
-        // --- УМНЫЙ ZOOM (Координаты) ---
+        // --- НАТИВНЫЙ МУЛЬТИТАЧ ZOOM ---
+        var viewerImg = document.getElementById('viewerImg');
+        var viewerContainer = document.getElementById('viewerContainer');
+        var zoomScale = 1; var initialDistance = 0; var initialScale = 1;
+        var panX = 0; var panY = 0; var startPanX = 0; var startPanY = 0;
+        var isPanning = false; var lastTap = 0;
+
+        function resetZoomState() {
+            zoomScale = 1; panX = 0; panY = 0;
+            viewerImg.style.transition = 'transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1)';
+            viewerImg.style.transform = "translate(0px, 0px) scale(1)";
+        }
+
         window.openFullscreen = function(src) {
-            var img = document.getElementById('viewerImg');
-            img.src = src; img.dataset.zoomed = "0"; img.style.transform = "scale(1)"; img.style.cursor = "zoom-in";
+            if(!src) return;
+            resetZoomState();
+            viewerImg.src = src; 
             document.getElementById('imageViewer').classList.add('active');
         };
         window.closeFullscreen = function() { document.getElementById('imageViewer').classList.remove('active'); };
 
-        window.toggleZoom = function(e) {
-            var img = e.target;
-            if (!img.dataset.zoomed || img.dataset.zoomed === "0") {
-                var rect = img.getBoundingClientRect();
-                var x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
-                var y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
-                img.style.transformOrigin = (x / rect.width * 100) + "% " + (y / rect.height * 100) + "%";
-                img.dataset.zoomed = "1"; img.style.transform = "scale(3)"; img.style.cursor = "zoom-out";
-            } else {
-                img.dataset.zoomed = "0"; img.style.transform = "scale(1)"; img.style.cursor = "zoom-in";
+        viewerContainer.addEventListener('touchstart', function(e) {
+            viewerImg.style.transition = 'none';
+            if (e.touches.length === 2) {
+                isPanning = false;
+                initialDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                initialScale = zoomScale;
+            } else if (e.touches.length === 1 && zoomScale > 1) {
+                isPanning = true;
+                startPanX = e.touches[0].pageX - panX;
+                startPanY = e.touches[0].pageY - panY;
             }
-        };
+        }, {passive: false});
+
+        viewerContainer.addEventListener('touchmove', function(e) {
+            if (e.touches.length === 2) {
+                e.preventDefault();
+                var currentDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+                zoomScale = Math.min(Math.max(1, initialScale * (currentDistance / initialDistance)), 5);
+                viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + zoomScale + ")";
+            } else if (e.touches.length === 1 && isPanning) {
+                e.preventDefault();
+                panX = e.touches[0].pageX - startPanX;
+                panY = e.touches[0].pageY - startPanY;
+                viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + zoomScale + ")";
+            }
+        }, {passive: false});
+
+        viewerContainer.addEventListener('touchend', function(e) {
+            if (e.touches.length < 2) isPanning = false;
+            if (e.touches.length === 0 && zoomScale <= 1) resetZoomState();
+            
+            // Быстрый двойной тап
+            if (e.changedTouches.length === 1) {
+                var currentTime = new Date().getTime();
+                var tapLength = currentTime - lastTap;
+                if (tapLength < 300 && tapLength > 0) {
+                    e.preventDefault();
+                    if (zoomScale > 1) { 
+                        resetZoomState(); 
+                    } else { 
+                        // Приближаем в ту точку, куда тапнул пользователь
+                        var rect = viewerImg.getBoundingClientRect();
+                        var touchX = e.changedTouches[0].clientX - rect.left;
+                        var touchY = e.changedTouches[0].clientY - rect.top;
+                        viewerImg.style.transformOrigin = (touchX / rect.width * 100) + "% " + (touchY / rect.height * 100) + "%";
+                        
+                        zoomScale = 3; 
+                        viewerImg.style.transition = 'transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1)';
+                        viewerImg.style.transform = "translate(0px, 0px) scale(3)"; 
+                    }
+                }
+                lastTap = currentTime;
+            }
+        });
 
         window.requestDelete = function() {
             if (tg) tg.HapticFeedback.impactOccurred('light');
@@ -638,7 +706,6 @@
             document.getElementById('editMode').style.display = 'flex';
         };
 
-        // --- МОДАЛЬНОЕ ОКНО ---
         window.openModal = function(id) {
             if (tg) tg.HapticFeedback.impactOccurred('light');
             editingId = id || null;
@@ -652,28 +719,29 @@
                 for(var i=0; i<items.length; i++) { if(String(items[i].id) === String(id)) { item = items[i]; break; } }
                 var cObj = parseColorField(item.color);
                 
-                // Заполнение режима ПРОСМОТРА
+                // РЕЖИМ ПРОСМОТРА
                 document.getElementById('modalTitle').innerText = "Информация о вещи";
                 document.getElementById('viewName').innerText = item.name || "Без названия";
                 
                 var viewImg = document.getElementById('viewPhotoImg');
                 var viewBlur = document.getElementById('viewBlurBg');
-                if (item.photo) {
-                    viewImg.src = item.photo; viewImg.style.display = 'block';
-                    viewBlur.style.backgroundImage = 'url(' + item.photo + ')';
+                
+                currentPhotoData = item.photo || ""; // В модалке всегда HD оригинал
+                if (currentPhotoData) {
+                    viewImg.src = currentPhotoData; viewImg.style.display = 'block';
+                    viewBlur.style.backgroundImage = 'url(' + currentPhotoData + ')';
                 } else {
                     viewImg.style.display = 'none'; viewBlur.style.backgroundImage = 'none';
                 }
 
                 document.getElementById('viewCatTag').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>' + (item.category || "Нет категории");
                 document.getElementById('viewColorTag').innerHTML = cObj.dot + (cObj.text || "Цвет не указан");
-                
                 document.getElementById('viewBrand').innerText = item.brand || "Не указан";
                 var statusText = item.status === "IN_CLOSET" ? "В шкафу" : (item.status === "WASHING" ? "В стирке" : "На сушилке");
                 document.getElementById('viewStatus').innerText = statusText;
                 document.getElementById('viewNotes').innerText = item.notes || "—";
 
-                // Заполнение режима РЕДАКТИРОВАНИЯ
+                // ДАННЫЕ ДЛЯ РЕЖИМА РЕДАКТИРОВАНИЯ
                 document.getElementById('fName').value = item.name || "";
                 document.getElementById('fCategory').value = item.category || "";
                 document.getElementById('fStatus').value = item.status || "IN_CLOSET";
@@ -691,7 +759,6 @@
                 document.getElementById('btnToggleColor2').style.display = isColor2Active ? 'none' : 'inline-block';
                 checkResetBtnVisibility();
 
-                currentPhotoData = item.photo || ""; 
                 if (currentPhotoData) { 
                     prev.src = currentPhotoData; prev.style.display = "block"; 
                     placeholder.style.display = "none"; changeBtn.style.display = "flex";
@@ -700,6 +767,108 @@
                 }
                 document.getElementById('btnDelete').style.display = "block";
 
-                // Показываем просмотр
                 document.getElementById('viewMode').style.display = 'flex';
-                document.getElementById('editMode').style.display = 'none
+                document.getElementById('editMode').style.display = 'none';
+            } else {
+                document.getElementById('modalTitle').innerText = "Добавление вещи";
+                document.getElementById('fName').value = ""; document.getElementById('fCategory').value = ""; document.getElementById('fStatus').value = currentTab; document.getElementById('fBrand').value = ""; document.getElementById('fColorText').value = ""; document.getElementById('fNotes').value = "";
+                
+                document.getElementById('fColorHex1').value = "#ffffff"; updateCircle(1);
+                document.getElementById('fColorHex2').value = "#ffffff"; updateCircle(2);
+                document.getElementById('fHasCustomColors').value = "false";
+                isColor2Active = false;
+                document.getElementById('circle2').style.display = 'none';
+                document.getElementById('btnRemoveColor2').style.display = 'none';
+                document.getElementById('btnToggleColor2').style.display = 'inline-block';
+                checkResetBtnVisibility();
+
+                currentPhotoData = ""; 
+                prev.style.display = "none"; placeholder.style.display = "flex"; changeBtn.style.display = "none";
+                document.getElementById('btnDelete').style.display = "none";
+
+                // Для новой вещи сразу открываем редактирование
+                document.getElementById('viewMode').style.display = 'none';
+                document.getElementById('editMode').style.display = 'flex';
+            }
+            document.getElementById('itemModal').classList.add('active');
+        };
+
+        window.closeModal = function() { document.getElementById('itemModal').classList.remove('active'); };
+
+        window.handlePhotoSelect = function(e) {
+            var file = e.target.files[0]; if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+                var img = new Image();
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    var w = img.width, h = img.height;
+                    if (w > 1000 || h > 1000) { if (w > h) { h = Math.round(h * 1000 / w); w = 1000; } else { w = Math.round(w * 1000 / h); h = 1000; } }
+                    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    currentPhotoData = canvas.toDataURL('image/jpeg', 0.88);
+                    
+                    document.getElementById('photoPreview').src = currentPhotoData; 
+                    document.getElementById('photoPreview').style.display = "block"; 
+                    document.getElementById('photoPlaceholder').style.display = "none";
+                    document.getElementById('btnChangePhoto').style.display = "flex";
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file); e.target.value = "";
+        };
+
+        window.saveCurrentItem = function() {
+            if (tg) tg.HapticFeedback.impactOccurred('light');
+
+            var colorText = document.getElementById('fColorText').value.trim();
+            var finalColorField = colorText;
+            
+            if (document.getElementById('fHasCustomColors').value === "true") {
+                var h1 = document.getElementById('fColorHex1').value;
+                if (isColor2Active) {
+                    var h2 = document.getElementById('fColorHex2').value;
+                    finalColorField = colorText + "||" + h1 + "||" + h2;
+                } else {
+                    finalColorField = colorText + "||" + h1;
+                }
+            }
+
+            var itemObj = {
+                id: editingId ? String(editingId) : String(Date.now()),
+                photo: currentPhotoData,
+                name: document.getElementById('fName').value.trim(),
+                category: document.getElementById('fCategory').value.trim(),
+                status: document.getElementById('fStatus').value,
+                brand: document.getElementById('fBrand').value.trim(),
+                color: finalColorField,
+                notes: document.getElementById('fNotes').value.trim()
+            };
+
+            if (editingId) { 
+                var idx = -1;
+                for(var i=0; i<items.length; i++) { if(String(items[i].id) === String(editingId)) { idx = i; break; } }
+                if (idx !== -1) items[idx] = itemObj; 
+            } else { items.unshift(itemObj); }
+
+            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); initGrid(); closeModal(); showSync("Сохранение данных...");
+            
+            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "save", item: itemObj, user_id: myTgId }) })
+            .then(function(res) { return res.json(); }).then(function(result) {
+                if (result.ok && result.photoUrl) { 
+                    for(var j=0; j<items.length; j++) {
+                        if(String(items[j].id) === String(itemObj.id)) { items[j].photo = result.photoUrl; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); break; }
+                    }
+                    initGrid();
+                }
+                showSync("");
+            }).catch(function(e) { showSync(""); });
+        };
+
+        try {
+            var savedData = localStorage.getItem(CACHE_KEY);
+            if (savedData) { items = JSON.parse(savedData); if (!Array.isArray(items)) items = []; initGrid(); }
+            fetchFromCloud();
+        } catch(e) { hideSplash(); }
+    </script>
+</body>
+</html>
