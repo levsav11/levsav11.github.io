@@ -46,16 +46,15 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); padding-bottom: 90px; transition: background-color 0.3s; }
 
-        /* ИДЕАЛЬНАЯ ЗАСТАВКА (СКРЫВАЕТ ИНТЕРФЕЙС БЕЗ МЕЛЬКАНИЙ) */
-        #splashScreen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.3s ease; }
+        /* УМНАЯ ЗАСТАВКА */
+        #splashScreen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.4s ease; }
         .splash-icon { width: 64px; height: 64px; color: var(--text); margin-bottom: 16px; opacity: 0; animation: fadeUp 0.5s ease forwards; }
         .splash-title { font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: 1px; opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards; }
         .splash-loader { margin-top: 24px; width: 30px; height: 30px; border: 3px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 1s linear infinite, fadeUp 0.5s ease 0.2s forwards; opacity: 0; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Обертка для скрытия основного UI при загрузке */
-        #mainWrapper { opacity: 0; transition: opacity 0.4s ease; }
+        #mainWrapper { opacity: 0; transition: opacity 0.3s ease; }
 
         .header { background: var(--card); padding: 12px 14px 8px; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-bottom: 1px solid var(--border); }
         
@@ -69,7 +68,6 @@
             background-repeat: no-repeat; background-position: right 10px center; background-size: 16px; padding-right: 32px;
         }
         body.dark-theme .filter-select { background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
-
         .search-input:focus, .filter-select:focus { border-color: var(--active-accent); }
         
         .tabs { display: flex; gap: 6px; }
@@ -98,7 +96,12 @@
         .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; overflow: hidden; width: 100%; }
         .card-meta span.meta-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
         
-        .color-dot { width: 14px; height: 14px; flex: 0 0 14px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(128,128,128,0.25); display: block; -webkit-mask-image: -webkit-radial-gradient(white, black); }
+        /* ЧЕТКАЯ ОБВОДКА ДЛЯ ЦВЕТОВЫХ КРУЖКОВ */
+        .color-dot { 
+            width: 14px; height: 14px; flex: 0 0 14px; border-radius: 50%; display: block; 
+            border: 1px solid rgba(128,128,128,0.4); box-shadow: inset 0 0 2px rgba(0,0,0,0.1); 
+            -webkit-mask-image: -webkit-radial-gradient(white, black); 
+        }
         
         .move-bar { display: flex; border-top: 1px solid var(--border); background: var(--input-bg); }
         .move-btn { flex: 1; padding: 10px 2px; font-size: 11px; font-weight: 700; border: none; background: transparent; cursor: pointer; border-right: 1px solid var(--border); transition: 0.2s; }
@@ -112,7 +115,7 @@
         .fab svg { width: 28px; height: 28px; stroke-width: 2; }
         .fab:active { transform: scale(0.95); }
 
-        /* МОДАЛЬНЫЕ ОКНА */
+        /* МОДАЛЬНЫЕ ОКНА И СКРОЛЛ */
         .modal { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 200; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
         .modal.active { display: flex; opacity: 1; }
         .modal-sheet { background: var(--card); width: 100%; max-width: 500px; height: 92vh; border-radius: 20px 20px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.1, 0.9, 0.2, 1); }
@@ -122,12 +125,15 @@
         .modal-header h3 { margin: 0; font-size: 17px; font-weight: 700; color: var(--text); }
         .close-btn-icon { background: var(--input-bg); border: none; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 16px; color: var(--subtext); cursor: pointer; }
 
-        /* РЕЖИМ ПРОСМОТРА */
-        .view-mode { display: flex; flex-direction: column; flex-grow: 1; overflow-y: auto; }
+        /* КОНТЕЙНЕРЫ ДЛЯ ИСПРАВЛЕНИЯ СКРОЛЛА КНОПОК */
+        .view-mode, .edit-mode { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; min-height: 0; }
+        .edit-mode { display: none; }
+
         .view-photo-area { position: relative; width: 100%; height: 280px; background: var(--card); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
         .view-blur-bg { position: absolute; inset: -20px; background-size: cover; background-position: center; filter: blur(15px); opacity: 0.35; z-index: 0; }
         .view-photo-area img { position: relative; z-index: 1; max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        .view-info-area { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+        
+        .view-info-area { padding: 20px 20px 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; flex-grow: 1; }
         .view-title { font-size: 22px; font-weight: 800; color: var(--text); margin: 0; line-height: 1.2; }
         .view-tags { display: flex; gap: 8px; flex-wrap: wrap; }
         .view-tag { background: var(--input-bg); color: var(--text); font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
@@ -140,8 +146,6 @@
         .btn-edit-mode:active { transform: scale(0.98); }
         .btn-edit-mode svg { width: 18px; height: 18px; }
 
-        /* РЕЖИМ РЕДАКТИРОВАНИЯ */
-        .edit-mode { display: flex; flex-direction: column; flex-grow: 1; display: none; }
         .modal-top { padding: 15px 18px; flex-shrink: 0; background: var(--card); z-index: 10; border-bottom: 1px solid var(--border); }
         .photo-preview-box { width: 100%; height: 160px; border-radius: 12px; background: var(--input-bg); border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
@@ -149,7 +153,7 @@
         .photo-placeholder svg { width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.4; }
         .btn-change-photo { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; backdrop-filter: blur(4px); cursor: pointer; display: flex; align-items: center; gap: 6px; }
 
-        .modal-body { padding: 15px 18px 24px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
+        .modal-body { padding: 15px 18px 40px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .field { display: flex; flex-direction: column; gap: 4px; }
@@ -158,7 +162,10 @@
         .field input:focus, .field select:focus { border-color: var(--active-accent); }
 
         .color-controls { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
-        .color-circle { width: 38px; height: 38px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(128,128,128,0.3); position: relative; overflow: hidden; flex-shrink: 0; }
+        .color-circle { 
+            width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0; position: relative; overflow: hidden; 
+            border: 1px solid rgba(128,128,128,0.4); box-shadow: inset 0 0 2px rgba(0,0,0,0.1); 
+        }
         .color-circle input[type="color"] { position: absolute; top: -10px; left: -10px; width: 60px; height: 60px; opacity: 0; cursor: pointer; }
         
         .btn-color-action { background: var(--input-bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; font-weight: 600; transition: 0.2s; }
@@ -167,17 +174,18 @@
         .modal-actions { display: flex; gap: 10px; margin-top: 10px; }
         .btn-primary { flex: 2; padding: 14px; background: var(--active-accent); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s ease; }
         .btn-danger { flex: 1; padding: 14px; background: rgba(239,68,68,0.1); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
+        .btn-primary:active, .btn-danger:active { transform: scale(0.98); }
 
         .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.85); color: #fff; padding: 8px 14px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; font-weight: 500; backdrop-filter: blur(4px); }
         .empty { width: 100%; text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 14px; display: none; }
 
-        /* ПОЛНОЭКРАННЫЙ УМНЫЙ ZOOM С МУЛЬТИТАЧЕМ */
+        /* ИСПРАВЛЕННЫЙ ПОЛНОЭКРАННЫЙ ZOOM */
         #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; opacity: 0; transition: opacity 0.3s ease; }
         #imageViewer.active { display: flex; opacity: 1; }
         .viewer-header { height: 60px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; background: linear-gradient(rgba(0,0,0,0.6), transparent); z-index: 1001; }
         .viewer-close { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; backdrop-filter: blur(4px); }
         .viewer-img-container { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; touch-action: none; }
-        #viewerImg { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: top left; transition: transform 0.1s; }
+        #viewerImg { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         #confirmDialog { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 300; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
         #confirmDialog.active { display: flex; opacity: 1; }
@@ -199,7 +207,7 @@
         <div class="splash-loader"></div>
     </div>
 
-    <!-- ПОЛНОЭКРАННЫЙ МУЛЬТИТАЧ ZOOM -->
+    <!-- ПОЛНОЭКРАННЫЙ ZOOM -->
     <div id="imageViewer">
         <div class="viewer-header">
             <button class="viewer-close" onclick="closeFullscreen()">Закрыть</button>
@@ -221,7 +229,7 @@
         </div>
     </div>
 
-    <!-- ОСНОВНОЙ ИНТЕРФЕЙС (СКРЫТ ВО ВРЕМЯ ЗАСТАВКИ) -->
+    <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
     <div id="mainWrapper">
         <div class="header">
             <div class="search-container">
@@ -285,7 +293,7 @@
                     </div>
                     <button class="btn-edit-mode" onclick="switchToEditMode()">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                        Редактировать параметры
+                        Редактировать
                     </button>
                 </div>
             </div>
@@ -354,7 +362,7 @@
     </div>
 
     <script>
-        // --- 1. ВАША ССЫЛКА ---
+        // --- 1. ВАША ССЫЛКА НА GOOGLE SCRIPT ---
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
         var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
@@ -364,7 +372,7 @@
         var myTgId = "default_user";
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { myTgId = tg.initDataUnsafe.user.id; }
 
-        var CACHE_KEY = "wardrobe_v19_" + myTgId;
+        var CACHE_KEY = "wardrobe_v20_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var editingId = null;
@@ -389,7 +397,7 @@
                 setTimeout(function(){ splash.style.display = 'none'; }, 300);
             }
         }
-        setTimeout(hideSplash, 1500); // Предохранитель от вечной загрузки
+        setTimeout(hideSplash, 1500); 
 
         function showSync(text) {
             var el = document.getElementById('syncStatus');
@@ -552,18 +560,29 @@
             applyFilters();
         };
 
+        var localDataStr = localStorage.getItem(CACHE_KEY) || "[]";
+        
         function fetchFromCloud() {
             fetch(API_URL + "?user_id=" + myTgId).then(function(res) { return res.json(); }).then(function(data) {
-                if (Array.isArray(data)) { items = data; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); initGrid(); }
+                if (Array.isArray(data)) { 
+                    var newDataStr = JSON.stringify(data);
+                    if (newDataStr !== localDataStr) {
+                        items = data; 
+                        localDataStr = newDataStr;
+                        localStorage.setItem(CACHE_KEY, newDataStr); 
+                        initGrid(); 
+                    }
+                }
                 hideSplash();
             }).catch(function(e) { hideSplash(); });
         }
 
         window.moveItem = function(id, newStatus, event) {
-            if (event) event.stopPropagation(); // Чтобы при клике не открывалась карточка
+            if (event) event.stopPropagation(); 
             if (tg) tg.HapticFeedback.impactOccurred('light');
             for(var i=0; i<items.length; i++) { if(String(items[i].id) === String(id)) { items[i].status = newStatus; break; } }
-            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); initGrid(); 
+            localDataStr = JSON.stringify(items);
+            localStorage.setItem(CACHE_KEY, localDataStr); initGrid(); 
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: [id], status: newStatus, user_id: myTgId }) });
         };
 
@@ -573,7 +592,8 @@
             var affectedIds = [];
             for(var i=0; i<items.length; i++) { if(items[i].status === currentTab) { items[i].status = targetStatus; affectedIds.push(items[i].id); } }
             if (affectedIds.length === 0) return;
-            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); initGrid();
+            localDataStr = JSON.stringify(items);
+            localStorage.setItem(CACHE_KEY, localDataStr); initGrid();
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: affectedIds, status: targetStatus, user_id: myTgId }) });
         };
 
@@ -613,13 +633,15 @@
         // --- НАТИВНЫЙ МУЛЬТИТАЧ ZOOM ---
         var viewerImg = document.getElementById('viewerImg');
         var viewerContainer = document.getElementById('viewerContainer');
-        var zoomScale = 1; var initialDistance = 0; var initialScale = 1;
-        var panX = 0; var panY = 0; var startPanX = 0; var startPanY = 0;
-        var isPanning = false; var lastTap = 0;
+        var zoomScale = 1; 
+        var panX = 0, panY = 0;
+        var startPanX = 0, startPanY = 0;
+        var isPanning = false; 
+        var lastTap = 0;
 
         function resetZoomState() {
             zoomScale = 1; panX = 0; panY = 0;
-            viewerImg.style.transition = 'transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1)';
+            viewerImg.style.transition = 'transform 0.25s ease';
             viewerImg.style.transform = "translate(0px, 0px) scale(1)";
         }
 
@@ -632,25 +654,16 @@
         window.closeFullscreen = function() { document.getElementById('imageViewer').classList.remove('active'); };
 
         viewerContainer.addEventListener('touchstart', function(e) {
-            viewerImg.style.transition = 'none';
-            if (e.touches.length === 2) {
-                isPanning = false;
-                initialDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
-                initialScale = zoomScale;
-            } else if (e.touches.length === 1 && zoomScale > 1) {
+            if (e.touches.length === 1 && zoomScale > 1) {
                 isPanning = true;
                 startPanX = e.touches[0].pageX - panX;
                 startPanY = e.touches[0].pageY - panY;
+                viewerImg.style.transition = 'none'; 
             }
         }, {passive: false});
 
         viewerContainer.addEventListener('touchmove', function(e) {
-            if (e.touches.length === 2) {
-                e.preventDefault();
-                var currentDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
-                zoomScale = Math.min(Math.max(1, initialScale * (currentDistance / initialDistance)), 5);
-                viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + zoomScale + ")";
-            } else if (e.touches.length === 1 && isPanning) {
+            if (e.touches.length === 1 && isPanning) {
                 e.preventDefault();
                 panX = e.touches[0].pageX - startPanX;
                 panY = e.touches[0].pageY - startPanY;
@@ -659,10 +672,7 @@
         }, {passive: false});
 
         viewerContainer.addEventListener('touchend', function(e) {
-            if (e.touches.length < 2) isPanning = false;
-            if (e.touches.length === 0 && zoomScale <= 1) resetZoomState();
-            
-            // Быстрый двойной тап
+            isPanning = false;
             if (e.changedTouches.length === 1) {
                 var currentTime = new Date().getTime();
                 var tapLength = currentTime - lastTap;
@@ -671,15 +681,16 @@
                     if (zoomScale > 1) { 
                         resetZoomState(); 
                     } else { 
-                        // Приближаем в ту точку, куда тапнул пользователь
-                        var rect = viewerImg.getBoundingClientRect();
+                        zoomScale = 2.5;
+                        var rect = viewerContainer.getBoundingClientRect();
                         var touchX = e.changedTouches[0].clientX - rect.left;
                         var touchY = e.changedTouches[0].clientY - rect.top;
-                        viewerImg.style.transformOrigin = (touchX / rect.width * 100) + "% " + (touchY / rect.height * 100) + "%";
                         
-                        zoomScale = 3; 
-                        viewerImg.style.transition = 'transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1)';
-                        viewerImg.style.transform = "translate(0px, 0px) scale(3)"; 
+                        panX = (rect.width / 2 - touchX) * 1.5;
+                        panY = (rect.height / 2 - touchY) * 1.5;
+                        
+                        viewerImg.style.transition = 'transform 0.25s ease';
+                        viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + zoomScale + ")"; 
                     }
                 }
                 lastTap = currentTime;
@@ -697,7 +708,8 @@
             var newItems = [];
             for(var i=0; i<items.length; i++) { if(String(items[i].id) !== String(editingId)) newItems.push(items[i]); }
             items = newItems;
-            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); initGrid(); closeModal();
+            localDataStr = JSON.stringify(items);
+            localStorage.setItem(CACHE_KEY, localDataStr); initGrid(); closeModal();
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
         };
 
@@ -719,14 +731,13 @@
                 for(var i=0; i<items.length; i++) { if(String(items[i].id) === String(id)) { item = items[i]; break; } }
                 var cObj = parseColorField(item.color);
                 
-                // РЕЖИМ ПРОСМОТРА
                 document.getElementById('modalTitle').innerText = "Информация о вещи";
                 document.getElementById('viewName').innerText = item.name || "Без названия";
                 
                 var viewImg = document.getElementById('viewPhotoImg');
                 var viewBlur = document.getElementById('viewBlurBg');
                 
-                currentPhotoData = item.photo || ""; // В модалке всегда HD оригинал
+                currentPhotoData = item.photo || ""; 
                 if (currentPhotoData) {
                     viewImg.src = currentPhotoData; viewImg.style.display = 'block';
                     viewBlur.style.backgroundImage = 'url(' + currentPhotoData + ')';
@@ -741,7 +752,6 @@
                 document.getElementById('viewStatus').innerText = statusText;
                 document.getElementById('viewNotes').innerText = item.notes || "—";
 
-                // ДАННЫЕ ДЛЯ РЕЖИМА РЕДАКТИРОВАНИЯ
                 document.getElementById('fName').value = item.name || "";
                 document.getElementById('fCategory').value = item.category || "";
                 document.getElementById('fStatus').value = item.status || "IN_CLOSET";
@@ -786,7 +796,6 @@
                 prev.style.display = "none"; placeholder.style.display = "flex"; changeBtn.style.display = "none";
                 document.getElementById('btnDelete').style.display = "none";
 
-                // Для новой вещи сразу открываем редактирование
                 document.getElementById('viewMode').style.display = 'none';
                 document.getElementById('editMode').style.display = 'flex';
             }
@@ -850,13 +859,14 @@
                 if (idx !== -1) items[idx] = itemObj; 
             } else { items.unshift(itemObj); }
 
-            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); initGrid(); closeModal(); showSync("Сохранение данных...");
+            localDataStr = JSON.stringify(items);
+            localStorage.setItem(CACHE_KEY, localDataStr); initGrid(); closeModal(); showSync("Сохранение данных...");
             
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "save", item: itemObj, user_id: myTgId }) })
             .then(function(res) { return res.json(); }).then(function(result) {
                 if (result.ok && result.photoUrl) { 
                     for(var j=0; j<items.length; j++) {
-                        if(String(items[j].id) === String(itemObj.id)) { items[j].photo = result.photoUrl; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); break; }
+                        if(String(items[j].id) === String(itemObj.id)) { items[j].photo = result.photoUrl; localDataStr = JSON.stringify(items); localStorage.setItem(CACHE_KEY, localDataStr); break; }
                     }
                     initGrid();
                 }
