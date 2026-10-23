@@ -6,92 +6,163 @@
     <title>Мой Гардероб</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        :root { --bg: #f2f4f7; --card: #ffffff; --text: #111827; --subtext: #6b7280; --accent: #2563eb; --border: #e5e7eb; --danger: #ef4444; }
+        /* БАЗОВЫЕ ПЕРЕМЕННЫЕ (СВЕТЛАЯ ТЕМА) */
+        :root { 
+            --bg: #f2f4f7; --card: #ffffff; --text: #111827; --subtext: #6b7280; 
+            --accent: #2563eb; --border: #e5e7eb; --danger: #ef4444; 
+            --modal-overlay: rgba(0,0,0,0.55); --input-bg: #f9fafb; 
+        }
+
+        /* ТЕМНАЯ ТЕМА (Подхватывает системную или Telegram) */
+        @media (prefers-color-scheme: dark) {
+            :root { 
+                --bg: #111827; --card: #1f2937; --text: #f9fafb; --subtext: #9ca3af; 
+                --accent: #3b82f6; --border: #374151; --danger: #f87171; 
+                --modal-overlay: rgba(0,0,0,0.75); --input-bg: #111827; 
+            }
+        }
+        body.dark-theme {
+            --bg: #111827; --card: #1f2937; --text: #f9fafb; --subtext: #9ca3af; 
+            --accent: #3b82f6; --border: #374151; --danger: #f87171; 
+            --modal-overlay: rgba(0,0,0,0.75); --input-bg: #111827; 
+        }
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); padding-bottom: 90px; }
 
         .header { background: var(--card); padding: 12px 14px 8px; position: sticky; top: 0; z-index: 50; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
         .search-row { display: flex; gap: 8px; margin-bottom: 10px; }
-        .search-input, .filter-select { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; background: #f9fafb; outline: none; }
+        .search-input, .filter-select { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; background: var(--input-bg); color: var(--text); outline: none; }
         
         .tabs { display: flex; gap: 6px; }
-        .tab { flex: 1; text-align: center; padding: 9px 4px; font-weight: 600; font-size: 13px; color: var(--subtext); border-radius: 8px; cursor: pointer; background: #f3f4f6; transition: 0.2s; }
+        .tab { flex: 1; text-align: center; padding: 9px 4px; font-weight: 600; font-size: 13px; color: var(--subtext); border-radius: 8px; cursor: pointer; background: var(--input-bg); transition: 0.2s; }
         .tab.active { background: var(--accent); color: #fff; }
-        .badge-count { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px; background: rgba(0,0,0,0.12); }
+        .badge-count { display: inline-block; padding: 1px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px; background: rgba(0,0,0,0.12); color: inherit; }
 
-        .bulk-bar { display: none; justify-content: space-between; align-items: center; padding: 10px 14px; background: #eff6ff; border-bottom: 1px solid #bfdbfe; font-size: 13px; font-weight: 600; color: #1e40af; }
+        .bulk-bar { display: none; justify-content: space-between; align-items: center; padding: 10px 14px; background: rgba(37, 99, 235, 0.1); border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600; color: var(--accent); }
         .bulk-bar.visible { display: flex; }
         .bulk-btn { background: var(--accent); color: #fff; border: none; padding: 7px 12px; border-radius: 8px; font-weight: 600; font-size: 12px; cursor: pointer; }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; }
         .card { background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 1px solid var(--border); }
-        .img-wrap { position: relative; width: 100%; height: 185px; background: #e5e7eb; cursor: pointer; }
+        .img-wrap { position: relative; width: 100%; height: 185px; background: var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center;}
         .img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .cat-pill { position: absolute; top: 8px; left: 8px; background: rgba(17,24,39,0.72); backdrop-filter: blur(4px); color: #fff; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 500; }
         .card-body { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; cursor: pointer; }
         .card-title { font-weight: 700; font-size: 14px; line-height: 1.25; color: var(--text); }
         .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-        .color-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.2); display: inline-block; }
+        .color-dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(128,128,128,0.3); display: inline-block; }
         
-        .move-bar { display: flex; border-top: 1px solid var(--border); background: #f9fafb; }
+        .move-bar { display: flex; border-top: 1px solid var(--border); background: var(--input-bg); }
         .move-btn { flex: 1; padding: 10px 4px; font-size: 11px; font-weight: 700; border: none; background: transparent; cursor: pointer; color: var(--accent); border-right: 1px solid var(--border); }
         .move-btn:last-child { border-right: none; }
 
         .fab { position: fixed; bottom: 20px; right: 20px; width: 58px; height: 58px; border-radius: 29px; background: var(--accent); color: #fff; font-size: 32px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(37,99,235,0.4); border: none; z-index: 90; cursor: pointer; }
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; align-items: flex-end; justify-content: center; }
+        /* Окна (Модалки) */
+        .modal { display: none; position: fixed; inset: 0; background: var(--modal-overlay); z-index: 200; align-items: flex-end; justify-content: center; }
         .modal.active { display: flex; }
         .modal-sheet { background: var(--card); width: 100%; max-width: 500px; max-height: 92vh; border-radius: 20px 20px 0 0; padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; }
-        .modal-header h3 { margin: 0; font-size: 18px; }
+        .modal-header h3 { margin: 0; font-size: 18px; color: var(--text); }
         .close-x { background: none; border: none; font-size: 22px; color: var(--subtext); cursor: pointer; }
         
-        .photo-preview-box { width: 100%; height: 220px; border-radius: 12px; background: #f3f4f6; border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: pointer; }
-        .photo-preview-box img { width: 100%; height: 100%; object-fit: contain; background: #111; }
-        .photo-placeholder { color: var(--subtext); font-size: 14px; font-weight: 500; text-align: center; }
+        .photo-preview-box { width: 100%; height: 220px; border-radius: 12px; background: var(--input-bg); border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .photo-preview-box img { width: 100%; height: 100%; object-fit: contain; cursor: zoom-in; }
+        .photo-placeholder { color: var(--subtext); font-size: 14px; font-weight: 500; text-align: center; cursor: pointer; padding: 20px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .btn-change-photo { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.6); color: #fff; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; backdrop-filter: blur(4px); cursor: pointer; }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .field { display: flex; flex-direction: column; gap: 4px; }
         .field label { font-size: 11px; font-weight: 700; color: var(--subtext); text-transform: uppercase; }
-        .field input, .field select { padding: 11px; border: 1px solid var(--border); border-radius: 9px; font-size: 15px; background: #f9fafb; outline: none; width: 100%; }
+        .field input, .field select { padding: 11px; border: 1px solid var(--border); border-radius: 9px; font-size: 15px; background: var(--input-bg); color: var(--text); outline: none; width: 100%; }
+
+        /* Пипетки цветов */
+        .color-pickers-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+        .color-pickers-row span { font-size: 12px; color: var(--subtext); }
+        .pipette { width: 30px; height: 30px; border: none; padding: 0; border-radius: 50%; overflow: hidden; cursor: pointer; background: none; }
+        .pipette::-webkit-color-swatch-wrapper { padding: 0; }
+        .pipette::-webkit-color-swatch { border: 1px solid var(--border); border-radius: 50%; }
+        .btn-clear-colors { background: var(--border); color: var(--text); border: none; border-radius: 6px; padding: 6px 10px; font-size: 11px; cursor: pointer; }
 
         .modal-actions { display: flex; gap: 10px; margin-top: 6px; }
         .btn-primary { flex: 2; padding: 13px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
-        .btn-danger { flex: 1; padding: 13px; background: #fee2e2; color: var(--danger); border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
+        .btn-danger { flex: 1; padding: 13px; background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; }
 
         .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.8); color: #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; }
         .empty { grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: var(--subtext); }
+
+        /* Полноэкранный просмотр фото */
+        #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; justify-content: center; align-items: center; }
+        #imageViewer.active { display: flex; }
+        #imageViewer img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .viewer-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 32px; cursor: pointer; padding: 10px; line-height: 1; }
+
+        /* Кастомное окно подтверждения удаления */
+        #confirmDialog { display: none; position: fixed; inset: 0; background: var(--modal-overlay); z-index: 300; align-items: center; justify-content: center; }
+        #confirmDialog.active { display: flex; }
+        .confirm-box { background: var(--card); padding: 22px; border-radius: 16px; width: 290px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .confirm-box h3 { margin: 0 0 10px 0; color: var(--text); }
+        .confirm-box p { color: var(--subtext); font-size: 14px; margin-bottom: 22px; }
+        .confirm-buttons { display: flex; gap: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="search-row">
-            <input type="text" id="searchInput" class="search-input" placeholder="Поиск..." oninput="render()">
-            <select id="catFilter" class="filter-select" onchange="render()"></select>
-        </div>
-        <div class="tabs">
-            <div class="tab active" data-tab="IN_CLOSET" onclick="setTab('IN_CLOSET')">Шкаф <span class="badge-count" id="cnt-IN_CLOSET">0</span></div>
-            <div class="tab" data-tab="WASHING" onclick="setTab('WASHING')">Стирка <span class="badge-count" id="cnt-WASHING">0</span></div>
-            <div class="tab" data-tab="DRYING" onclick="setTab('DRYING')">Сушилка <span class="badge-count" id="cnt-DRYING">0</span></div>
+    <!-- ПОЛНОЭКРАННЫЙ ПРОСМОТР -->
+    <div id="imageViewer" onclick="this.classList.remove('active')">
+        <div class="viewer-close">✕</div>
+        <img id="viewerImg" src="" alt="Fullscreen">
+    </div>
+
+    <!-- КАСТОМНОЕ ОКНО УДАЛЕНИЯ -->
+    <div id="confirmDialog">
+        <div class="confirm-box">
+            <h3>Удалить вещь?</h3>
+            <p>Это действие нельзя отменить, вещь пропадет из базы навсегда.</p>
+            <div class="confirm-buttons">
+                <button class="btn-primary" style="background:var(--input-bg); color:var(--text); flex:1;" onclick="document.getElementById('confirmDialog').classList.remove('active')">Отмена</button>
+                <button class="btn-danger" style="flex:1; background:var(--danger); color:#fff;" onclick="executeDelete()">Удалить</button>
+            </div>
         </div>
     </div>
 
-    <div id="bulkBar" class="bulk-bar"><span id="bulkText">Действие</span><button id="bulkBtn" class="bulk-btn" onclick="executeBulkAction()">Выполнить</button></div>
-    <div id="grid" class="grid"></div>
-    <button class="fab" onclick="openModal()">+</button>
-    <div id="syncStatus" class="sync-indicator">Синхронизация...</div>
+    <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
+    <div id="appContent">
+        <div class="header">
+            <div class="search-row">
+                <input type="text" id="searchInput" class="search-input" placeholder="Поиск..." oninput="render()">
+                <select id="catFilter" class="filter-select" onchange="render()"></select>
+            </div>
+            <div class="tabs">
+                <div class="tab active" data-tab="IN_CLOSET" onclick="setTab('IN_CLOSET')">Шкаф <span class="badge-count" id="cnt-IN_CLOSET">0</span></div>
+                <div class="tab" data-tab="WASHING" onclick="setTab('WASHING')">Стирка <span class="badge-count" id="cnt-WASHING">0</span></div>
+                <div class="tab" data-tab="DRYING" onclick="setTab('DRYING')">Сушилка <span class="badge-count" id="cnt-DRYING">0</span></div>
+            </div>
+        </div>
 
-    <!-- Модальное окно свойств -->
+        <div id="bulkBar" class="bulk-bar"><span id="bulkText">Действие</span><button id="bulkBtn" class="bulk-btn" onclick="executeBulkAction()">Выполнить</button></div>
+        <div id="grid" class="grid"></div>
+        <button class="fab" onclick="openModal()">+</button>
+        <div id="syncStatus" class="sync-indicator">Синхронизация...</div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО СВОЙСТВ -->
     <div class="modal" id="itemModal" onclick="if(event.target===this) closeModal()">
         <div class="modal-sheet">
             <div class="modal-header"><h3 id="modalTitle">Свойства вещи</h3><button class="close-x" onclick="closeModal()">✕</button></div>
 
-            <label class="photo-preview-box" id="photoBox">
-                <span class="photo-placeholder" id="photoPlaceholder"Нажмите, чтобы сделать фото</span>
-                <img id="photoPreview" style="display:none;" alt="Preview">
+            <div class="photo-preview-box" id="photoBox">
+                <!-- Если фото нет, нажимаем на эту область для загрузки -->
+                <div class="photo-placeholder" id="photoPlaceholder" onclick="document.getElementById('photoInput').click()">
+                    📷 Добавить фотографию (необязательно)
+                </div>
+                <!-- Если фото есть, клик по нему увеличивает -->
+                <img id="photoPreview" style="display:none;" alt="Preview" onclick="openFullscreen(this.src)">
+                <!-- Кнопка замены фото -->
+                <button id="btnChangePhoto" class="btn-change-photo" style="display:none;" onclick="document.getElementById('photoInput').click()">🔄 Изменить</button>
                 <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)">
-            </label>
+            </div>
 
             <div class="field">
                 <label>Название вещи</label>
@@ -100,8 +171,8 @@
 
             <div class="form-row">
                 <div class="field">
-                    <label>Категория (Выберите или введите)</label>
-                    <input type="text" id="fCategory" list="cat-suggestions" placeholder="Впиши или выбери...">
+                    <label>Категория (Выбери или введи)</label>
+                    <input type="text" id="fCategory" list="cat-suggestions" placeholder="Начни писать...">
                     <datalist id="cat-suggestions">
                         <option value="Верх / Худи"></option><option value="Футболки"></option><option value="Штаны / Джинсы"></option><option value="Обувь"></option><option value="Белье / Носки"></option>
                     </datalist>
@@ -109,228 +180,69 @@
                 <div class="field">
                     <label>Статус</label>
                     <select id="fStatus">
-                        <option value="IN_CLOSET">Шкаф</option><option value="WASHING">Стика</option><option value="DRYING">Сушилка</option>
+                        <option value="IN_CLOSET">В шкафу</option><option value="WASHING">В стирке</option><option value="DRYING">На сушилке</option>
                     </select>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="field"><label>Бренд</label><input type="text" id="fBrand" placeholder="Например: Nike"></div>
-                <div class="field"><label>Цвет</label><input type="text" id="fColor" placeholder="Например: Черный"></div>
+                <div class="field">
+                    <label>Цвет (Название)</label>
+                    <input type="text" id="fColorText" placeholder="Например: Черно-белый">
+                </div>
             </div>
 
-            <div class="field"><label>Заметки / Уход</label><input type="text" id="fNotes" placeholder="Например: 40°C"></div>
+            <!-- ПИПЕТКИ ЦВЕТОВ -->
+            <div class="field">
+                <label>Точные оттенки (1 или 2 цвета)</label>
+                <div class="color-pickers-row">
+                    <input type="color" id="fColorHex1" class="pipette" value="#ffffff" onchange="markCustomColorUsed()">
+                    <input type="color" id="fColorHex2" class="pipette" value="#ffffff" onchange="markCustomColorUsed()">
+                    <button class="btn-clear-colors" onclick="clearCustomColors()">Сброс</button>
+                </div>
+                <input type="hidden" id="fHasCustomColors" value="false">
+            </div>
+
+            <div class="field"><label>Заметки / Уход</label><input type="text" id="fNotes" placeholder="Например: 40°C, наизнанку"></div>
 
             <div class="modal-actions">
-                <button class="btn-danger" id="btnDelete" style="display:none;" onclick="deleteCurrentItem()">Удалить</button>
+                <button class="btn-danger" id="btnDelete" style="display:none;" onclick="requestDelete()">Удалить</button>
                 <button class="btn-primary" id="btnSave" onclick="saveCurrentItem()">Сохранить</button>
             </div>
         </div>
     </div>
 
     <script>
+        // 1. ВСТАВЬ СВОЮ ССЫЛКУ СЮДА
         const API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
         const tg = window.Telegram?.WebApp;
         if (tg) tg.expand();
 
-        const myTgId = tg?.initDataUnsafe?.user?.id || "default_user";
+        // ВКЛЮЧАЕМ ТЕМНУЮ ТЕМУ, ЕСЛИ В TELEGRAM СТОИТ ТЕМНАЯ
+        if (tg && tg.colorScheme === 'dark') {
+            document.body.classList.add('dark-theme');
+        }
 
-        // Кэш v8 сбрасывает старые следы сбоев
-        const CACHE_KEY = `wardrobe_v8_${myTgId}`;
+        const myTgId = tg?.initDataUnsafe?.user?.id || "default_user";
+        const CACHE_KEY = `wardrobe_v9_${myTgId}`;
+        
         let items = JSON.parse(localStorage.getItem(CACHE_KEY) || "[]");
         let currentTab = "IN_CLOSET";
         let editingId = null;
         let currentPhotoData = "";
+        let itemToDelete = null;
 
+        // Заглушка, если фото не загружено (SVG рубашка)
+        const NO_PHOTO_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%239ca3af"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>';
+
+        // УМНЫЙ СЛОВАРЬ БАЗОВЫХ ЦВЕТОВ (Если пипетки не использованы)
         const COLOR_MAP = {
-  // --- ЧЕРНЫЙ И ТЕМНЫЕ ТОНА ---
-  "черный": "#111827",
-  "черная": "#111827",
-  "черное": "#111827",
-  "черные": "#111827",
-  "black": "#111827",
-  "графит": "#27272a",
-  "графитовый": "#27272a",
-  "антрацит": "#374151",
-  "угольный": "#18181b",
-  "темный": "#1f2937",
-  "темно": "#1f2937",
-
-  // --- БЕЛЫЙ И СВЕТЛЫЕ ТОНА ---
-  "белый": "#ffffff",
-  "белая": "#ffffff",
-  "белое": "#ffffff",
-  "белые": "#ffffff",
-  "white": "#ffffff",
-  "молочный": "#fdfbf7",
-  "слоновая кость": "#fdf6e2",
-  "айвори": "#fffff0",
-  "кремовый": "#fef3c7",
-  "светлый": "#f3f4f6",
-
-  // --- СЕРЫЕ ТОНА ---
-  "серый": "#9ca3af",
-  "серая": "#9ca3af",
-  "серое": "#9ca3af",
-  "серые": "#9ca3af",
-  "grey": "#9ca3af",
-  "gray": "#9ca3af",
-  "светло-серый": "#d1d5db",
-  "светло серый": "#d1d5db",
-  "темно-серый": "#4b5563",
-  "темно серый": "#4b5563",
-  "мокрый асфальт": "#3f3f46",
-  "стальной": "#71717a",
-  "пепельный": "#a1a1aa",
-  "серебристый": "#cbd5e1",
-  "серебро": "#cbd5e1",
-
-  // --- СИНИЕ И ГОЛУБЫЕ ТОНА ---
-  "синий": "#2563eb",
-  "синяя": "#2563eb",
-  "синее": "#2563eb",
-  "синие": "#2563eb",
-  "blue": "#2563eb",
-  "темно-синий": "#1e3a8a",
-  "темно синий": "#1e3a8a",
-  "глубокий синий": "#172554",
-  "индиго": "#4338ca",
-  "васильковый": "#3b82f6",
-  "электрик": "#1d4ed8",
-  "navy": "#0f172a",
-  "голубой": "#38bdf8",
-  "голубая": "#38bdf8",
-  "голубое": "#38bdf8",
-  "голубые": "#38bdf8",
-  "небесный": "#0ea5e9",
-  "небесно-голубой": "#0ea5e9",
-  "бирюзовый": "#06b6d4",
-  "бирюза": "#06b6d4",
-  "аквамарин": "#7dd3fc",
-  "морской": "#0369a1",
-  "морская волна": "#0e7490",
-  "лазурный": "#0284c7",
-
-  // --- ЗЕЛЕНЫЕ И ОЛИВКОВЫЕ ТОНА ---
-  "зеленый": "#16a34a",
-  "зеленая": "#16a34a",
-  "зеленое": "#16a34a",
-  "зеленые": "#16a34a",
-  "зелёный": "#16a34a",
-  "зелёная": "#16a34a",
-  "зелёное": "#16a34a",
-  "зелёные": "#16a34a",
-  "green": "#16a34a",
-  "темно-зеленый": "#14532d",
-  "темно зеленый": "#14532d",
-  "светло-зеленый": "#86efac",
-  "салатовый": "#84cc16",
-  "лайм": "#a3e635",
-  "изумрудный": "#059669",
-  "изумруд": "#059669",
-  "мятный": "#6ee7b7",
-  "мята": "#6ee7b7",
-  "оливковый": "#65a30d",
-  "олива": "#65a30d",
-  "хаки": "#78716c",
-  "болотный": "#3f4f2c",
-  "хвойный": "#064e3b",
-  "фисташковый": "#bef264",
-
-  // --- КРАСНЫЕ И БОРДОВЫЕ ТОНА ---
-  "красный": "#ef4444",
-  "красная": "#ef4444",
-  "красное": "#ef4444",
-  "красные": "#ef4444",
-  "red": "#ef4444",
-  "алый": "#f43f5e",
-  "темно-красный": "#7f1d1d",
-  "бордовый": "#881337",
-  "бордо": "#881337",
-  "вишневый": "#9f1239",
-  "вишня": "#9f1239",
-  "винный": "#4c0519",
-  "марсала": "#581c87",
-  "рубиновый": "#b91c1c",
-
-  // --- РОЗОВЫЕ И ФИОЛЕТОВЫЕ ТОНА ---
-  "розовый": "#ec4899",
-  "розовая": "#ec4899",
-  "розовое": "#ec4899",
-  "розовые": "#ec4899",
-  "pink": "#ec4899",
-  "светло-розовый": "#fbcfe8",
-  "пыльная роза": "#d88b9d",
-  "пудровый": "#fce7f3",
-  "фуксия": "#d946ef",
-  "малиновый": "#e11d48",
-  "фиолетовый": "#7c3aed",
-  "фиолетовая": "#7c3aed",
-  "purple": "#7c3aed",
-  "темно-фиолетовый": "#4c1d95",
-  "сиреневый": "#c084fc",
-  "лавандовый": "#a78bfa",
-  "лаванда": "#a78bfa",
-  "лиловый": "#d8b4fe",
-  "баклажановый": "#3b0764",
-
-  // --- ЖЕЛТЫЕ И ОРАНЖЕВЫЕ ТОНА ---
-  "желтый": "#facc15",
-  "желтая": "#facc15",
-  "желтое": "#facc15",
-  "желтые": "#facc15",
-  "жёлтый": "#facc15",
-  "yellow": "#facc15",
-  "лимонный": "#fef08a",
-  "горчичный": "#ca8a04",
-  "золотой": "#eab308",
-  "золотистый": "#eab308",
-  "золото": "#eab308",
-  "янтарный": "#d97706",
-  "оранжевый": "#f97316",
-  "оранжевая": "#f97316",
-  "orange": "#f97316",
-  "рыжий": "#ea580c",
-  "морковный": "#f97316",
-  "коралловый": "#fb7185",
-  "коралл": "#fb7185",
-  "персиковый": "#fdba74",
-  "персик": "#fdba74",
-
-  // --- КОРИЧНЕВЫЕ И БЕЖЕВЫЕ ТОНА ---
-  "коричневый": "#78350f",
-  "коричневая": "#78350f",
-  "коричневое": "#78350f",
-  "коричневые": "#78350f",
-  "brown": "#78350f",
-  "темно-коричневый": "#451a03",
-  "шоколадный": "#3b1e08",
-  "шоколад": "#3b1e08",
-  "кофейный": "#543310",
-  "кофе": "#543310",
-  "терракотовый": "#9a3412",
-  "бежевый": "#e5d3b3",
-  "бежевая": "#e5d3b3",
-  "бежевое": "#e5d3b3",
-  "беж": "#e5d3b3",
-  "beige": "#e5d3b3",
-  "песочный": "#d4b996",
-  "песок": "#d4b996",
-  "верблюжий": "#c19a6b",
-  "camel": "#c19a6b",
-  "карамельный": "#b45309",
-  "карамель": "#b45309",
-  "нюдовый": "#e7c8b0",
-  "нюд": "#e7c8b0",
-
-  // --- МЕТАЛЛ И ЭФФЕКТЫ ---
-  "бронзовый": "#cd7f32",
-  "бронза": "#cd7f32",
-  "медный": "#b87333",
-  "медь": "#b87333",
-  "металлик": "#94a3b8"
-};
+            "черный": "#111827", "белый": "#ffffff", "серый": "#9ca3af", "синий": "#2563eb", "голубой": "#38bdf8", "небесный": "#0ea5e9",
+            "красный": "#ef4444", "зеленый": "#10b981", "желтый": "#facc15", "коричневый": "#78350f", "розовый": "#ec4899", 
+            "фиолетовый": "#7c3aed", "оранжевый": "#f97316", "бордовый": "#881337", "хаки": "#78716c", "оливковый": "#65a30d"
+        };
 
         function showSync(text) {
             const el = document.getElementById('syncStatus');
@@ -348,22 +260,44 @@
                     localStorage.setItem(CACHE_KEY, JSON.stringify(items));
                     render();
                 }
-            } catch (e) {
-                console.warn("Оффлайн режим", e);
-            }
-            showSync("");
+            } catch (e) {} showSync("");
         }
 
         function updateDynamicFilters() {
             const select = document.getElementById('catFilter');
             const currentVal = select.value || "ALL";
             const uniqueCats = [...new Set(items.map(i => i.category).filter(Boolean))];
-            
             let html = '<option value="ALL">Все категории</option>';
             uniqueCats.forEach(cat => { html += `<option value="${cat}">${cat}</option>`; });
-            
             select.innerHTML = html;
             select.value = uniqueCats.includes(currentVal) ? currentVal : "ALL";
+        }
+
+        // --- ПАРСЕР СОСТАВНОГО ЦВЕТА ---
+        // Строка в базе выглядит так: "Название||#hex1||#hex2" ИЛИ просто "Название"
+        function parseColorField(colorStr) {
+            if (!colorStr) return { text: "", dot: "" };
+            let parts = colorStr.split("||");
+            let text = parts[0];
+            let h1 = parts[1];
+            let h2 = parts[2];
+            
+            let bgStyle = "";
+            if (h1 && h2 && h1 !== h2) {
+                // Если два разных цвета - делаем диагональный градиент
+                bgStyle = `background: linear-gradient(135deg, ${h1} 50%, ${h2} 50%)`;
+            } else if (h1) {
+                // Если один цвет из пипетки
+                bgStyle = `background: ${h1}`;
+            } else {
+                // Пытаемся найти по словарю
+                let clean = text.toLowerCase().trim().replace(/ё/g, "е");
+                let mapped = COLOR_MAP[clean] || null;
+                if (mapped) bgStyle = `background: ${mapped}`;
+            }
+            
+            let dotHtml = bgStyle ? `<span class="color-dot" style="${bgStyle}"></span>` : '';
+            return { text: text, dot: dotHtml, hex1: h1 || "#ffffff", hex2: h2 || "#ffffff", hasCustom: !!h1 };
         }
 
         function render() {
@@ -375,11 +309,10 @@
 
             const bulkBar = document.getElementById('bulkBar');
             const currentCount = items.filter(i => i.status === currentTab).length;
-            
             if (currentTab === "WASHING" && currentCount > 0) {
                 bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `В стирке: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё на сушилку →`;
             } else if (currentTab === "DRYING" && currentCount > 0) {
-                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `На сушилке: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё в шкаф ✓`;
+                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = `Высохло: ${currentCount}`; document.getElementById('bulkBtn').innerText = `Всё в шкаф ✓`;
             } else { bulkBar.classList.remove('visible'); }
 
             const grid = document.getElementById('grid');
@@ -390,29 +323,32 @@
             if (cat !== "ALL") filtered = filtered.filter(i => i.category === cat);
             if (query) {
                 filtered = filtered.filter(i => 
-                    (i.name||"").toLowerCase().includes(query) || 
-                    (i.brand||"").toLowerCase().includes(query) || 
-                    (i.category||"").toLowerCase().includes(query)
+                    (i.name||"").toLowerCase().includes(query) || (i.brand||"").toLowerCase().includes(query) || (i.category||"").toLowerCase().includes(query)
                 );
             }
 
             if (filtered.length === 0) { grid.innerHTML = `<div class="empty">Список пуст.</div>`; return; }
 
             grid.innerHTML = filtered.map(item => {
-                const hex = COLOR_MAP[(item.color||"").toLowerCase()] || null;
-                const colorDot = hex ? `<span class="color-dot" style="background:${hex}"></span>` : '';
+                const colorObj = parseColorField(item.color);
                 
                 let moveButtons = '';
-                if (item.status === 'IN_CLOSET') moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">На сушилку</button>`;
-                else if (item.status === 'WASHING') moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">← В шкаф</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">На сушилку →</button>`;
-                else moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">← В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">В шкаф ✓</button>`;
+                if (item.status === 'IN_CLOSET') moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">🧺 В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">☀️ На сушилку</button>`;
+                else if (item.status === 'WASHING') moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">← В шкаф</button><button class="move-btn" onclick="moveItem('${item.id}', 'DRYING')">☀️ На сушилку →</button>`;
+                else moveButtons = `<button class="move-btn" onclick="moveItem('${item.id}', 'WASHING')">← В стирку</button><button class="move-btn" onclick="moveItem('${item.id}', 'IN_CLOSET')">👕 В шкаф ✓</button>`;
+
+                const photoSrc = item.photo || NO_PHOTO_SVG;
+                const photoPadding = item.photo ? '0' : '30px'; // Отступ для иконки заглушки
 
                 return `
                     <div class="card">
-                        <div class="img-wrap" onclick="openModal('${item.id}')"><img src="${item.photo}" loading="lazy"><span class="cat-pill">${item.category || 'Без категории'}</span></div>
+                        <div class="img-wrap" onclick="openModal('${item.id}')">
+                            <img src="${photoSrc}" style="padding:${photoPadding}" loading="lazy">
+                            ${item.category ? `<span class="cat-pill">${item.category}</span>` : ''}
+                        </div>
                         <div class="card-body" onclick="openModal('${item.id}')">
                             <div class="card-title">${item.name || 'Без названия'}</div>
-                            <div class="card-meta">${colorDot}<span>${item.brand || ''} ${item.color || ''}</span></div>
+                            <div class="card-meta">${colorObj.dot}<span>${item.brand || ''} ${colorObj.text}</span></div>
                         </div>
                         <div class="move-bar">${moveButtons}</div>
                     </div>`;
@@ -444,25 +380,78 @@
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: affectedIds, status: targetStatus, user_id: myTgId }) });
         };
 
+        // --- ЛОГИКА ЦВЕТНЫХ ПИПЕТОК ---
+        window.markCustomColorUsed = function() {
+            document.getElementById('fHasCustomColors').value = "true";
+        };
+        window.clearCustomColors = function() {
+            document.getElementById('fColorHex1').value = "#ffffff";
+            document.getElementById('fColorHex2').value = "#ffffff";
+            document.getElementById('fHasCustomColors').value = "false";
+        };
+
+        // --- ПОЛНОЭКРАННЫЙ ПРОСМОТР ---
+        window.openFullscreen = function(src) {
+            document.getElementById('viewerImg').src = src;
+            document.getElementById('imageViewer').classList.add('active');
+        };
+
+        // --- УДАЛЕНИЕ (КАСТОМНОЕ ОКНО) ---
+        window.requestDelete = function() {
+            if (tg) tg.HapticFeedback.impactOccurred('light');
+            document.getElementById('confirmDialog').classList.add('active');
+        };
+        window.executeDelete = async function() {
+            document.getElementById('confirmDialog').classList.remove('active');
+            if (!editingId) return;
+            items = items.filter(i => String(i.id) !== String(editingId));
+            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render(); closeModal();
+            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
+        };
+
         window.openModal = function(id = null) {
             if (tg) tg.HapticFeedback.impactOccurred('light');
             editingId = id;
+            
+            const prev = document.getElementById('photoPreview');
+            const placeholder = document.getElementById('photoPlaceholder');
+            const changeBtn = document.getElementById('btnChangePhoto');
+
             if (id) {
                 const item = items.find(i => String(i.id) === String(id));
+                const colorObj = parseColorField(item.color);
+
                 document.getElementById('modalTitle').innerText = "Редактировать";
                 document.getElementById('fName').value = item.name || "";
                 document.getElementById('fCategory').value = item.category || "";
                 document.getElementById('fStatus').value = item.status || "IN_CLOSET";
                 document.getElementById('fBrand').value = item.brand || "";
-                document.getElementById('fColor').value = item.color || "";
                 document.getElementById('fNotes').value = item.notes || "";
+                
+                // Заполняем цвета
+                document.getElementById('fColorText').value = colorObj.text;
+                document.getElementById('fColorHex1').value = colorObj.hex1;
+                document.getElementById('fColorHex2').value = colorObj.hex2;
+                document.getElementById('fHasCustomColors').value = colorObj.hasCustom ? "true" : "false";
+
                 currentPhotoData = item.photo || "";
-                if (currentPhotoData) { document.getElementById('photoPreview').src = currentPhotoData; document.getElementById('photoPreview').style.display = "block"; document.getElementById('photoPlaceholder').style.display = "none"; }
+                if (currentPhotoData) { 
+                    prev.src = currentPhotoData; prev.style.display = "block"; 
+                    placeholder.style.display = "none"; changeBtn.style.display = "block";
+                } else {
+                    prev.style.display = "none"; placeholder.style.display = "flex"; changeBtn.style.display = "none";
+                }
                 document.getElementById('btnDelete').style.display = "block";
             } else {
                 document.getElementById('modalTitle').innerText = "Новая вещь";
-                document.getElementById('fName').value = ""; document.getElementById('fCategory').value = ""; document.getElementById('fStatus').value = currentTab; document.getElementById('fBrand').value = ""; document.getElementById('fColor').value = ""; document.getElementById('fNotes').value = "";
-                currentPhotoData = ""; document.getElementById('photoPreview').style.display = "none"; document.getElementById('photoPlaceholder').style.display = "block"; document.getElementById('btnDelete').style.display = "none";
+                document.getElementById('fName').value = ""; document.getElementById('fCategory').value = ""; document.getElementById('fStatus').value = currentTab; document.getElementById('fBrand').value = ""; document.getElementById('fNotes').value = "";
+                
+                document.getElementById('fColorText').value = "";
+                clearCustomColors();
+
+                currentPhotoData = ""; 
+                prev.style.display = "none"; placeholder.style.display = "flex"; changeBtn.style.display = "none";
+                document.getElementById('btnDelete').style.display = "none";
             }
             document.getElementById('itemModal').classList.add('active');
         };
@@ -480,7 +469,11 @@
                     if (w > 1000 || h > 1000) { if (w > h) { h = Math.round(h * 1000 / w); w = 1000; } else { w = Math.round(w * 1000 / h); h = 1000; } }
                     canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
                     currentPhotoData = canvas.toDataURL('image/jpeg', 0.88);
-                    document.getElementById('photoPreview').src = currentPhotoData; document.getElementById('photoPreview').style.display = "block"; document.getElementById('photoPlaceholder').style.display = "none";
+                    
+                    document.getElementById('photoPreview').src = currentPhotoData; 
+                    document.getElementById('photoPreview').style.display = "block"; 
+                    document.getElementById('photoPlaceholder').style.display = "none";
+                    document.getElementById('btnChangePhoto').style.display = "block";
                 };
                 img.src = ev.target.result;
             };
@@ -488,17 +481,25 @@
         };
 
         window.saveCurrentItem = async function() {
-            if (!currentPhotoData) { alert("Необходимо добавить фото"); return; }
             if (tg) tg.HapticFeedback.impactOccurred('light');
+
+            // Формируем комбинированную строку цвета
+            let colorText = document.getElementById('fColorText').value.trim();
+            let finalColorField = colorText;
+            if (document.getElementById('fHasCustomColors').value === "true") {
+                let h1 = document.getElementById('fColorHex1').value;
+                let h2 = document.getElementById('fColorHex2').value;
+                finalColorField = `${colorText}||${h1}||${h2}`;
+            }
 
             const itemObj = {
                 id: editingId ? String(editingId) : String(Date.now()),
-                photo: currentPhotoData,
+                photo: currentPhotoData, // Может быть пустой строкой, это нормально
                 name: document.getElementById('fName').value.trim(),
                 category: document.getElementById('fCategory').value.trim(),
                 status: document.getElementById('fStatus').value,
                 brand: document.getElementById('fBrand').value.trim(),
-                color: document.getElementById('fColor').value.trim(),
+                color: finalColorField,
                 notes: document.getElementById('fNotes').value.trim()
             };
 
@@ -511,14 +512,6 @@
                 const result = await res.json();
                 if (result.ok && result.photoUrl) { const saved = items.find(i => String(i.id) === String(itemObj.id)); if (saved) { saved.photo = result.photoUrl; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); } }
             } catch (e) {} showSync("");
-        };
-
-        window.deleteCurrentItem = async function() {
-            if (!editingId || !confirm("Удалить вещь безвозвратно?")) return;
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            items = items.filter(i => String(i.id) !== String(editingId));
-            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); render(); closeModal();
-            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
         };
 
         render();
