@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Мой Гардероб</title>
+    <title>Управление Гардеробом</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         /* ЦВЕТОВЫЕ ТЕМЫ & LIQUID GLASS ПРЕМИУМ iOS STYLE */
         :root { 
             --theme-closet: #f97316;     
-            --theme-washing: #32ade6; 
-            --theme-drying: #af52de;     
+            --theme-washing: #32ade6; /* Стильный iOS Cyan */
+            --theme-drying: #af52de; /* Стильный iOS Purple */
             
             --active-accent: var(--theme-closet); 
             --active-accent-rgb: 249, 115, 22;
@@ -24,7 +24,7 @@
             --subtext: #8e8e93; 
             --input-bg: rgba(255, 255, 255, 0.6);
             --overlay: rgba(0, 0, 0, 0.4);
-            --circle-border: rgba(0, 0, 0, 0.35);
+            --circle-border: rgba(0, 0, 0, 0.15); 
             --blur: 25px;
         }
 
@@ -46,23 +46,10 @@
                 --subtext: #98989d; 
                 --input-bg: rgba(118, 118, 128, 0.24);
                 --overlay: rgba(0, 0, 0, 0.75);
-                --circle-border: rgba(255, 255, 255, 0.45);
+                --circle-border: rgba(255, 255, 255, 0.3);
             }
         }
-
-        body.dark-theme { 
-            color-scheme: dark;
-            --bg-base: #000000;
-            --card: #1c1c1e;
-            --glass-bg: rgba(28, 28, 30, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            --text: #ffffff; 
-            --subtext: #98989d; 
-            --input-bg: rgba(118, 118, 128, 0.24);
-            --overlay: rgba(0, 0, 0, 0.75);
-            --circle-border: rgba(255, 255, 255, 0.45);
-        }
+        body.dark-theme { color-scheme: dark; --bg-base: #000000; --card: #1c1c1e; --glass-bg: rgba(28, 28, 30, 0.75); --glass-border: rgba(255, 255, 255, 0.08); --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); --text: #ffffff; --subtext: #98989d; --input-bg: rgba(118, 118, 128, 0.24); --overlay: rgba(0, 0, 0, 0.75); --circle-border: rgba(255, 255, 255, 0.3); }
 
         body.tab-IN_CLOSET { --active-accent: var(--theme-closet); --active-accent-rgb: 249, 115, 22; }
         body.tab-WASHING { --active-accent: var(--theme-washing); --active-accent-rgb: 50, 173, 230; }
@@ -72,190 +59,108 @@
         body.dark-theme.tab-WASHING { --active-accent-rgb: 100, 210, 255; }
         body.dark-theme.tab-DRYING { --active-accent-rgb: 191, 90, 242; }
 
-        * { 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; 
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
+        /* Шрифты Apple */
         body { 
             margin: 0; 
-            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif; 
-            background-color: var(--bg-base); 
-            color: var(--text); 
-            overflow-x: hidden; 
-            -webkit-font-smoothing: antialiased;
+            font-family: -apple-system, "SF Pro Display", "SF Pro Text", BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-base); color: var(--text); padding-bottom: 0; 
+            overflow-x: hidden; -webkit-font-smoothing: antialiased;
         }
 
         #mainWrapper { 
             background-color: var(--bg-base);
-            background-image: 
-                radial-gradient(circle at 0% 0%, rgba(var(--active-accent-rgb), 0.15), transparent 50%), 
-                radial-gradient(circle at 100% 100%, rgba(var(--active-accent-rgb), 0.1), transparent 50%);
-            background-attachment: fixed; 
-            min-height: 100vh; 
-            padding-bottom: 100px; 
-            transform-origin: 50% 0%; 
-            transition: filter 0.4s cubic-bezier(0.32, 0.72, 0, 1), transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s ease;
+            background-image: radial-gradient(circle at 0% 0%, rgba(var(--active-accent-rgb), 0.15), transparent 50%), radial-gradient(circle at 100% 100%, rgba(var(--active-accent-rgb), 0.1), transparent 50%);
+            background-attachment: fixed; min-height: 100vh; padding-bottom: 90px; transform-origin: 50% 0%; 
+            transition: filter 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s ease, transform 0.4s ease;
+            opacity: 0; position: relative; z-index: 1;
         }
 
-        /* Заморозка фона при открытых окнах */
-        body.modal-open { 
-            overflow: hidden; 
-            overscroll-behavior: none;
-        }
-        
-        body.modal-open #mainWrapper { 
-            filter: brightness(0.65) blur(3px); 
-            transform: scale(0.96) translateY(5px); 
-            pointer-events: none; 
-            border-radius: 20px; 
-        }
-        
-        body.modal-open .fab { 
-            opacity: 0; 
-            transform: scale(0.8) translateY(20px); 
-            pointer-events: none; 
-        }
+        body.modal-open { overflow: hidden; overscroll-behavior: none; }
+        body.modal-open #mainWrapper { filter: brightness(0.6) blur(4px); pointer-events: none; transform: scale(0.97) translateY(4px); border-radius: 16px; }
 
-        /* Заставка */
-        #splashScreen { 
-            visibility: visible; 
-            opacity: 1; 
-            position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            background: var(--bg-base); 
-            z-index: 9999; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            transition: opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.5s; 
-        }
+        /* ЗАСТАВКА И ПРОГРЕСС */
+        #splashScreen { visibility: visible; opacity: 1; position: fixed; inset: 0; background: var(--bg-base); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.4s; }
         .splash-icon { width: 64px; height: 64px; color: var(--text); margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.32, 0.72, 0, 1) forwards; }
-        .splash-title { font-size: 24px; font-weight: 700; color: var(--text); opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.32, 0.72, 0, 1) 0.1s forwards; }
-        .splash-progress-container { width: 180px; height: 4px; background: rgba(142, 142, 147, 0.2); border-radius: 4px; margin-top: 30px; overflow: hidden; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
-        .splash-progress-bar { width: 10%; height: 100%; background: var(--text); border-radius: 4px; transition: width 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
+        .splash-title { font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: 0.5px; opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.32, 0.72, 0, 1) 0.1s forwards; }
+        .splash-progress-container { width: 160px; height: 4px; background: rgba(142, 142, 147, 0.2); border-radius: 4px; margin-top: 30px; overflow: hidden; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+        .splash-progress-bar { width: 10%; height: 100%; background: var(--text); border-radius: 4px; transition: width 0.3s ease; }
         .splash-version { position: absolute; bottom: 24px; font-size: 14px; font-weight: 600; color: var(--subtext); opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; letter-spacing: 1px;}
         
         @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .image-loader {
-            position: absolute; top: 50%; left: 50%; margin-top: -15px; margin-left: -15px; width: 30px; height: 30px; 
-            border: 3px solid var(--glass-border); border-top-color: var(--active-accent); border-radius: 50%;
-            animation: spin 0.8s linear infinite; z-index: 2; display: none;
-        }
+        .image-loader { position: absolute; top: 50%; left: 50%; margin-top: -15px; margin-left: -15px; width: 30px; height: 30px; border: 3px solid var(--glass-border); border-top-color: var(--active-accent); border-radius: 50%; animation: spin 0.8s linear infinite; z-index: 0; display: none; }
 
-        /* Шапка и поиск */
-        .header { 
-            background: var(--glass-bg); 
-            backdrop-filter: blur(var(--blur)) saturate(200%); -webkit-backdrop-filter: blur(var(--blur)) saturate(200%); 
-            padding: 12px 14px 14px; 
-            position: sticky; top: 0; z-index: 50; 
-            border-bottom: 0.5px solid var(--glass-border); 
-            transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1); 
-        }
+        /* HEADER */
+        .header { background: var(--glass-bg); backdrop-filter: blur(var(--blur)) saturate(180%); -webkit-backdrop-filter: blur(var(--blur)) saturate(180%); padding: 12px 14px 14px; position: sticky; top: 0; z-index: 50; border-bottom: 0.5px solid var(--glass-border); box-shadow: 0 4px 20px rgba(0,0,0,0.03); transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
         .search-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
         .search-row-inner { display: flex; gap: 8px; }
-        .search-input, .filter-select { 
-            flex: 1; padding: 10px 14px; border: 0.5px solid var(--glass-border); border-radius: 12px; font-size: 15px; 
-            font-weight: 500; background-color: var(--input-bg); color: var(--text); outline: none; transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1); 
-            white-space: nowrap; text-overflow: ellipsis; overflow: hidden; 
-        }
-        select.filter-select { 
-            -webkit-appearance: none !important; appearance: none !important; 
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important; 
-            background-repeat: no-repeat !important; background-position: right 10px center !important; background-size: 16px !important; 
-            padding-right: 32px; 
-        }
+        .search-input, .filter-select { flex: 1; padding: 10px 14px; border: 0.5px solid var(--glass-border); border-radius: 12px; font-size: 15px; font-weight: 500; background-color: var(--input-bg); color: var(--text); outline: none; transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1); white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+        select.filter-select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 10px center; background-size: 16px; padding-right: 32px;}
         .search-input:focus, .filter-select:focus { border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.2); }
         
-        /* Вкладки */
-        .tabs { display: flex; position: relative; background: rgba(118, 118, 128, 0.12); padding: 3px; border-radius: 9px; }
+        /* ВКЛАДКИ */
+        .tabs { display: flex; position: relative; background: rgba(118, 118, 128, 0.12); padding: 3px; border-radius: 9px; border: none; }
         .tab-indicator { position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(33.333% - 4px); background: var(--card); border-radius: 7px; box-shadow: 0 3px 8px rgba(0,0,0,0.12), 0 3px 1px rgba(0,0,0,0.04); transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1); z-index: 1; pointer-events: none; }
-        body.tab-IN_CLOSET .tab-indicator { transform: translateX(0); }
-        body.tab-WASHING .tab-indicator { transform: translateX(calc(100% + 3px)); }
-        body.tab-DRYING .tab-indicator { transform: translateX(calc(200% + 6px)); }
-        
-        .tab { flex: 1; padding: 6px 4px; font-weight: 500; font-size: 13px; color: var(--text); opacity: 0.7; cursor: pointer; position: relative; z-index: 2; transition: color 0.3s, opacity 0.3s; display: flex; align-items: center; justify-content: center; height: 100%; white-space: nowrap; }
+        body.tab-IN_CLOSET .tab-indicator { transform: translateX(0); } body.tab-WASHING .tab-indicator { transform: translateX(calc(100% + 3px)); } body.tab-DRYING .tab-indicator { transform: translateX(calc(200% + 6px)); }
+        .tab { flex: 1; padding: 6px 4px; font-weight: 500; font-size: 13px; color: var(--text); opacity: 0.7; cursor: pointer; position: relative; z-index: 2; transition: color 0.3s ease, opacity 0.3s ease; display: flex; align-items: center; justify-content: center; height: 100%; white-space: nowrap; }
         .tab.active { opacity: 1; font-weight: 600; color: var(--text); }
-        .badge-count { display: inline-flex; align-items: center; justify-content: center; padding: 2px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px; background: rgba(var(--active-accent-rgb), 0.15); color: var(--text); font-weight: 700; transition: background 0.3s; }
+        .badge-count { display: inline-flex; align-items: center; justify-content: center; padding: 2px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px; background: rgba(var(--active-accent-rgb), 0.15); color: var(--text); flex-shrink: 0; font-weight: 700; transition: background 0.3s; }
 
-        /* Групповые действия */
+        /* ПЛАШКА С АНИМАЦИЕЙ (iOS 27) */
         .bulk-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 14px; background: rgba(var(--active-accent-rgb), 0.1); backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); font-size: 14px; font-weight: 600; color: var(--active-accent); max-height: 0; opacity: 0; overflow: hidden; border-bottom: 0px solid var(--glass-border); transition: max-height 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease, padding 0.4s ease; }
         .bulk-bar.visible { max-height: 80px; opacity: 1; padding: 12px 14px; border-bottom: 0.5px solid var(--glass-border); }
-        .bulk-btn { background: var(--active-accent); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.2s cubic-bezier(0.32, 0.72, 0, 1); }
+        .bulk-btn { background: var(--active-accent); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s; box-shadow: 0 4px 12px rgba(var(--active-accent-rgb), 0.3); }
         .bulk-btn:active { transform: scale(0.95); opacity: 0.8; }
 
-        /* Сетка карточек */
         .grid { display: flex; flex-wrap: wrap; gap: 12px; padding: 14px; align-items: flex-start; }
-        @keyframes scaleInCard { from { opacity: 0; transform: translateY(15px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        
-        .card { width: calc(50% - 6px); background: var(--card); border-radius: 20px; overflow: hidden; box-shadow: var(--glass-shadow); display: flex; flex-direction: column; border: 0.5px solid var(--glass-border); opacity: 0; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1); }
+        @keyframes slideUpCard { from { opacity: 0; transform: translateY(15px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .card { width: calc(50% - 6px); background: var(--card); border-radius: 20px; overflow: hidden; box-shadow: var(--glass-shadow); display: flex; flex-direction: column; border: 0.5px solid var(--glass-border); transform: translateZ(0); opacity: 0; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1); }
         .card.show { opacity: 1; }
-        .card:active { transform: scale(0.95); }
-        
+        .card:active { transform: scale(0.96); }
         .img-wrap { position: relative; width: 100%; height: 185px; background: var(--bg-base); cursor: pointer; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
         .card:hover .img-wrap img { transform: scale(1.05); }
-        
         .placeholder-img { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg-base); color: var(--subtext); }
         .placeholder-img svg { width: 40px; height: 40px; opacity: 0.3; }
-        
-        .cat-pill { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); backdrop-filter: blur(12px) saturate(180%); -webkit-backdrop-filter: blur(12px) saturate(180%); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; }
-        
-        .card-body { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; cursor: pointer; background: var(--card); }
+        .cat-pill { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); backdrop-filter: blur(12px) saturate(180%); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; }
+        .card-body { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; cursor: pointer; overflow: hidden; background: var(--card); }
         .card-title { font-weight: 600; font-size: 15px; line-height: 1.25; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
-        .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; overflow: hidden; font-weight: 500; }
+        .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; overflow: hidden; width: 100%; font-weight: 500; }
         .card-meta span.meta-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+        .color-dot { width: 16px; height: 16px; flex: 0 0 16px; border-radius: 50%; display: block; box-shadow: inset 0 0 0 1px var(--circle-border), 0 2px 4px rgba(0,0,0,0.1); background-clip: padding-box; transform: translateZ(0); }
         
-        .color-dot, .color-circle { border-radius: 50%; display: block; background-clip: padding-box; transform: translateZ(0); }
-        .color-dot { width: 16px; height: 16px; flex: 0 0 16px; box-shadow: inset 0 0 0 1px var(--circle-border), 0 2px 4px rgba(0,0,0,0.1); }
-        
-        /* Кнопки карточки */
+        /* КНОПКИ ПЕРЕМЕЩЕНИЯ (КРУПНЕЕ, ОЦЕНТРИРОВАННЫЕ В 2 СТРОКИ) */
         .move-bar { display: flex; border-top: 0.5px solid var(--glass-border); background: var(--input-bg); }
-        .move-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 4px; font-size: 12px; font-weight: 600; border: none; background: transparent; cursor: pointer; border-right: 0.5px solid var(--glass-border); transition: 0.2s ease; letter-spacing: 0.2px; line-height: 1.2; text-align: center; white-space: nowrap;}
+        .move-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 2px; font-size: 11px; font-weight: 600; border: none; background: transparent; cursor: pointer; border-right: 0.5px solid var(--glass-border); transition: background 0.2s ease, opacity 0.2s; line-height: 1.25; text-align: center; }
         .move-btn:last-child { border-right: none; }
         .move-btn.to-closet { color: var(--theme-closet); }
         .move-btn.to-washing { color: var(--theme-washing); }
         .move-btn.to-drying { color: var(--theme-drying); }
         .move-btn:active { background: rgba(0,0,0,0.05); opacity: 0.7; }
 
-        /* Плавающие кнопки (FAB) */
-        .fab { position: fixed; right: 20px; width: 56px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center; border: 0.5px solid rgba(255,255,255,0.3); z-index: 90; cursor: pointer; transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), background 0.4s ease, box-shadow 0.4s ease; color: #fff; backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); }
+        .fab { position: fixed; right: 20px; width: 56px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center; border: 0.5px solid rgba(255,255,255,0.3); z-index: 90; cursor: pointer; transition: opacity 0.4s ease, transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.4s ease; color: #fff; backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); background: rgba(var(--active-accent-rgb), 0.95); box-shadow: 0 10px 24px rgba(var(--active-accent-rgb), 0.4); }
         .fab:active { transform: scale(0.9); }
-        .fab-add { bottom: 24px; background: rgba(var(--active-accent-rgb), 0.95); box-shadow: 0 10px 24px rgba(var(--active-accent-rgb), 0.4); }
-        .fab-add svg { width: 26px; height: 26px; stroke-width: 2.2; }
-        .fab-gen { bottom: 94px; background: rgba(var(--active-accent-rgb), 0.95); box-shadow: 0 10px 24px rgba(var(--active-accent-rgb), 0.4); }
-        .fab-gen svg { width: 24px; height: 24px; stroke-width: 2.2; fill: currentColor; }
+        .fab-add { bottom: 24px; } .fab-add svg { width: 26px; height: 26px; stroke-width: 2.2; }
+        .fab-gen { bottom: 94px; } .fab-gen svg { width: 24px; height: 24px; stroke-width: 2.2; fill: currentColor; }
+        body.modal-open .fab { opacity: 0; transform: scale(0.8) translateY(20px); pointer-events: none; }
 
-        /* Модальные окна: Свойства */
-        .modal { 
-            visibility: hidden; opacity: 0; pointer-events: none; 
-            display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: var(--overlay); z-index: 200; align-items: flex-end; justify-content: center; 
-            transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.4s; 
-            overscroll-behavior: none; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); 
-        }
+        /* VISIBILITY ENGINE & MODALS */
+        .modal { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: var(--overlay); z-index: 200; align-items: flex-end; justify-content: center; transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.4s; overscroll-behavior: none; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
         .modal.active { visibility: visible; opacity: 1; pointer-events: auto; }
         
-        .modal-sheet { 
-            background: var(--bg-base); width: 100%; max-width: 500px; height: 92vh; 
-            border-radius: 32px 32px 0 0; display: flex; flex-direction: column; 
-            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
-            border-top: 0.5px solid var(--glass-border); box-shadow: 0 -10px 40px rgba(0,0,0,0.2); 
-            overscroll-behavior: none; 
-        }
+        .modal-sheet { background: var(--bg-base); width: 100%; max-width: 500px; height: 92vh; border-radius: 32px 32px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); border-top: 0.5px solid var(--glass-border); box-shadow: 0 -10px 40px rgba(0,0,0,0.2); overscroll-behavior: none; }
         .modal.active .modal-sheet { transform: translateY(0); }
         
-        #generatorModal .modal-sheet { height: 96vh; }
+        .modal-drag-pill { width: 36px; height: 5px; border-radius: 3px; background: var(--text); opacity: 0.2; margin: 12px auto 0; cursor: grab; flex-shrink: 0; }
+        .modal-drag-pill:active { cursor: grabbing; }
         
-        .modal-drag-pill { width: 40px; height: 5px; border-radius: 3px; background: var(--text); opacity: 0.2; margin: 12px auto 0; cursor: grab; flex-shrink: 0; }
         .modal-header { padding: 12px 20px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid var(--glass-border); flex-shrink: 0; }
         .modal-header h3 { margin: 0; font-size: 18px; font-weight: 700; color: var(--text); }
-        .close-btn-icon { background: var(--input-bg); display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 15px; color: var(--subtext); cursor: pointer; transition: 0.2s; }
+        .close-btn-icon { background: var(--input-bg); display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 15px; color: var(--subtext); cursor: pointer; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s; }
         .close-btn-icon:active { transform: scale(0.85); opacity: 0.7; }
-
         .modal-footer { padding: 14px 20px 24px; border-top: 0.5px solid var(--glass-border); background: var(--bg-base); display: flex; gap: 12px; flex-shrink: 0; }
 
         .view-mode, .edit-mode { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; min-height: 0; }
@@ -265,82 +170,83 @@
         .view-blur-bg { position: absolute; top: -30px; left: -30px; right: -30px; bottom: -30px; background-size: cover; background-position: center; filter: blur(25px); opacity: 0.6; z-index: 0; }
         .view-photo-area img { position: relative; z-index: 1; max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.15)); transition: opacity 0.3s; opacity: 0; }
         
-        .view-info-area, .gen-scroll-area, .modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; flex-grow: 1; overscroll-behavior: contain; }
+        .view-info-area { padding: 24px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; flex-grow: 1; overscroll-behavior: contain; }
         .view-title { font-size: 24px; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; letter-spacing: -0.5px; }
         .view-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-        .view-tag { background: var(--input-bg); backdrop-filter: blur(12px); color: var(--text); font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: 10px; border: 0.5px solid var(--glass-border); display: flex; align-items: center; gap: 6px; }
-        
-        .view-details { background: var(--input-bg); border: 0.5px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+        .view-tag { background: var(--input-bg); backdrop-filter: blur(12px) saturate(180%); color: var(--text); font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: 10px; border: 0.5px solid var(--glass-border); display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .view-details { background: var(--input-bg); border: 0.5px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
         .detail-row { display: flex; justify-content: space-between; font-size: 15px; }
         .detail-label { color: var(--subtext); font-weight: 500; }
         .detail-value { color: var(--text); font-weight: 600; text-align: right; }
         
-        .btn-edit-mode, .btn-gen-all { background: var(--active-accent); color: #fff; border: none; padding: 16px; border-radius: 14px; font-weight: 600; font-size: 17px; cursor: pointer; width: 100%; transition: 0.2s; box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.3); display: flex; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; }
-        .btn-edit-mode:active, .btn-gen-all:active { transform: scale(0.96); opacity: 0.9; }
+        .btn-edit-mode { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--active-accent); color: #fff; border: none; padding: 16px 20px; border-radius: 14px; font-weight: 600; font-size: 17px; cursor: pointer; width: 100%; transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1); box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.3); }
+        .btn-edit-mode:active { transform: scale(0.96); opacity: 0.9; }
 
-        /* Поля ввода и кружки цветов */
-        .modal-top { padding: 16px 20px; flex-shrink: 0; border-bottom: 0.5px solid var(--glass-border); }
-        .photo-preview-box { width: 100%; height: 160px; border-radius: 16px; background: var(--input-bg); border: 1.5px dashed rgba(var(--active-accent-rgb), 0.4); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .photo-placeholder { color: var(--active-accent); font-size: 14px; font-weight: 600; display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 100%; height: 100%; justify-content: center; }
+        .modal-top { padding: 16px 20px; flex-shrink: 0; background: transparent; z-index: 10; border-bottom: 0.5px solid var(--glass-border); }
+        .photo-preview-box { width: 100%; height: 160px; border-radius: 16px; background: var(--input-bg); border: 1.5px dashed rgba(var(--active-accent-rgb), 0.4); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; transition: 0.3s ease; }
+        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
+        .photo-placeholder { color: var(--active-accent); font-size: 14px; font-weight: 600; text-align: center; cursor: pointer; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.2s; }
         .photo-placeholder svg { width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.8; }
-        .btn-change-photo { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; backdrop-filter: blur(15px); cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .btn-change-photo { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #fff; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; backdrop-filter: blur(15px); cursor: pointer; display: flex; align-items: center; gap: 6px; border: none; }
 
+        .modal-body { padding: 20px 20px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 16px; overscroll-behavior: contain; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .field { display: flex; flex-direction: column; gap: 6px; }
         .field label { font-size: 11px; font-weight: 600; color: var(--subtext); text-transform: uppercase; margin-left: 4px; }
-        .field input, .field select { padding: 14px 16px; border: 0.5px solid var(--glass-border); border-radius: 14px; font-size: 15px; font-weight: 500; background: var(--input-bg); color: var(--text); outline: none; width: 100%; transition: 0.3s; }
+        .field input, .field select { padding: 14px 16px; border: 0.5px solid var(--glass-border); border-radius: 14px; font-size: 15px; font-weight: 500; background: var(--input-bg); color: var(--text); outline: none; width: 100%; transition: all 0.3s; }
         .field input:focus, .field select:focus { border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.2); }
 
         .color-controls { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
-        .color-circle { width: 44px; height: 44px; flex-shrink: 0; position: relative; overflow: hidden; border: 2.5px solid var(--circle-border); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .color-circle { width: 44px; height: 44px; border-radius: 22px; flex-shrink: 0; position: relative; overflow: hidden; border: 1px solid var(--circle-border); transform: translateZ(0); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .color-circle input[type="color"] { position: absolute; top: -10px; left: -10px; width: 64px; height: 64px; opacity: 0; cursor: pointer; }
-        .btn-color-action { background: var(--input-bg); color: var(--text); border: 0.5px solid var(--glass-border); border-radius: 12px; padding: 12px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-color-action { background: var(--input-bg); color: var(--text); border: 0.5px solid var(--glass-border); border-radius: 12px; padding: 12px 16px; font-size: 13px; cursor: pointer; font-weight: 600; transition: transform 0.2s; }
         .btn-color-action:active { transform: scale(0.95); opacity: 0.8; }
         .btn-color-action.danger { color: #ff3b30; border-color: rgba(255,59,48,0.3); background: rgba(255,59,48,0.1); }
 
-        .btn-primary, .btn-danger { padding: 16px; border: none; border-radius: 14px; font-weight: 600; font-size: 17px; cursor: pointer; transition: 0.2s; }
-        .btn-primary { flex: 2; background: var(--active-accent); color: #fff; box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.3); }
-        .btn-danger { flex: 1; background: rgba(255,59,48,0.1); color: #ff3b30; }
+        .btn-primary { flex: 2; padding: 16px; background: var(--active-accent); color: #fff; border: none; border-radius: 14px; font-weight: 600; font-size: 17px; cursor: pointer; transition: transform 0.2s, opacity 0.2s; box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.3); }
+        .btn-danger { flex: 1; padding: 16px; background: rgba(255,59,48,0.1); color: #ff3b30; border: none; border-radius: 14px; font-weight: 600; font-size: 17px; cursor: pointer; transition: transform 0.2s, opacity 0.2s; }
         .btn-primary:active, .btn-danger:active { transform: scale(0.95); opacity: 0.8; }
 
         .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(28,28,30,0.85); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; font-weight: 600; backdrop-filter: blur(15px); border: 0.5px solid rgba(255,255,255,0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         .empty { width: 100%; text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 15px; font-weight: 500; display: none; }
 
-        /* Генератор */
+        /* ГЕНЕРАТОР ОБРАЗОВ */
         .gen-header-options { padding: 10px 20px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid var(--glass-border); }
+        .gen-scroll-area { padding: 20px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 16px; overscroll-behavior: contain; }
         .gen-slot { background: var(--card); border-radius: 20px; display: flex; align-items: center; padding: 14px; border: 0.5px solid var(--glass-border); box-shadow: var(--glass-shadow); position: relative; }
-        .gen-slot-title { position: absolute; top: -10px; left: 20px; background: var(--card); color: var(--active-accent); font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 8px; border: 0.5px solid var(--glass-border); }
-        .gen-img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; background: var(--bg-base); flex-shrink: 0; border: 0.5px solid var(--glass-border); transition: opacity 0.3s; }
+        .gen-slot-title { position: absolute; top: -10px; left: 20px; background: var(--card); color: var(--active-accent); font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 8px; border: 0.5px solid var(--glass-border); transition: color 0.4s ease; }
+        .gen-img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; background: var(--bg-base); flex-shrink: 0; border: 0.5px solid var(--glass-border); }
         .gen-info { flex-grow: 1; padding: 0 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
-        .gen-item-title { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px; }
+        .gen-item-title { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); margin-bottom: 6px; }
         .gen-item-meta { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--subtext); font-weight: 500; }
         .gen-actions { display: flex; flex-direction: column; gap: 10px; }
-        .gen-btn { width: 36px; height: 36px; border-radius: 18px; border: 0.5px solid var(--glass-border); display: flex; align-items: center; justify-content: center; background: var(--bg-base); color: var(--text); cursor: pointer; transition: 0.2s; }
+        .gen-btn { width: 36px; height: 36px; border-radius: 18px; border: 0.5px solid var(--glass-border); display: flex; align-items: center; justify-content: center; background: var(--bg-base); color: var(--text); cursor: pointer; transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1); }
         .gen-btn.locked { background: var(--active-accent); color: #fff; border-color: transparent; }
         .gen-btn:active { transform: scale(0.85); opacity: 0.8; }
         .gen-empty { text-align: center; color: var(--subtext); font-size: 14px; width: 100%; padding: 16px 0; font-weight: 500; }
+        .btn-gen-all { background: var(--active-accent); color: #fff; border: none; padding: 18px; border-radius: 14px; font-weight: 600; font-size: 17px; cursor: pointer; width: 100%; transition: all 0.2s cubic-bezier(0.32, 0.72, 0, 1); box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.3); flex-shrink: 0; }
+        .btn-gen-all:active { transform: scale(0.95); opacity: 0.9; }
 
-        .toggle-container { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; }
+        .toggle-container { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; color: var(--text); }
         .toggle-switch { position: relative; width: 50px; height: 30px; display: inline-block; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #e5e5ea; transition: .3s; border-radius: 30px; }
-        body.dark-theme .toggle-slider { background-color: #39393d; }
-        .toggle-slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .toggle-switch input:checked + .toggle-slider { background-color: #34c759; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #e5e5ea; transition: .3s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 30px; border: 1px solid rgba(0,0,0,0.1); }
+        body.dark-theme .toggle-slider { background-color: #39393d; border-color: rgba(255,255,255,0.1); }
+        .toggle-slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 1px; bottom: 1px; background-color: white; transition: .3s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .toggle-switch input:checked + .toggle-slider { background-color: #34c759; border-color: transparent; }
         .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
 
-        /* Zoom просмотрщик */
-        #imageViewer { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 999; flex-direction: column; transition: opacity 0.4s; overscroll-behavior: none; }
+        /* ИСПРАВЛЕННЫЙ ПОЛНОЭКРАННЫЙ ZOOM */
+        #imageViewer { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 999; flex-direction: column; transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.4s; overscroll-behavior: none; }
         #imageViewer.active { visibility: visible; opacity: 1; pointer-events: auto; }
         .viewer-header { height: 70px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; background: linear-gradient(rgba(0,0,0,0.3), transparent); z-index: 1001; }
-        .viewer-close { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 10px 20px; border-radius: 14px; font-size: 15px; cursor: pointer; font-weight: 600; transition: transform 0.2s; }
+        .viewer-close { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 10px 20px; border-radius: 14px; font-size: 15px; cursor: pointer; font-weight: 600; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1); }
         .viewer-close:active { transform: scale(0.9); }
         .viewer-img-container { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; touch-action: none; }
         .viewer-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: 50% 50%; transition: transform 0.1s linear, opacity 0.3s; opacity: 0; }
 
-        /* Диалог удаления */
-        #confirmDialog { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--overlay); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 300; align-items: center; justify-content: center; transition: opacity 0.3s; overscroll-behavior: none; }
+        /* ОКНО ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ */
+        #confirmDialog { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: var(--overlay); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 300; align-items: center; justify-content: center; transition: opacity 0.3s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.3s; overscroll-behavior: none; }
         #confirmDialog.active { visibility: visible; opacity: 1; pointer-events: auto; }
         .confirm-box { background: var(--bg-base); border: 0.5px solid var(--glass-border); padding: 28px; border-radius: 20px; width: 300px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
         #confirmDialog.active .confirm-box { transform: scale(1); }
@@ -351,17 +257,15 @@
 </head>
 <body class="tab-IN_CLOSET">
 
-    <!-- Заставка 3.95 -->
     <div id="splashScreen">
         <svg class="splash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
         </svg>
         <div class="splash-title">Мой Гардероб</div>
         <div class="splash-progress-container"><div class="splash-progress-bar" id="splashProgressBar"></div></div>
-        <div class="splash-version">3.95 Pro</div>
+        <div class="splash-version">3.91</div>
     </div>
 
-    <!-- Полноэкранный Viewer -->
     <div id="imageViewer">
         <div class="viewer-header"><button class="viewer-close" onclick="closeFullscreen()">Закрыть</button></div>
         <div class="viewer-img-container" id="viewerContainer">
@@ -370,7 +274,6 @@
         </div>
     </div>
 
-    <!-- Диалог удаления -->
     <div id="confirmDialog">
         <div class="confirm-box">
             <h3>Удаление вещи</h3>
@@ -385,7 +288,7 @@
     <div id="mainWrapper">
         <div class="header">
             <div class="search-container">
-                <input type="text" id="searchInput" class="search-input" placeholder="Поиск по гардеробу..." oninput="applyFilters(true)">
+                <input type="text" id="searchInput" class="search-input" placeholder="Поиск по гардеробу..." oninput="applyFilters(false)">
                 <div class="search-row-inner">
                     <select id="catFilter" class="filter-select" onchange="applyFilters(true)"></select>
                     <select id="sortFilter" class="filter-select" onchange="applyFilters(true)">
@@ -411,19 +314,18 @@
         
         <div id="grid" class="grid"></div>
         <div id="emptyState" class="empty">В данной группе пока нет вещей.</div>
+        
+        <button class="fab fab-add" onclick="openModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        <button class="fab fab-gen" onclick="openGenerator()">
+            <svg viewBox="0 0 24 24"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+        </button>
+        
+        <div id="syncStatus" class="sync-indicator">Синхронизация данных...</div>
     </div>
 
-    <!-- Плавающие кнопки -->
-    <button class="fab fab-add" onclick="openModal()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-    </button>
-    <button class="fab fab-gen" onclick="openGenerator()">
-        <svg viewBox="0 0 24 24"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-    </button>
-    
-    <div id="syncStatus" class="sync-indicator">Синхронизация данных...</div>
-
-    <!-- Генератор образов -->
+    <!-- Модалки генератора и свойств идентичны -->
     <div class="modal gen-modal" id="generatorModal">
         <div class="modal-sheet">
             <div class="modal-drag-pill"></div>
@@ -449,7 +351,6 @@
         </div>
     </div>
 
-    <!-- Просмотр и редактирование вещи -->
     <div class="modal" id="itemModal">
         <div class="modal-sheet">
             <div class="modal-drag-pill"></div>
@@ -460,7 +361,6 @@
                 </button>
             </div>
 
-            <!-- Режим просмотра -->
             <div class="view-mode" id="viewMode">
                 <div class="view-photo-area" onclick="openFullscreen(document.getElementById('viewPhotoImg').src)">
                     <div class="image-loader" id="viewPhotoLoader"></div>
@@ -487,7 +387,6 @@
                 </div>
             </div>
 
-            <!-- Режим редактирования -->
             <div class="edit-mode" id="editMode">
                 <div class="modal-top">
                     <div class="photo-preview-box" id="photoBox">
@@ -501,35 +400,14 @@
                     </div>
                 </div>
                 <div class="modal-body">
-                    <div class="field">
-                        <label>Название вещи</label>
-                        <input type="text" id="fName" placeholder="Введите название">
+                    <div class="field"><label>Название вещи</label><input type="text" id="fName" placeholder="Введите название"></div>
+                    <div class="form-row">
+                        <div class="field"><label>Роль в образе</label><select id="fRole"><option value="UNASSIGNED">Без роли</option><option value="TOP">Верх (База)</option><option value="OUTER">Верх (Второй слой)</option><option value="BOTTOM">Низ</option><option value="SHOES">Обувь</option><option value="ACCESSORY">Аксессуары</option></select></div>
+                        <div class="field"><label>Категория</label><input type="text" id="fCategory" list="cat-suggestions" placeholder="Выберите"><datalist id="cat-suggestions"></datalist></div>
                     </div>
                     <div class="form-row">
-                        <div class="field">
-                            <label>Роль в образе</label>
-                            <select id="fRole">
-                                <option value="UNASSIGNED">Без роли</option>
-                                <option value="TOP">Верх (База)</option>
-                                <option value="OUTER">Верх (Второй слой)</option>
-                                <option value="BOTTOM">Низ</option>
-                                <option value="SHOES">Обувь</option>
-                                <option value="ACCESSORY">Аксессуары</option>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <label>Категория</label>
-                            <input type="text" id="fCategory" list="cat-suggestions" placeholder="Выберите">
-                            <datalist id="cat-suggestions"></datalist>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="field"><label>Расположение</label>
-                            <select id="fStatus">
-                                <option value="IN_CLOSET">В шкафу</option><option value="WASHING">В стирке</option><option value="DRYING">На сушилке</option>
-                            </select>
-                        </div>
-                        <div class="field"><label>Бренд</label><input type="text" id="fBrand" placeholder="Укажите бренд"></div>
+                        <div class="field"><label>Расположение</label><select id="fStatus"><option value="IN_CLOSET">В шкафу</option><option value="WASHING">В стирке</option><option value="DRYING">На сушилке</option></select></div>
+                        <div class="field"><label>Бренд</label><input type="text" id="fBrand" placeholder="Бренд"></div>
                     </div>
                     <div class="field">
                         <label>Отображение цвета</label>
@@ -539,11 +417,11 @@
                             <div class="color-circle" id="circle2" style="background-color: #ffffff; display:none;"><input type="color" id="fColorHex2" value="#ffffff" oninput="updateCircle(2)" onchange="markCustomColorUsed()"></div>
                             <button id="btnRemoveColor2" class="btn-color-action danger" style="display:none;" onclick="toggleColor2()">- Цвет</button>
                         </div>
-                        <input type="text" id="fColorText" placeholder="Текстовое описание цвета">
-                        <button id="btnClearColors" class="btn-color-action danger" style="display:none; width: 100%; margin-top: 8px;" onclick="clearCustomColors()">Сбросить ручные настройки</button>
+                        <input type="text" id="fColorText" placeholder="Описание цвета">
+                        <button id="btnClearColors" class="btn-color-action danger" style="display:none; width: 100%; margin-top: 8px;" onclick="clearCustomColors()">Сбросить цвета</button>
                         <input type="hidden" id="fHasCustomColors" value="false">
                     </div>
-                    <div class="field"><label>Заметки</label><input type="text" id="fNotes" placeholder="Рекомендации по уходу"></div>
+                    <div class="field"><label>Заметки</label><input type="text" id="fNotes" placeholder="Уход и др."></div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn-danger" id="btnDelete" style="display:none;" onclick="requestDelete()">Удалить</button>
@@ -553,110 +431,106 @@
         </div>
     </div>
 
-    <!-- MAIN JAVASCRIPT ENGINE -->
     <script>
         var NO_PHOTO_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%239ca3af" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>';
-
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
         var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
         if (tg) tg.expand();
         if (tg && tg.colorScheme === 'dark') { document.body.classList.add('dark-theme'); }
 
-        var myTgId = "default_user";
-        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { 
-            myTgId = tg.initDataUnsafe.user.id; 
-        }
-
-        var CACHE_KEY = "wardrobe_v395_" + myTgId;
+        var myTgId = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "default_user";
+        var CACHE_KEY = "wardrobe_v391_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var editingId = null;
         var currentPhotoData = "";
         var isColor2Active = false;
 
-        var COLOR_MAP = {
-            "черный": "#111827", "белый": "#ffffff", "серый": "#9ca3af", "синий": "#2563eb", "голубой": "#38bdf8", "небесный": "#0ea5e9",
-            "красный": "#ef4444", "зеленый": "#10b981", "желтый": "#facc15", "коричневый": "#78350f", "розовый": "#ec4899", 
-            "фиолетовый": "#7c3aed", "оранжевый": "#f97316", "бордовый": "#881337", "хаки": "#78716c", "оливковый": "#65a30d"
-        };
+        var COLOR_MAP = { "черный": "#111827", "белый": "#ffffff", "серый": "#9ca3af", "синий": "#2563eb", "голубой": "#38bdf8", "небесный": "#0ea5e9", "красный": "#ef4444", "зеленый": "#10b981", "желтый": "#facc15", "коричневый": "#78350f", "розовый": "#ec4899", "фиолетовый": "#7c3aed", "оранжевый": "#f97316", "бордовый": "#881337", "хаки": "#78716c", "оливковый": "#65a30d" };
 
-        // Scroll Bleeding & Body Lock
         function toggleBodyScroll(lock) {
-            if(lock) { 
-                document.body.classList.add('modal-open'); 
-            } else { 
-                document.body.classList.remove('modal-open'); 
-            }
+            if(lock) document.body.classList.add('modal-open'); 
+            else document.body.classList.remove('modal-open');
         }
 
-        // Умный Swipe-To-Close (Работает в любой зоне, кроме скролла списков)
+        // 1. ИСПРАВЛЕННЫЙ SWIPE-TO-CLOSE (Как в iOS)
         function enableSwipeToClose(modalId, closeAction) {
             var modal = document.getElementById(modalId);
             var sheet = modal.querySelector('.modal-sheet');
-            var startY = 0; 
-            var currentY = 0; 
-            var isDragging = false;
+            var startY = 0, currentY = 0, isDragging = false;
 
             sheet.addEventListener('touchstart', function(e) {
                 var target = e.target;
-                if (target.tagName === 'BUTTON' || target.tagName === 'INPUT' || target.closest('button') || target.closest('.color-circle') || target.closest('.toggle-switch')) return;
-                
+                if (target.closest('button, input, select, .toggle-switch, .color-circle')) return;
                 var scrollArea = target.closest('.modal-body, .view-info-area, .gen-scroll-area');
-                if (scrollArea && scrollArea.scrollTop > 0) return; // Если скроллим сам список, не закрываем
-                
-                startY = e.touches[0].clientY;
-                isDragging = true;
-                sheet.style.transition = 'none';
+                if (scrollArea && scrollArea.scrollTop > 0) return; // Если не верх списка - не тянем
+                startY = e.touches[0].clientY; isDragging = true; sheet.style.transition = 'none';
             }, {passive: true});
 
             sheet.addEventListener('touchmove', function(e) {
                 if (!isDragging) return;
-                var deltaY = e.touches[0].clientY - startY;
-                if (deltaY > 0) { 
-                    currentY = deltaY; 
-                    sheet.style.transform = 'translateY(' + deltaY + 'px)'; 
+                var scrollArea = e.target.closest('.modal-body, .view-info-area, .gen-scroll-area');
+                if (scrollArea && scrollArea.scrollTop > 0) {
+                    isDragging = false; sheet.style.transform = ''; return;
                 }
-            }, {passive: true});
+                var deltaY = e.touches[0].clientY - startY;
+                if (deltaY > 0) {
+                    currentY = deltaY; 
+                    sheet.style.transform = 'translateY(' + deltaY + 'px)';
+                    if (e.cancelable) e.preventDefault(); // Запрещаем родному браузеру скрывать TMA
+                }
+            }, {passive: false}); // Обязательно false для preventDefault
 
             sheet.addEventListener('touchend', function(e) {
                 if (!isDragging) return;
                 isDragging = false;
                 sheet.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
-                if (currentY > 120) { 
-                    sheet.style.transform = 'translateY(100%)'; 
-                    setTimeout(closeAction, 300); // Даем время уехать
-                    currentY = 0; 
-                } else { 
-                    sheet.style.transform = 'translateY(0)'; 
-                    currentY = 0; 
+                if (currentY > 100) {
+                    sheet.style.transform = 'translateY(100%)';
+                    setTimeout(closeAction, 300);
+                } else {
+                    sheet.style.transform = 'translateY(0)';
                 }
+                currentY = 0;
             });
             modal.addEventListener('click', function(e) { if(e.target === modal) closeAction(); });
         }
 
+        // 2. ИДЕАЛЬНЫЙ РЕНДЕР ЗАСТАВКИ И ПРОГРЕСС-БАР
         document.addEventListener('DOMContentLoaded', function() {
             enableSwipeToClose('itemModal', closeModal);
             enableSwipeToClose('generatorModal', closeGenerator);
-            
             var bar = document.getElementById('splashProgressBar');
             if(bar) bar.style.width = '30%';
+            
+            try { var savedData = localStorage.getItem(CACHE_KEY); if (savedData) { items = JSON.parse(savedData); if (!Array.isArray(items)) items = []; } } catch(e) {}
+            fetchFromCloud();
         });
 
-        // Универсальный лоадер для фото
-        function loadPhotoWithSpinner(imgElement, loaderElement, src, blurElement) {
-            imgElement.style.opacity = '0';
-            if (loaderElement) loaderElement.style.display = 'block';
-            imgElement.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; // Сброс кэша
+        async function fetchFromCloud() {
+            var bar = document.getElementById('splashProgressBar');
+            var splash = document.getElementById('splashScreen');
+            if(bar) bar.style.width = '60%';
+            try {
+                const res = await fetch(API_URL + "?user_id=" + myTgId);
+                const data = await res.json();
+                if (Array.isArray(data)) { 
+                    items = data; 
+                    localStorage.setItem(CACHE_KEY, JSON.stringify(data)); 
+                }
+            } catch(e) {}
+            if(bar) bar.style.width = '100%';
+            initGrid();
             
+            // Заставка уходит только когда данные получены и сетка отрисована
             setTimeout(function() {
-                imgElement.onload = function() {
-                    if (loaderElement) loaderElement.style.display = 'none';
-                    imgElement.style.opacity = '1';
-                };
-                imgElement.src = src;
-                if (blurElement) blurElement.style.backgroundImage = 'url(' + src + ')';
-            }, 50);
+                if(splash) {
+                    splash.style.opacity = '0';
+                    splash.style.visibility = 'hidden';
+                    document.getElementById('mainWrapper').style.opacity = '1';
+                }
+            }, 150);
         }
 
         function showSync(text) {
@@ -670,18 +544,16 @@
             var parts = colorStr.split("||");
             var text = parts[0] || ""; var h1 = parts[1]; var h2 = parts[2];
             var bgStyle = ""; var isTwo = (h1 && h2 && h1 !== h2);
-            
             if (isTwo) bgStyle = "background: linear-gradient(135deg, " + h1 + " 50%, " + h2 + " 50%)";
             else if (h1) bgStyle = "background: " + h1;
             else { var clean = text.toLowerCase().trim().replace(/ё/g, "е"); if (COLOR_MAP[clean]) bgStyle = "background: " + COLOR_MAP[clean]; }
-            
             var dotHtml = bgStyle ? '<div class="color-dot" style="' + bgStyle + '"></div>' : '';
             return { text: text, dot: dotHtml, hex1: h1 || "#ffffff", hex2: h2 || "#ffffff", hasCustom: !!h1, isColor2Active: isTwo, style: bgStyle };
         }
 
         function parseCategoryField(catRaw) {
             if (!catRaw) return { role: 'UNASSIGNED', name: '' };
-            if (catRaw.indexOf('||') !== -1) { var parts = catRaw.split('||'); return { role: parts[0], name: parts[1] || '' }; }
+            if (catRaw.indexOf('||') !== -1) { var p = catRaw.split('||'); return { role: p[0], name: p[1] || '' }; }
             var lower = catRaw.toLowerCase(); var role = 'UNASSIGNED';
             if (/(футб|рубаш|майк|топ|блуз|поло)/i.test(lower)) role = 'TOP';
             else if (/(худи|свит|свитер|пиджак|куртк|кофт|пальт|кардиган|жилет)/i.test(lower)) role = 'OUTER';
@@ -694,17 +566,12 @@
         function initGrid() {
             var select = document.getElementById('catFilter');
             var currentVal = select.value || "ALL";
-            var uniqueCats = []; 
-            var cntIN = 0, cntWASH = 0, cntDRY = 0;
+            var uniqueCats = []; var cntIN = 0, cntWASH = 0, cntDRY = 0;
 
             for (var i = 0; i < items.length; i++) { 
-                var it = items[i]; 
-                var pCat = parseCategoryField(it.category);
+                var it = items[i]; var pCat = parseCategoryField(it.category);
                 if (pCat.name && uniqueCats.indexOf(pCat.name) === -1) uniqueCats.push(pCat.name); 
-                
-                if (it.status === "IN_CLOSET") cntIN++;
-                if (it.status === "WASHING") cntWASH++;
-                if (it.status === "DRYING") cntDRY++;
+                if (it.status === "IN_CLOSET") cntIN++; if (it.status === "WASHING") cntWASH++; if (it.status === "DRYING") cntDRY++;
             }
             
             document.getElementById('cnt-IN_CLOSET').innerText = cntIN;
@@ -712,54 +579,34 @@
             document.getElementById('cnt-DRYING').innerText = cntDRY;
 
             uniqueCats.sort();
-            var html = '<option value="ALL">Все категории</option>';
-            var datalistHtml = '';
+            var html = '<option value="ALL">Все категории</option>'; var datalistHtml = '';
             for (var j = 0; j < uniqueCats.length; j++) { 
-                html += '<option value="' + uniqueCats[j] + '">' + uniqueCats[j] + '</option>'; 
-                datalistHtml += '<option value="' + uniqueCats[j] + '"></option>';
+                html += '<option value="' + uniqueCats[j] + '">' + uniqueCats[j] + '</option>'; datalistHtml += '<option value="' + uniqueCats[j] + '"></option>';
             }
-            select.innerHTML = html; 
-            select.value = uniqueCats.indexOf(currentVal) !== -1 ? currentVal : "ALL";
+            select.innerHTML = html; select.value = uniqueCats.indexOf(currentVal) !== -1 ? currentVal : "ALL";
             document.getElementById('cat-suggestions').innerHTML = datalistHtml;
 
             var grid = document.getElementById('grid');
             var htmlResult = '';
             
             for(var k = 0; k < items.length; k++) {
-                var item = items[k];
-                var colorObj = parseColorField(item.color);
-                var pCat = parseCategoryField(item.category);
-                
+                var item = items[k]; var colorObj = parseColorField(item.color); var pCat = parseCategoryField(item.category);
                 var safeName = (item.name || '').toLowerCase().replace(/"/g, '&quot;');
                 var safeCat = (pCat.name).toLowerCase().replace(/"/g, '&quot;');
                 var safeBrand = (item.brand || '').toLowerCase().replace(/"/g, '&quot;');
                 var searchStr = (safeName + " " + safeBrand + " " + safeCat).replace(/"/g, '&quot;');
                 
                 var moveButtons = '';
-                if (item.status === 'IN_CLOSET') {
-                    moveButtons = '<button class="move-btn to-washing" onclick="moveItem(\'' + item.id + '\', \'WASHING\', event)">В<br>стирку</button><button class="move-btn to-drying" onclick="moveItem(\'' + item.id + '\', \'DRYING\', event)">На<br>сушилку</button>';
-                } else if (item.status === 'WASHING') {
-                    moveButtons = '<button class="move-btn to-closet" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\', event)">В<br>шкаф</button><button class="move-btn to-drying" onclick="moveItem(\'' + item.id + '\', \'DRYING\', event)">На<br>сушилку</button>';
-                } else {
-                    moveButtons = '<button class="move-btn to-washing" onclick="moveItem(\'' + item.id + '\', \'WASHING\', event)">В<br>стирку</button><button class="move-btn to-closet" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\', event)">В<br>шкаф</button>';
-                }
+                if (item.status === 'IN_CLOSET') moveButtons = '<button class="move-btn to-washing" onclick="moveItem(\'' + item.id + '\', \'WASHING\', event)">В<br>стирку</button><button class="move-btn to-drying" onclick="moveItem(\'' + item.id + '\', \'DRYING\', event)">На<br>сушилку</button>';
+                else if (item.status === 'WASHING') moveButtons = '<button class="move-btn to-closet" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\', event)">В<br>шкаф</button><button class="move-btn to-drying" onclick="moveItem(\'' + item.id + '\', \'DRYING\', event)">На<br>сушилку</button>';
+                else moveButtons = '<button class="move-btn to-washing" onclick="moveItem(\'' + item.id + '\', \'WASHING\', event)">В<br>стирку</button><button class="move-btn to-closet" onclick="moveItem(\'' + item.id + '\', \'IN_CLOSET\', event)">В<br>шкаф</button>';
 
-                var imgContent = '';
-                if (item.photo) {
-                    var thumbSrc = item.photo.indexOf('sz=w1000') !== -1 ? item.photo.replace('sz=w1000', 'sz=w400') : item.photo;
-                    imgContent = '<img src="' + thumbSrc + '" loading="lazy">';
-                } else {
-                    imgContent = '<div class="placeholder-img">' + NO_PHOTO_SVG + '</div>';
-                }
+                var imgContent = item.photo ? '<img src="' + (item.photo.indexOf('sz=w1000') !== -1 ? item.photo.replace('sz=w1000', 'sz=w400') : item.photo) + '">' : '<div class="placeholder-img">' + NO_PHOTO_SVG + '</div>';
 
                 htmlResult += '<div class="card card-item" id="card-' + item.id + '" data-status="' + item.status + '" data-category="' + safeCat + '" data-search="' + searchStr + '" data-name="' + safeName + '" data-brand="' + safeBrand + '">' +
                             '<div class="img-wrap" onclick="openModal(\'' + item.id + '\')">' + imgContent + '<span class="cat-pill">' + (pCat.name || 'Без категории') + '</span></div>' +
-                            '<div class="card-body" onclick="openModal(\'' + item.id + '\')">' +
-                                '<div class="card-title">' + (item.name || 'Без названия') + '</div>' +
-                                '<div class="card-meta">' + colorObj.dot + '<span class="meta-text">' + (item.brand || '') + (item.brand && colorObj.text ? ', ' : '') + colorObj.text + '</span></div>' +
-                            '</div>' +
-                            '<div class="move-bar">' + moveButtons + '</div>' +
-                        '</div>';
+                            '<div class="card-body" onclick="openModal(\'' + item.id + '\')"><div class="card-title">' + (item.name || 'Без названия') + '</div><div class="card-meta">' + colorObj.dot + '<span class="meta-text">' + (item.brand || '') + (item.brand && colorObj.text ? ', ' : '') + colorObj.text + '</span></div></div>' +
+                            '<div class="move-bar">' + moveButtons + '</div></div>';
             }
             grid.innerHTML = htmlResult;
             applyFilters(true);
@@ -772,82 +619,50 @@
             
             var grid = document.getElementById('grid');
             var cards = Array.from(grid.getElementsByClassName('card-item'));
-            var visibleCount = 0; 
-            var statusCount = 0; 
+            var visibleCount = 0; var statusCount = 0; 
             var filteredCards = [];
-            
             var frag = document.createDocumentFragment();
             
             cards.forEach(function(card) {
-                var st = card.getAttribute('data-status');
-                var c = card.getAttribute('data-category');
-                var s = card.getAttribute('data-search');
-                
+                var st = card.getAttribute('data-status'); var c = card.getAttribute('data-category'); var s = card.getAttribute('data-search');
                 var match = (st === currentTab) && (cat === "all" || c === cat) && (s.indexOf(query) !== -1);
                 if (st === currentTab) statusCount++;
-                
-                if (match) { 
-                    visibleCount++; 
-                    filteredCards.push({ elem: card, id: Number(card.id.replace('card-', '')), name: card.getAttribute('data-name'), brand: card.getAttribute('data-brand'), cat: c });
-                } else { 
-                    card.style.display = 'none'; 
-                    card.classList.remove('show');
-                    frag.appendChild(card);
-                }
+                if (match) { visibleCount++; filteredCards.push({ elem: card, id: Number(card.id.replace('card-', '')), name: card.getAttribute('data-name'), brand: card.getAttribute('data-brand'), cat: c }); } 
+                else { card.style.display = 'none'; card.classList.remove('show'); frag.appendChild(card); }
             });
             
             filteredCards.sort(function(a, b) {
-                if (sortVal === 'newest') return b.id - a.id;
-                if (sortVal === 'oldest') return a.id - b.id;
-                if (sortVal === 'az') return a.name.localeCompare(b.name);
-                if (sortVal === 'za') return b.name.localeCompare(a.name);
-                if (sortVal === 'brand') return a.brand.localeCompare(b.brand);
-                if (sortVal === 'category') return a.cat.localeCompare(b.cat);
+                if (sortVal === 'newest') return b.id - a.id; if (sortVal === 'oldest') return a.id - b.id;
+                if (sortVal === 'az') return a.name.localeCompare(b.name); if (sortVal === 'za') return b.name.localeCompare(a.name);
+                if (sortVal === 'brand') return a.brand.localeCompare(b.brand); if (sortVal === 'category') return a.cat.localeCompare(b.cat);
                 return 0;
             });
             
-            filteredCards.forEach(function(item) {
-                item.elem.style.display = 'flex';
-                if (animate) item.elem.style.animation = 'none';
-                frag.appendChild(item.elem);
-            });
-            
+            filteredCards.forEach(function(item) { item.elem.style.display = 'flex'; if (animate) item.elem.style.animation = 'none'; frag.appendChild(item.elem); });
             grid.appendChild(frag); 
             
             if (animate) {
                 requestAnimationFrame(function() {
                     filteredCards.forEach(function(item, index) {
-                        item.elem.style.animation = 'scaleInCard 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards';
-                        item.elem.style.animationDelay = (index * 0.02) + 's';
-                        item.elem.classList.add('show');
+                        item.elem.style.animation = 'slideUpCard 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards';
+                        item.elem.style.animationDelay = (index * 0.02) + 's'; item.elem.classList.add('show');
                     });
                 });
             }
             
             document.getElementById('emptyState').style.display = (visibleCount === 0) ? 'block' : 'none';
-            
             var bulkBar = document.getElementById('bulkBar');
-            if (currentTab === "WASHING" && statusCount > 0) {
-                bulkBar.classList.add('visible'); 
-                document.getElementById('bulkText').innerText = "В стирке: " + statusCount; 
-                document.getElementById('bulkBtn').innerText = "Переместить на сушилку";
-            } else if (currentTab === "DRYING" && statusCount > 0) {
-                bulkBar.classList.add('visible'); 
-                document.getElementById('bulkText').innerText = "На сушилке: " + statusCount; 
-                document.getElementById('bulkBtn').innerText = "Вернуть в шкаф";
-            } else { 
-                bulkBar.classList.remove('visible'); 
-            }
+            if (currentTab === "WASHING" && statusCount > 0) { bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = "В стирке: " + statusCount; document.getElementById('bulkBtn').innerText = "Все на сушилку"; } 
+            else if (currentTab === "DRYING" && statusCount > 0) { bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = "На сушилке: " + statusCount; document.getElementById('bulkBtn').innerText = "Вернуть в шкаф"; } 
+            else { bulkBar.classList.remove('visible'); }
         };
 
         window.setTab = function(tab) {
             if (tg) tg.HapticFeedback.impactOccurred('light');
             if (currentTab === tab) return;
-            
             document.getElementById('bulkBar').classList.remove('visible'); 
 
-            var tabs = document.querySelectorAll('.tab');
-            tabs.forEach(t => t.classList.remove('active'));
+            var tabs = document.querySelectorAll('.tab'); tabs.forEach(t => t.classList.remove('active'));
             document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
             
             var indicator = document.getElementById('tabIndicator');
@@ -855,344 +670,46 @@
             else if(tab === 'WASHING') indicator.style.transform = 'translateX(100%)';
             else if(tab === 'DRYING') indicator.style.transform = 'translateX(200%)';
 
-            currentTab = tab;
-            document.body.className = document.body.className.replace(/tab-\w+/g, '');
-            document.body.classList.add('tab-' + tab);
-            
+            currentTab = tab; document.body.className = document.body.className.replace(/tab-\w+/g, ''); document.body.classList.add('tab-' + tab);
             applyFilters(true); 
         };
 
-        var localDataStr = localStorage.getItem(CACHE_KEY) || "[]";
-        
-        async function fetchFromCloud() {
-            var bar = document.getElementById('splashProgressBar');
-            if(bar) bar.style.width = '60%';
-            
-            try {
-                const res = await fetch(API_URL + "?user_id=" + myTgId);
-                const data = await res.json();
-                if (Array.isArray(data)) { 
-                    var newDataStr = JSON.stringify(data);
-                    items = data; 
-                    localDataStr = newDataStr; 
-                    localStorage.setItem(CACHE_KEY, newDataStr); 
-                }
-            } catch(e) {}
-            
-            if(bar) bar.style.width = '100%';
-            initGrid();
-            
-            setTimeout(function() {
-                var splash = document.getElementById('splashScreen');
-                if(splash) {
-                    splash.style.opacity = '0';
-                    splash.style.visibility = 'hidden';
-                }
-            }, 400); 
-        }
-
         window.moveItem = function(id, newStatus, event) {
-            if (event) event.stopPropagation(); 
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            
-            for(var i=0; i<items.length; i++) { 
-                if(String(items[i].id) === String(id)) { items[i].status = newStatus; break; } 
-            }
-            localDataStr = JSON.stringify(items); 
-            localStorage.setItem(CACHE_KEY, localDataStr); 
-            initGrid(); 
+            if (event) event.stopPropagation(); if (tg) tg.HapticFeedback.impactOccurred('light');
+            for(var i=0; i<items.length; i++) { if(String(items[i].id) === String(id)) { items[i].status = newStatus; break; } }
+            localDataStr = JSON.stringify(items); localStorage.setItem(CACHE_KEY, localDataStr); initGrid(); 
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: [id], status: newStatus, user_id: myTgId }) });
         };
 
         window.executeBulkAction = function() {
             if (tg) tg.HapticFeedback.impactOccurred('light');
-            var targetStatus = currentTab === "WASHING" ? "DRYING" : "IN_CLOSET";
-            var affectedIds = [];
-            
-            for(var i=0; i<items.length; i++) { 
-                if(items[i].status === currentTab) { 
-                    items[i].status = targetStatus; 
-                    affectedIds.push(items[i].id); 
-                } 
-            }
+            var targetStatus = currentTab === "WASHING" ? "DRYING" : "IN_CLOSET"; var affectedIds = [];
+            for(var i=0; i<items.length; i++) { if(items[i].status === currentTab) { items[i].status = targetStatus; affectedIds.push(items[i].id); } }
             if (affectedIds.length === 0) return;
-            
-            localDataStr = JSON.stringify(items); 
-            localStorage.setItem(CACHE_KEY, localDataStr); 
-            initGrid();
+            localDataStr = JSON.stringify(items); localStorage.setItem(CACHE_KEY, localDataStr); initGrid();
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: affectedIds, status: targetStatus, user_id: myTgId }) });
         };
 
-        window.updateCircle = function(num) {
-            var hex = document.getElementById('fColorHex' + num).value;
-            document.getElementById('circle' + num).style.backgroundColor = hex;
+        window.handlePhotoSelect = function(e) {
+            var file = e.target.files[0]; if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(ev) {
+                var img = new Image();
+                img.onload = function() {
+                    var canvas = document.createElement('canvas'); var w = img.width, h = img.height;
+                    if (w > 1000 || h > 1000) { if (w > h) { h = Math.round(h * 1000 / w); w = 1000; } else { w = Math.round(w * 1000 / h); h = 1000; } }
+                    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    currentPhotoData = canvas.toDataURL('image/jpeg', 0.82); 
+                    document.getElementById('photoPreview').src = currentPhotoData; document.getElementById('photoPreview').style.display = "block"; 
+                    document.getElementById('photoPlaceholder').style.display = "none"; document.getElementById('btnChangePhoto').style.display = "flex";
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file); e.target.value = "";
         };
 
-        function checkResetBtnVisibility() {
-            var isCustom = document.getElementById('fHasCustomColors').value === "true";
-            document.getElementById('btnClearColors').style.display = isCustom ? 'inline-block' : 'none';
-        }
-
-        window.markCustomColorUsed = function() { 
-            document.getElementById('fHasCustomColors').value = "true"; 
-            checkResetBtnVisibility();
-        };
-
-        window.toggleColor2 = function() {
-            isColor2Active = !isColor2Active;
-            document.getElementById('circle2').style.display = isColor2Active ? 'block' : 'none';
-            document.getElementById('btnRemoveColor2').style.display = isColor2Active ? 'inline-block' : 'none';
-            document.getElementById('btnToggleColor2').style.display = isColor2Active ? 'none' : 'inline-block';
-            if (isColor2Active) markCustomColorUsed();
-        };
-
-        window.clearCustomColors = function() {
-            document.getElementById('fHasCustomColors').value = "false";
-            document.getElementById('fColorHex1').value = "#ffffff"; updateCircle(1);
-            document.getElementById('fColorHex2').value = "#ffffff"; updateCircle(2);
-            isColor2Active = false;
-            document.getElementById('circle2').style.display = 'none';
-            document.getElementById('btnRemoveColor2').style.display = 'none';
-            document.getElementById('btnToggleColor2').style.display = 'inline-block';
-            checkResetBtnVisibility();
-        };
-
-        // ZOOM View Logic
-        var viewerImg = document.getElementById('viewerImg');
-        var viewerContainer = document.getElementById('viewerContainer');
-        var scale = 1, panX = 0, panY = 0, startPanX = 0, startPanY = 0, startScale = 1, startDistance = 0, focalX = 0, focalY = 0, isPanning = false, lastTap = 0;
-
-        function resetZoomState() {
-            scale = 1; panX = 0; panY = 0;
-            viewerImg.style.transition = 'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)';
-            viewerImg.style.transform = "translate(0px, 0px) scale(1)";
-        }
-
-        window.openFullscreen = function(src) {
-            if(!src) return;
-            toggleBodyScroll(true);
-            resetZoomState();
-            
-            var fLoader = document.getElementById('fullscreenLoader');
-            document.getElementById('imageViewer').classList.add('active');
-            
-            // Запускаем универсальный лоадер
-            loadPhotoWithSpinner(viewerImg, fLoader, src, null);
-        };
-        
-        window.closeFullscreen = function() { 
-            document.getElementById('imageViewer').classList.remove('active'); 
-            // Возвращаем блокировку для нижележащего модального окна, если оно открыто
-            if (document.getElementById('itemModal').classList.contains('active') || document.getElementById('generatorModal').classList.contains('active')) {
-                toggleBodyScroll(true);
-            } else {
-                toggleBodyScroll(false);
-            }
-        };
-
-        viewerContainer.addEventListener('touchstart', function(e) {
-            viewerImg.style.transition = 'none';
-            if (e.touches.length === 2) {
-                isPanning = false; 
-                startDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-                startScale = scale; 
-                startPanX = panX; 
-                startPanY = panY;
-                focalX = (e.touches[0].clientX + e.touches[1].clientX) / 2; 
-                focalY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-            } else if (e.touches.length === 1 && scale > 1) {
-                isPanning = true; 
-                startPanX = panX; 
-                startPanY = panY; 
-                focalX = e.touches[0].clientX; 
-                focalY = e.touches[0].clientY;
-            }
-        }, {passive: false});
-
-        viewerContainer.addEventListener('touchmove', function(e) {
-            e.preventDefault(); 
-            var rect = viewerContainer.getBoundingClientRect(); 
-            var centerX = rect.left + rect.width / 2; 
-            var centerY = rect.top + rect.height / 2;
-            
-            if (e.touches.length === 2) {
-                var currentDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-                var newScale = Math.max(1, Math.min(startScale * (currentDistance / startDistance), 5));
-                var currentFocalX = (e.touches[0].clientX + e.touches[1].clientX) / 2; 
-                var currentFocalY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-                
-                panX = currentFocalX - centerX - (focalX - centerX - startPanX) * (newScale / startScale); 
-                panY = currentFocalY - centerY - (focalY - centerY - startPanY) * (newScale / startScale);
-                scale = newScale; 
-                viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")";
-            } else if (e.touches.length === 1 && isPanning && scale > 1) {
-                panX = startPanX + (e.touches[0].clientX - focalX); 
-                panY = startPanY + (e.touches[0].clientY - focalY); 
-                viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")";
-            }
-        }, {passive: false});
-
-        viewerContainer.addEventListener('touchend', function(e) {
-            if (e.touches.length < 2) isPanning = false;
-            if (e.touches.length === 0 && scale <= 1) { resetZoomState(); }
-            if (e.changedTouches.length === 1) {
-                var now = new Date().getTime();
-                if (now - lastTap < 300 && now - lastTap > 0) {
-                    e.preventDefault();
-                    if (scale > 1) { 
-                        resetZoomState(); 
-                    } else { 
-                        scale = 2.5; 
-                        var rect = viewerContainer.getBoundingClientRect(); 
-                        var centerX = rect.left + rect.width / 2; 
-                        var centerY = rect.top + rect.height / 2; 
-                        var touchX = e.changedTouches[0].clientX; 
-                        var touchY = e.changedTouches[0].clientY;
-                        
-                        panX = (centerX - touchX) * (scale - 1); 
-                        panY = (centerY - touchY) * (scale - 1);
-                        viewerImg.style.transition = 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)'; 
-                        viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")"; 
-                    }
-                }
-                lastTap = now;
-            }
-            if (e.touches.length === 1 && scale > 1) { 
-                isPanning = true; 
-                startPanX = panX; 
-                startPanY = panY; 
-                focalX = e.touches[0].clientX; 
-                focalY = e.touches[0].clientY; 
-            }
-        });
-
-        // GENERATOR LOGIC
-        var lockedSlots = { TOP: false, OUTER: false, BOTTOM: false, SHOES: false };
-        var currentOutfit = { TOP: null, OUTER: null, BOTTOM: null, SHOES: null };
-        var useOuterwear = true;
-
-        window.openGenerator = function() {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            toggleBodyScroll(true);
-            document.getElementById('generatorModal').classList.add('active');
-            rollOutfit();
-        };
-
-        window.closeGenerator = function() { 
-            document.getElementById('generatorModal').classList.remove('active'); 
-            toggleBodyScroll(false);
-        };
-
-        window.toggleOuterwear = function() {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            useOuterwear = document.getElementById('toggleOuter').checked;
-            if (useOuterwear && !currentOutfit['OUTER']) rollSlot('OUTER');
-            renderGenerator();
-        };
-
-        window.rollOutfit = function() {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            var rolesToRoll = ['TOP', 'BOTTOM', 'SHOES'];
-            if (useOuterwear) rolesToRoll.unshift('OUTER');
-            
-            rolesToRoll.forEach(function(role) { 
-                if (!lockedSlots[role]) rollSlot(role); 
-            });
-            renderGenerator();
-        };
-
-        function rollSlot(role) {
-            var available = items.filter(function(i) { 
-                return i.status === 'IN_CLOSET' && parseCategoryField(i.category).role === role; 
-            });
-            
-            if (available.length > 0) { 
-                currentOutfit[role] = available[Math.floor(Math.random() * available.length)]; 
-            } else { 
-                currentOutfit[role] = null; 
-            }
-        }
-
-        window.toggleLock = function(role) { 
-            if (tg) tg.HapticFeedback.impactOccurred('light'); 
-            lockedSlots[role] = !lockedSlots[role]; 
-            renderGenerator(); 
-        };
-
-        window.refreshSlot = function(role) { 
-            if (tg) tg.HapticFeedback.impactOccurred('light'); 
-            lockedSlots[role] = false; 
-            rollSlot(role); 
-            renderGenerator(); 
-        };
-
-        function renderGenerator() {
-            var container = document.getElementById('genSlotsContainer');
-            var rolesMap = [];
-            if (useOuterwear) rolesMap.push({ id: 'OUTER', label: 'Второй слой' });
-            rolesMap.push({ id: 'TOP', label: 'Верх (База)' });
-            rolesMap.push({ id: 'BOTTOM', label: 'Низ' });
-            rolesMap.push({ id: 'SHOES', label: 'Обувь' });
-            
-            var html = '';
-            rolesMap.forEach(function(r) {
-                var it = currentOutfit[r.id];
-                var locked = lockedSlots[r.id];
-                
-                html += '<div class="gen-slot">';
-                html += '<div class="gen-slot-title">' + r.label + '</div>';
-                
-                if (it) {
-                    var cObj = parseColorField(it.color);
-                    var photo = it.photo ? (it.photo.indexOf('sz=w1000') !== -1 ? it.photo.replace('sz=w1000', 'sz=w400') : it.photo) : NO_PHOTO_SVG;
-                    
-                    html += '<img src="' + photo + '" class="gen-img" onclick="openFullscreen(\'' + (it.photo||'') + '\')">';
-                    html += '<div class="gen-info">';
-                    html += '<div class="gen-item-title">' + (it.name || 'Без названия') + '</div>';
-                    html += '<div class="gen-item-meta">' + cObj.dot + '<span>' + (it.brand || 'Без бренда') + '</span></div>';
-                    html += '</div>';
-                    html += '<div class="gen-actions">';
-                    html += '<button class="gen-btn ' + (locked ? 'locked' : '') + '" onclick="toggleLock(\'' + r.id + '\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></button>';
-                    html += '<button class="gen-btn" onclick="refreshSlot(\'' + r.id + '\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg></button>';
-                    html += '</div>';
-                } else {
-                    html += '<div class="gen-empty">В шкафу нет вещей для этой категории</div>';
-                }
-                html += '</div>';
-            });
-            container.innerHTML = html;
-        }
-
-        // --- PROPERTIES MODAL LOGIC ---
-        window.requestDelete = function() {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            document.getElementById('confirmDialog').classList.add('active');
-        };
-
-        window.executeDelete = function() {
-            document.getElementById('confirmDialog').classList.remove('active');
-            if (!editingId) return;
-            
-            var newItems = [];
-            for(var i=0; i<items.length; i++) { 
-                if(String(items[i].id) !== String(editingId)) newItems.push(items[i]); 
-            }
-            items = newItems;
-            
-            localDataStr = JSON.stringify(items);
-            localStorage.setItem(CACHE_KEY, localDataStr); 
-            initGrid(); 
-            closeModal();
-            
-            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
-        };
-
-        window.switchToEditMode = function() {
-            document.getElementById('viewMode').style.display = 'none';
-            document.getElementById('editMode').style.display = 'flex';
-        };
-
-        window.openModal = function(id) {
+        /* 3. ИСПРАВЛЕННЫЙ БЕСКОНЕЧНЫЙ БЛЮР ПРИ ОТКРЫТИИ */
+        window.openModal = function(id) { 
             if (tg) tg.HapticFeedback.impactOccurred('light');
             toggleBodyScroll(true);
             editingId = id || null;
@@ -1204,233 +721,147 @@
             var viewBlur = document.getElementById('viewBlurBg');
             var loader = document.getElementById('viewPhotoLoader');
 
-            // Полный сброс визуала
+            // Сброс
+            viewImg.onload = null;
             viewImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
             viewBlur.style.backgroundImage = 'none';
             viewImg.style.opacity = '0';
+            loader.style.display = 'block';
 
             if (id) {
                 var item = null;
-                for(var i=0; i<items.length; i++) { 
-                    if(String(items[i].id) === String(id)) { item = items[i]; break; } 
-                }
-                
-                var cObj = parseColorField(item.color);
-                var pCat = parseCategoryField(item.category);
+                for(var i=0; i<items.length; i++) { if(String(items[i].id) === String(id)) { item = items[i]; break; } }
+                var cObj = parseColorField(item.color); var pCat = parseCategoryField(item.category);
                 
                 document.getElementById('modalTitle').innerText = "Информация о вещи";
                 document.getElementById('viewName').innerText = item.name || "Без названия";
                 
                 currentPhotoData = item.photo || ""; 
                 if (currentPhotoData) {
-                    viewImg.style.display = 'block';
-                    loadPhotoWithSpinner(viewImg, loader, currentPhotoData, viewBlur);
+                    viewImg.onload = function() {
+                        loader.style.display = 'none';
+                        viewImg.style.opacity = '1';
+                    };
+                    viewImg.src = currentPhotoData;
+                    viewBlur.style.backgroundImage = 'url(' + currentPhotoData + ')';
                 } else {
-                    viewImg.style.display = 'none';
+                    loader.style.display = 'none';
                 }
 
                 document.getElementById('viewCatTag').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path></svg>' + (pCat.name || "Нет категории");
                 document.getElementById('viewColorTag').innerHTML = cObj.dot + (cObj.text || "Цвет не указан");
                 document.getElementById('viewBrand').innerText = item.brand || "Не указан";
-                
                 var statusText = item.status === "IN_CLOSET" ? "В шкафу" : (item.status === "WASHING" ? "В стирке" : "На сушилке");
                 document.getElementById('viewStatus').innerText = statusText;
                 document.getElementById('viewNotes').innerText = item.notes || "—";
 
-                // Заполнение полей формы (на случай редактирования)
-                document.getElementById('fName').value = item.name || "";
-                document.getElementById('fRole').value = pCat.role;
-                document.getElementById('fCategory').value = pCat.name;
-                document.getElementById('fStatus').value = item.status || "IN_CLOSET";
-                document.getElementById('fBrand').value = item.brand || "";
-                document.getElementById('fNotes').value = item.notes || "";
+                document.getElementById('fName').value = item.name || ""; document.getElementById('fRole').value = pCat.role;
+                document.getElementById('fCategory').value = pCat.name; document.getElementById('fStatus').value = item.status || "IN_CLOSET";
+                document.getElementById('fBrand').value = item.brand || ""; document.getElementById('fNotes').value = item.notes || "";
+                document.getElementById('fColorText').value = cObj.text; document.getElementById('fColorHex1').value = cObj.hex1; updateCircle(1);
+                document.getElementById('fColorHex2').value = cObj.hex2; updateCircle(2); document.getElementById('fHasCustomColors').value = cObj.hasCustom ? "true" : "false";
                 
-                document.getElementById('fColorText').value = cObj.text;
-                document.getElementById('fColorHex1').value = cObj.hex1; 
-                updateCircle(1);
-                document.getElementById('fColorHex2').value = cObj.hex2; 
-                updateCircle(2);
-                
-                document.getElementById('fHasCustomColors').value = cObj.hasCustom ? "true" : "false";
                 isColor2Active = cObj.isColor2Active;
-                
                 document.getElementById('circle2').style.display = isColor2Active ? 'block' : 'none';
                 document.getElementById('btnRemoveColor2').style.display = isColor2Active ? 'inline-block' : 'none';
                 document.getElementById('btnToggleColor2').style.display = isColor2Active ? 'none' : 'inline-block';
                 checkResetBtnVisibility();
 
-                if (currentPhotoData) { 
-                    prev.src = currentPhotoData; 
-                    prev.style.display = "block"; 
-                    placeholder.style.display = "none"; 
-                    changeBtn.style.display = "flex";
-                } else {
-                    prev.style.display = "none"; 
-                    placeholder.style.display = "flex"; 
-                    changeBtn.style.display = "none";
-                }
+                if (currentPhotoData) { prev.src = currentPhotoData; prev.style.display = "block"; placeholder.style.display = "none"; changeBtn.style.display = "flex"; } 
+                else { prev.style.display = "none"; placeholder.style.display = "flex"; changeBtn.style.display = "none"; }
                 document.getElementById('btnDelete').style.display = "block";
 
-                // Показываем View Mode
-                document.getElementById('viewMode').style.display = 'flex';
-                document.getElementById('editMode').style.display = 'none';
+                document.getElementById('viewMode').style.display = 'flex'; document.getElementById('editMode').style.display = 'none';
             } else {
+                loader.style.display = 'none';
                 document.getElementById('modalTitle').innerText = "Добавление вещи";
-                document.getElementById('fName').value = ""; 
-                document.getElementById('fRole').value = "UNASSIGNED"; 
-                document.getElementById('fCategory').value = ""; 
-                document.getElementById('fStatus').value = currentTab; 
-                document.getElementById('fBrand').value = ""; 
-                document.getElementById('fColorText').value = ""; 
-                document.getElementById('fNotes').value = "";
-                
-                document.getElementById('fColorHex1').value = "#ffffff"; 
-                updateCircle(1);
-                document.getElementById('fColorHex2').value = "#ffffff"; 
-                updateCircle(2);
-                
-                document.getElementById('fHasCustomColors').value = "false";
-                isColor2Active = false;
-                document.getElementById('circle2').style.display = 'none';
-                document.getElementById('btnRemoveColor2').style.display = 'none';
-                document.getElementById('btnToggleColor2').style.display = 'inline-block';
-                checkResetBtnVisibility();
+                document.getElementById('fName').value = ""; document.getElementById('fRole').value = "UNASSIGNED"; document.getElementById('fCategory').value = ""; document.getElementById('fStatus').value = currentTab; document.getElementById('fBrand').value = ""; document.getElementById('fColorText').value = ""; document.getElementById('fNotes').value = "";
+                document.getElementById('fColorHex1').value = "#ffffff"; updateCircle(1); document.getElementById('fColorHex2').value = "#ffffff"; updateCircle(2);
+                document.getElementById('fHasCustomColors').value = "false"; isColor2Active = false; document.getElementById('circle2').style.display = 'none'; document.getElementById('btnRemoveColor2').style.display = 'none'; document.getElementById('btnToggleColor2').style.display = 'inline-block'; checkResetBtnVisibility();
 
-                currentPhotoData = ""; 
-                prev.style.display = "none"; 
-                placeholder.style.display = "flex"; 
-                changeBtn.style.display = "none";
+                currentPhotoData = ""; prev.style.display = "none"; placeholder.style.display = "flex"; changeBtn.style.display = "none";
                 document.getElementById('btnDelete').style.display = "none";
 
-                // Показываем Edit Mode напрямую
-                document.getElementById('viewMode').style.display = 'none';
-                document.getElementById('editMode').style.display = 'flex';
+                document.getElementById('viewMode').style.display = 'none'; document.getElementById('editMode').style.display = 'flex';
             }
             
-            requestAnimationFrame(function() {
-                document.getElementById('itemModal').classList.add('active');
-            });
+            document.getElementById('itemModal').classList.add('active');
         };
 
-        window.closeModal = function() { 
-            document.getElementById('itemModal').classList.remove('active'); 
-            toggleBodyScroll(false);
-        };
-
-        window.handlePhotoSelect = function(e) {
-            var file = e.target.files[0]; 
-            if (!file) return;
-            var reader = new FileReader();
-            
-            reader.onload = function(ev) {
-                var img = new Image();
-                img.onload = function() {
-                    var canvas = document.createElement('canvas');
-                    var w = img.width, h = img.height;
-                    
-                    if (w > 1000 || h > 1000) { 
-                        if (w > h) { 
-                            h = Math.round(h * 1000 / w); w = 1000; 
-                        } else { 
-                            w = Math.round(w * 1000 / h); h = 1000; 
-                        } 
-                    }
-                    
-                    canvas.width = w; canvas.height = h; 
-                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    
-                    // Сжатие до 0.88
-                    currentPhotoData = canvas.toDataURL('image/jpeg', 0.88);
-                    
-                    document.getElementById('photoPreview').src = currentPhotoData; 
-                    document.getElementById('photoPreview').style.display = "block"; 
-                    document.getElementById('photoPlaceholder').style.display = "none";
-                    document.getElementById('btnChangePhoto').style.display = "flex";
-                };
-                img.src = ev.target.result;
-            };
-            reader.readAsDataURL(file); 
-            e.target.value = "";
-        };
+        window.closeModal = function() { document.getElementById('itemModal').classList.remove('active'); toggleBodyScroll(false); };
+        window.switchToEditMode = function() { document.getElementById('viewMode').style.display = 'none'; document.getElementById('editMode').style.display = 'flex'; };
+        window.requestDelete = function() { if (tg) tg.HapticFeedback.impactOccurred('light'); document.getElementById('confirmDialog').classList.add('active'); };
+        window.executeDelete = function() { document.getElementById('confirmDialog').classList.remove('active'); if (!editingId) return; var newItems = []; for(var i=0; i<items.length; i++) { if(String(items[i].id) !== String(editingId)) newItems.push(items[i]); } items = newItems; localDataStr = JSON.stringify(items); localStorage.setItem(CACHE_KEY, localDataStr); initGrid(); closeModal(); fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) }); };
 
         window.saveCurrentItem = function() {
             if (tg) tg.HapticFeedback.impactOccurred('light');
 
             var colorText = document.getElementById('fColorText').value.trim();
             var finalColorField = colorText;
-            
             if (document.getElementById('fHasCustomColors').value === "true") {
                 var h1 = document.getElementById('fColorHex1').value;
-                if (isColor2Active) {
-                    var h2 = document.getElementById('fColorHex2').value;
-                    finalColorField = colorText + "||" + h1 + "||" + h2;
-                } else {
-                    finalColorField = colorText + "||" + h1;
-                }
+                if (isColor2Active) { var h2 = document.getElementById('fColorHex2').value; finalColorField = colorText + "||" + h1 + "||" + h2; } 
+                else { finalColorField = colorText + "||" + h1; }
             }
 
             var finalCategory = document.getElementById('fRole').value + "||" + document.getElementById('fCategory').value.trim();
-
             var itemObj = {
-                id: editingId ? String(editingId) : String(Date.now()),
-                photo: currentPhotoData,
-                name: document.getElementById('fName').value.trim(),
-                category: finalCategory,
-                status: document.getElementById('fStatus').value,
-                brand: document.getElementById('fBrand').value.trim(),
-                color: finalColorField,
-                notes: document.getElementById('fNotes').value.trim()
+                id: editingId ? String(editingId) : String(Date.now()), photo: currentPhotoData, name: document.getElementById('fName').value.trim(), category: finalCategory, status: document.getElementById('fStatus').value, brand: document.getElementById('fBrand').value.trim(), color: finalColorField, notes: document.getElementById('fNotes').value.trim()
             };
 
-            if (editingId) { 
-                var idx = -1;
-                for(var i=0; i<items.length; i++) { 
-                    if(String(items[i].id) === String(editingId)) { idx = i; break; } 
-                }
-                if (idx !== -1) items[idx] = itemObj; 
-            } else { 
-                items.unshift(itemObj); 
-            }
+            if (editingId) { var idx = -1; for(var i=0; i<items.length; i++) { if(String(items[i].id) === String(editingId)) { idx = i; break; } } if (idx !== -1) items[idx] = itemObj; } 
+            else { items.unshift(itemObj); }
 
-            localDataStr = JSON.stringify(items);
-            localStorage.setItem(CACHE_KEY, localDataStr); 
-            initGrid(); 
-            closeModal(); 
-            showSync("Сохранение данных...");
-            
-            fetch(API_URL, { 
-                method: "POST", 
-                body: JSON.stringify({ action: "save", item: itemObj, user_id: myTgId }) 
-            })
-            .then(function(res) { return res.json(); })
-            .then(function(result) {
-                if (result.ok && result.photoUrl) { 
-                    for(var j=0; j<items.length; j++) {
-                        if(String(items[j].id) === String(itemObj.id)) { 
-                            items[j].photo = result.photoUrl; 
-                            localDataStr = JSON.stringify(items); 
-                            localStorage.setItem(CACHE_KEY, localDataStr); 
-                            break; 
-                        }
-                    }
-                    initGrid();
-                }
+            localDataStr = JSON.stringify(items); localStorage.setItem(CACHE_KEY, localDataStr); initGrid(); closeModal(); showSync("Сохранение...");
+            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "save", item: itemObj, user_id: myTgId }) }).then(function(res) { return res.json(); }).then(function(result) {
+                if (result.ok && result.photoUrl) { for(var j=0; j<items.length; j++) { if(String(items[j].id) === String(itemObj.id)) { items[j].photo = result.photoUrl; localDataStr = JSON.stringify(items); localStorage.setItem(CACHE_KEY, localDataStr); break; } } initGrid(); }
                 showSync("");
             }).catch(function(e) { showSync(""); });
         };
 
-        // Запуск приложения
-        try {
-            var savedData = localStorage.getItem(CACHE_KEY);
-            if (savedData) { 
-                items = JSON.parse(savedData); 
-                if (!Array.isArray(items)) items = []; 
-                initGrid(); 
-            }
-            fetchFromCloud();
-        } catch(e) { 
-            fetchFromCloud(); 
-        }
+        window.updateCircle = function(num) { var hex = document.getElementById('fColorHex' + num).value; document.getElementById('circle' + num).style.backgroundColor = hex; };
+        function checkResetBtnVisibility() { var isCustom = document.getElementById('fHasCustomColors').value === "true"; document.getElementById('btnClearColors').style.display = isCustom ? 'inline-block' : 'none'; }
+        window.markCustomColorUsed = function() { document.getElementById('fHasCustomColors').value = "true"; checkResetBtnVisibility(); };
+        window.toggleColor2 = function() { isColor2Active = !isColor2Active; document.getElementById('circle2').style.display = isColor2Active ? 'block' : 'none'; document.getElementById('btnRemoveColor2').style.display = isColor2Active ? 'inline-block' : 'none'; document.getElementById('btnToggleColor2').style.display = isColor2Active ? 'none' : 'inline-block'; if (isColor2Active) markCustomColorUsed(); };
+        window.clearCustomColors = function() { document.getElementById('fHasCustomColors').value = "false"; document.getElementById('fColorHex1').value = "#ffffff"; updateCircle(1); document.getElementById('fColorHex2').value = "#ffffff"; updateCircle(2); isColor2Active = false; document.getElementById('circle2').style.display = 'none'; document.getElementById('btnRemoveColor2').style.display = 'none'; document.getElementById('btnToggleColor2').style.display = 'inline-block'; checkResetBtnVisibility(); };
+
+        /* ZOOM LOGIC */
+        var viewerImg = document.getElementById('viewerImg'); var viewerContainer = document.getElementById('viewerContainer'); var scale = 1, panX = 0, panY = 0, startPanX = 0, startPanY = 0, startScale = 1, startDistance = 0, focalX = 0, focalY = 0, isPanning = false, lastTap = 0;
+        function resetZoomState() { scale = 1; panX = 0; panY = 0; viewerImg.style.transition = 'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)'; viewerImg.style.transform = "translate(0px, 0px) scale(1)"; }
+        window.openFullscreen = function(src) { 
+            if(!src) return; 
+            document.getElementById('imageViewer').classList.add('active'); 
+            resetZoomState(); 
+            var loader = document.getElementById('fullscreenLoader');
+            
+            viewerImg.onload = null;
+            viewerImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+            viewerImg.style.opacity = '0';
+            loader.style.display = 'block';
+
+            setTimeout(function() {
+                viewerImg.onload = function() {
+                    loader.style.display = 'none';
+                    viewerImg.style.opacity = '1';
+                };
+                viewerImg.src = src;
+            }, 10);
+        };
+        window.closeFullscreen = function() { document.getElementById('imageViewer').classList.remove('active'); };
+        viewerContainer.addEventListener('touchstart', function(e) { viewerImg.style.transition = 'none'; if (e.touches.length === 2) { isPanning = false; startDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); startScale = scale; startPanX = panX; startPanY = panY; focalX = (e.touches[0].clientX + e.touches[1].clientX) / 2; focalY = (e.touches[0].clientY + e.touches[1].clientY) / 2; } else if (e.touches.length === 1 && scale > 1) { isPanning = true; startPanX = panX; startPanY = panY; focalX = e.touches[0].clientX; focalY = e.touches[0].clientY; } }, {passive: false});
+        viewerContainer.addEventListener('touchmove', function(e) { e.preventDefault(); var rect = viewerContainer.getBoundingClientRect(); var centerX = rect.left + rect.width / 2; var centerY = rect.top + rect.height / 2; if (e.touches.length === 2) { var currentDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); var newScale = Math.max(1, Math.min(startScale * (currentDistance / startDistance), 5)); var currentFocalX = (e.touches[0].clientX + e.touches[1].clientX) / 2; var currentFocalY = (e.touches[0].clientY + e.touches[1].clientY) / 2; panX = currentFocalX - centerX - (focalX - centerX - startPanX) * (newScale / startScale); panY = currentFocalY - centerY - (focalY - centerY - startPanY) * (newScale / startScale); scale = newScale; viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")"; } else if (e.touches.length === 1 && isPanning && scale > 1) { panX = startPanX + (e.touches[0].clientX - focalX); panY = startPanY + (e.touches[0].clientY - focalY); viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")"; } }, {passive: false});
+        viewerContainer.addEventListener('touchend', function(e) { if (e.touches.length < 2) isPanning = false; if (e.touches.length === 0 && scale <= 1) { resetZoomState(); } if (e.changedTouches.length === 1) { var now = new Date().getTime(); if (now - lastTap < 300 && now - lastTap > 0) { e.preventDefault(); if (scale > 1) { resetZoomState(); } else { scale = 2.5; var rect = viewerContainer.getBoundingClientRect(); var centerX = rect.left + rect.width / 2; var centerY = rect.top + rect.height / 2; var touchX = e.changedTouches[0].clientX; var touchY = e.changedTouches[0].clientY; panX = (centerX - touchX) * (scale - 1); panY = (centerY - touchY) * (scale - 1); viewerImg.style.transition = 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)'; viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")"; } } lastTap = now; } if (e.touches.length === 1 && scale > 1) { isPanning = true; startPanX = panX; startPanY = panY; focalX = e.touches[0].clientX; focalY = e.touches[0].clientY; } });
+
+        /* GENERATOR LOGIC */
+        var lockedSlots = { TOP: false, OUTER: false, BOTTOM: false, SHOES: false }; var currentOutfit = { TOP: null, OUTER: null, BOTTOM: null, SHOES: null }; var useOuterwear = true;
+        window.openGenerator = function() { if (tg) tg.HapticFeedback.impactOccurred('light'); toggleBodyScroll(true); document.getElementById('generatorModal').classList.add('active'); rollOutfit(); };
+        window.closeGenerator = function() { document.getElementById('generatorModal').classList.remove('active'); toggleBodyScroll(false); };
+        window.toggleOuterwear = function() { if (tg) tg.HapticFeedback.impactOccurred('light'); useOuterwear = document.getElementById('toggleOuter').checked; if (useOuterwear && !currentOutfit['OUTER']) rollSlot('OUTER'); renderGenerator(); };
+        window.rollOutfit = function() { if (tg) tg.HapticFeedback.impactOccurred('light'); var rolesToRoll = ['TOP', 'BOTTOM', 'SHOES']; if (useOuterwear) rolesToRoll.unshift('OUTER'); rolesToRoll.forEach(function(role) { if (!lockedSlots[role]) rollSlot(role); }); renderGenerator(); };
+        function rollSlot(role) { var available = items.filter(function(i) { return i.status === 'IN_CLOSET' && parseCategoryField(i.category).role === role; }); if (available.length > 0) { currentOutfit[role] = available[Math.floor(Math.random() * available.length)]; } else { currentOutfit[role] = null; } }
+        window.toggleLock = function(role) { if (tg) tg.HapticFeedback.impactOccurred('light'); lockedSlots[role] = !lockedSlots[role]; renderGenerator(); };
+        window.refreshSlot = function(role) { if (tg) tg.HapticFeedback.impactOccurred('light'); lockedSlots[role] = false; rollSlot(role); renderGenerator(); };
+        function renderGenerator() { var container = document.getElementById('genSlotsContainer'); var rolesMap = []; if (useOuterwear) rolesMap.push({ id: 'OUTER', label: 'Второй слой' }); rolesMap.push({ id: 'TOP', label: 'Верх (База)' }); rolesMap.push({ id: 'BOTTOM', label: 'Низ' }); rolesMap.push({ id: 'SHOES', label: 'Обувь' }); var html = ''; rolesMap.forEach(function(r) { var it = currentOutfit[r.id]; var locked = lockedSlots[r.id]; html += '<div class="gen-slot">'; html += '<div class="gen-slot-title">' + r.label + '</div>'; if (it) { var cObj = parseColorField(it.color); var photo = it.photo ? (it.photo.indexOf('sz=w1000') !== -1 ? it.photo.replace('sz=w1000', 'sz=w400') : it.photo) : NO_PHOTO_SVG; html += '<img src="' + photo + '" class="gen-img" onclick="openFullscreen(\'' + (it.photo||'') + '\')">'; html += '<div class="gen-info">'; html += '<div class="gen-item-title">' + (it.name || 'Без названия') + '</div>'; html += '<div class="gen-item-meta">' + cObj.dot + '<span>' + (it.brand || 'Без бренда') + '</span></div>'; html += '</div>'; html += '<div class="gen-actions">'; html += '<button class="gen-btn ' + (locked ? 'locked' : '') + '" onclick="toggleLock(\'' + r.id + '\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></button>'; html += '<button class="gen-btn" onclick="refreshSlot(\'' + r.id + '\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg></button>'; html += '</div>'; } else { html += '<div class="gen-empty">В шкафу нет вещей для этой категории</div>'; } html += '</div>'; }); container.innerHTML = html; }
     </script>
 </body>
 </html>
