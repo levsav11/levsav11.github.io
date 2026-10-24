@@ -50,7 +50,7 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); padding-bottom: 90px; transition: background-color 0.3s; }
 
-        /* ЗАСТАВКА С ВЕРСИЕЙ 1.1 */
+        /* ЗАСТАВКА С ВЕРСИЕЙ 1.2 */
         #splashScreen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.4s ease; }
         .splash-icon { width: 64px; height: 64px; color: var(--text); margin-bottom: 16px; opacity: 0; animation: fadeUp 0.5s ease forwards; }
         .splash-title { font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: 1px; opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards; }
@@ -133,7 +133,7 @@
 
         .view-photo-area { position: relative; width: 100%; height: 280px; background: var(--card); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
         .view-blur-bg { position: absolute; inset: -20px; background-size: cover; background-position: center; filter: blur(15px); opacity: 0.35; z-index: 0; }
-        .view-photo-area img { position: relative; z-index: 1; max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .view-photo-area img { position: relative; z-index: 1; max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
         
         .view-info-area { padding: 20px 20px 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; flex-grow: 1; }
         .view-title { font-size: 22px; font-weight: 800; color: var(--text); margin: 0; line-height: 1.2; }
@@ -150,7 +150,7 @@
 
         .modal-top { padding: 15px 18px; flex-shrink: 0; background: var(--card); z-index: 10; border-bottom: 1px solid var(--border); }
         .photo-preview-box { width: 100%; height: 160px; border-radius: 12px; background: var(--input-bg); border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; }
+        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
         .photo-placeholder { color: var(--subtext); font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.2s; }
         .photo-placeholder svg { width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.4; }
         .btn-change-photo { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; backdrop-filter: blur(4px); cursor: pointer; display: flex; align-items: center; gap: 6px; }
@@ -181,7 +181,7 @@
         .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.85); color: #fff; padding: 8px 14px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; font-weight: 500; backdrop-filter: blur(4px); }
         .empty { width: 100%; text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 14px; display: none; }
 
-        /* ПОЛНОЭКРАННЫЙ ZOOM (С МУЛЬТИТАЧЕМ И ФОКУСОМ) */
+        /* ИДЕАЛЬНЫЙ ПОЛНОЭКРАННЫЙ ZOOM (С МУЛЬТИТАЧЕМ) */
         #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; opacity: 0; transition: opacity 0.3s ease; }
         #imageViewer.active { display: flex; opacity: 1; }
         .viewer-header { height: 60px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; background: linear-gradient(rgba(0,0,0,0.6), transparent); z-index: 1001; }
@@ -200,17 +200,17 @@
 </head>
 <body class="tab-IN_CLOSET">
 
-    <!-- ЗАСТАВКА -->
+    <!-- ЗАСТАВКА С ВЕРСИЕЙ 1.2 -->
     <div id="splashScreen">
         <svg class="splash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
         </svg>
         <div class="splash-title">Мой Гардероб</div>
         <div class="splash-loader"></div>
-        <div class="splash-version">Версия 1.1</div>
+        <div class="splash-version">Версия 1.2</div>
     </div>
 
-    <!-- ПОЛНОЭКРАННЫЙ ZOOM -->
+    <!-- ПОЛНОЭКРАННЫЙ МУЛЬТИТАЧ ZOOM -->
     <div id="imageViewer">
         <div class="viewer-header">
             <button class="viewer-close" onclick="closeFullscreen()">Закрыть</button>
@@ -365,6 +365,7 @@
     </div>
 
     <script>
+        // --- 1. ВАША ССЫЛКА НА GOOGLE SCRIPT ---
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
         var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
@@ -374,7 +375,7 @@
         var myTgId = "default_user";
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { myTgId = tg.initDataUnsafe.user.id; }
 
-        var CACHE_KEY = "wardrobe_v22_" + myTgId;
+        var CACHE_KEY = "wardrobe_v23_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var editingId = null;
@@ -475,7 +476,9 @@
                 var imgContent = '';
                 if (item.photo) {
                     var thumbSrc = item.photo.indexOf('sz=w1000') !== -1 ? item.photo.replace('sz=w1000', 'sz=w400') : item.photo;
-                    imgContent = '<img src="' + thumbSrc + '" loading="lazy">';
+                    
+                    // Убираем loading="lazy", чтобы браузер фоном подгрузил все фото для всех вкладок 
+                    imgContent = '<img src="' + thumbSrc + '">';
                 } else {
                     imgContent = '<div class="placeholder-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5a2.5 2.5 0 0 0-2.5 2.5v.5L3 13a1 1 0 0 0 .7 1.7h16.6a1 1 0 0 0 .7-1.7L14.5 7.5v-.5A2.5 2.5 0 0 0 12 4.5z"></path><path d="M12 7v10"></path><path d="M9 17h6"></path></svg></div>';
                 }
@@ -629,7 +632,7 @@
             checkResetBtnVisibility();
         };
 
-        // --- УЛУЧШЕННЫЙ МУЛЬТИТАЧ ZOOM ---
+        // --- УЛУЧШЕННЫЙ МАТЕМАТИЧЕСКИЙ ZOOM ---
         var viewerImg = document.getElementById('viewerImg');
         var viewerContainer = document.getElementById('viewerContainer');
         var scale = 1, panX = 0, panY = 0;
@@ -664,27 +667,34 @@
                 focalY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
             } else if (e.touches.length === 1 && scale > 1) {
                 isPanning = true;
-                startPanX = e.touches[0].clientX - panX;
-                startPanY = e.touches[0].clientY - panY;
+                startPanX = panX;
+                startPanY = panY;
+                focalX = e.touches[0].clientX;
+                focalY = e.touches[0].clientY;
             }
         }, {passive: false});
 
         viewerContainer.addEventListener('touchmove', function(e) {
             e.preventDefault(); 
+            var rect = viewerContainer.getBoundingClientRect();
+            var centerX = rect.left + rect.width / 2;
+            var centerY = rect.top + rect.height / 2;
+
             if (e.touches.length === 2) {
                 var currentDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-                scale = Math.max(1, Math.min(startScale * (currentDistance / startDistance), 5));
+                var newScale = Math.max(1, Math.min(startScale * (currentDistance / startDistance), 5));
                 
                 var currentFocalX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
                 var currentFocalY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
                 
-                panX = currentFocalX - (focalX - startPanX) * (scale / startScale);
-                panY = currentFocalY - (focalY - startPanY) * (scale / startScale);
+                panX = currentFocalX - centerX - (focalX - centerX - startPanX) * (newScale / startScale);
+                panY = currentFocalY - centerY - (focalY - centerY - startPanY) * (newScale / startScale);
+                scale = newScale;
                 
                 viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")";
             } else if (e.touches.length === 1 && isPanning && scale > 1) {
-                panX = e.touches[0].clientX - startPanX;
-                panY = e.touches[0].clientY - startPanY;
+                panX = startPanX + (e.touches[0].clientX - focalX);
+                panY = startPanY + (e.touches[0].clientY - focalY);
                 viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")";
             }
         }, {passive: false});
@@ -703,13 +713,15 @@
                     if (scale > 1) { 
                         resetZoomState(); 
                     } else { 
-                        scale = 3;
+                        scale = 2.5;
                         var rect = viewerContainer.getBoundingClientRect();
-                        var touchX = e.changedTouches[0].clientX - rect.left;
-                        var touchY = e.changedTouches[0].clientY - rect.top;
+                        var centerX = rect.left + rect.width / 2;
+                        var centerY = rect.top + rect.height / 2;
+                        var touchX = e.changedTouches[0].clientX;
+                        var touchY = e.changedTouches[0].clientY;
                         
-                        panX = (rect.width / 2 - touchX) * 2;
-                        panY = (rect.height / 2 - touchY) * 2;
+                        panX = (touchX - centerX) * (1 - scale);
+                        panY = (touchY - centerY) * (1 - scale);
                         
                         viewerImg.style.transition = 'transform 0.25s cubic-bezier(0.1, 0.9, 0.2, 1)';
                         viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")"; 
@@ -720,8 +732,10 @@
             
             if (e.touches.length === 1 && scale > 1) {
                 isPanning = true;
-                startPanX = e.touches[0].clientX - panX;
-                startPanY = e.touches[0].clientY - panY;
+                startPanX = panX;
+                startPanY = panY;
+                focalX = e.touches[0].clientX;
+                focalY = e.touches[0].clientY;
             }
         });
 
