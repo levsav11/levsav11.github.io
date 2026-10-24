@@ -6,7 +6,7 @@
     <title>Управление Гардеробом</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* ЦВЕТОВЫЕ ТЕМЫ & LIQUID GLASS ПЕРЕМЕННЫЕ */
+        /* ЦВЕТОВЫЕ ТЕМЫ & LIQUID GLASS */
         :root { 
             --theme-closet: #f97316;     
             --theme-washing: #3b82f6;    
@@ -15,7 +15,6 @@
             --active-accent: var(--theme-closet); 
             --active-accent-rgb: 249, 115, 22;
 
-            /* Светлая тема Liquid Glass */
             --bg-base: #f4f6f9;
             --glass-bg: rgba(255, 255, 255, 0.65);
             --glass-border: rgba(255, 255, 255, 0.8);
@@ -37,7 +36,6 @@
                 --active-accent: var(--theme-closet);
                 --active-accent-rgb: 245, 158, 11;
 
-                /* Темная тема Liquid Glass */
                 --bg-base: #0f1115;
                 --glass-bg: rgba(30, 41, 59, 0.55);
                 --glass-border: rgba(255, 255, 255, 0.08);
@@ -62,7 +60,6 @@
             --circle-border: rgba(255, 255, 255, 0.25);
         }
 
-        /* Динамическое изменение акцентного цвета */
         body.tab-IN_CLOSET { --active-accent: var(--theme-closet); --active-accent-rgb: 249, 115, 22; }
         body.tab-WASHING { --active-accent: var(--theme-washing); --active-accent-rgb: 59, 130, 246; }
         body.tab-DRYING { --active-accent: var(--theme-drying); --active-accent-rgb: 139, 92, 246; }
@@ -75,27 +72,25 @@
         body { 
             margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; 
             background-color: var(--bg-base);
-            /* Мягкое атмосферное свечение на фоне под стекло */
             background-image: 
                 radial-gradient(circle at 0% 0%, rgba(var(--active-accent-rgb), 0.12), transparent 50%),
                 radial-gradient(circle at 100% 100%, rgba(var(--active-accent-rgb), 0.08), transparent 50%);
-            background-attachment: fixed;
-            color: var(--text); padding-bottom: 90px; 
+            background-attachment: fixed; color: var(--text); padding-bottom: 90px; 
             transition: background-image 0.5s ease; 
         }
 
-        /* ЗАСТАВКА */
+        /* ЗАСТАВКА 3.1 */
         #splashScreen { position: fixed; inset: 0; background: var(--bg-base); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .splash-icon { width: 64px; height: 64px; color: var(--text); margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         .splash-title { font-size: 24px; font-weight: 800; color: var(--text); letter-spacing: 0.5px; opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards; }
         .splash-loader { margin-top: 24px; width: 30px; height: 30px; border: 3px solid var(--glass-border); border-top-color: var(--text); border-radius: 50%; animation: spin 1s linear infinite, fadeUp 0.6s ease 0.2s forwards; opacity: 0; }
-        .splash-version { position: absolute; bottom: 24px; font-size: 13px; font-weight: 600; color: var(--subtext); opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; }
+        .splash-version { position: absolute; bottom: 24px; font-size: 15px; font-weight: 800; color: var(--subtext); opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; letter-spacing: 1px;}
         @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         #mainWrapper { opacity: 0; transition: opacity 0.4s ease; }
 
-        /* HEADER & GLASSMORPHISM */
+        /* HEADER */
         .header { 
             background: var(--glass-bg); 
             backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
@@ -109,30 +104,29 @@
         .search-input, .filter-select { 
             flex: 1; padding: 10px 12px; border: 1px solid var(--glass-border); 
             border-radius: 12px; font-size: 14px; font-weight: 500;
-            background: var(--input-bg); color: var(--text); outline: none; 
+            background-color: var(--input-bg); color: var(--text); outline: none; 
             transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            /* ЖЕСТКИЙ ФИКС НАЛОЖЕНИЯ ТЕКСТА И СТРЕЛКИ */
+            padding-right: 36px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
         }
         
-        .filter-select {
-            appearance: none; -webkit-appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat; background-position: right 10px center; background-size: 16px; padding-right: 32px;
+        /* ЖЕСТКИЙ ФИКС РАЗМНОЖЕНИЯ ЗНАЧКА */
+        select.filter-select {
+            -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important; 
+            background-position: right 10px center !important; 
+            background-size: 16px !important;
         }
-        body.dark-theme .filter-select { background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); }
-        .search-input:focus, .filter-select:focus { border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.15); background: var(--glass-bg); }
+        select.filter-select::-ms-expand { display: none; }
         
-        /* APPLE-STYLE TABS */
+        body.dark-theme select.filter-select { background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e") !important; }
+        .search-input:focus, .filter-select:focus { border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.15); background-color: var(--glass-bg); }
+        
         .tabs { display: flex; gap: 4px; background: var(--input-bg); padding: 4px; border-radius: 14px; border: 1px solid var(--glass-border); }
-        .tab { 
-            flex: 1; text-align: center; padding: 8px 4px; font-weight: 600; font-size: 13px; 
-            color: var(--subtext); border-radius: 10px; cursor: pointer; 
-            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
-        }
-        .tab.active { 
-            background: var(--glass-bg); color: var(--active-accent); 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid var(--glass-border);
-        }
+        .tab { flex: 1; text-align: center; padding: 8px 4px; font-weight: 600; font-size: 13px; color: var(--subtext); border-radius: 10px; cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .tab.active { background: var(--glass-bg); color: var(--active-accent); box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid var(--glass-border); }
         .badge-count { display: inline-block; padding: 2px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px; background: rgba(var(--active-accent-rgb), 0.1); color: var(--text); }
 
         .bulk-bar { display: none; justify-content: space-between; align-items: center; padding: 12px 14px; background: rgba(var(--active-accent-rgb), 0.1); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--glass-border); font-size: 13px; font-weight: 600; color: var(--active-accent); transition: 0.3s ease; }
@@ -144,14 +138,7 @@
         
         @keyframes slideUpCard { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
         
-        /* КАРТОЧКИ LIQUID GLASS */
-        .card { 
-            width: calc(50% - 6px); background: var(--glass-bg); border-radius: 20px; overflow: hidden; 
-            box-shadow: var(--glass-shadow); display: flex; flex-direction: column; 
-            border: 1px solid var(--glass-border); animation: slideUpCard 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; 
-            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            transform: translateZ(0); transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
+        .card { width: calc(50% - 6px); background: var(--glass-bg); border-radius: 20px; overflow: hidden; box-shadow: var(--glass-shadow); display: flex; flex-direction: column; border: 1px solid var(--glass-border); animation: slideUpCard 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); transform: translateZ(0); transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .card:active { transform: scale(0.97); }
         
         .img-wrap { position: relative; width: 100%; height: 185px; background: var(--input-bg); cursor: pointer; display: flex; align-items: center; justify-content: center; overflow: hidden; }
@@ -166,11 +153,7 @@
         .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; overflow: hidden; width: 100%; font-weight: 500; }
         .card-meta span.meta-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
         
-        .color-dot { 
-            width: 16px; height: 16px; flex: 0 0 16px; border-radius: 50%; display: block; 
-            box-shadow: inset 0 0 0 1.5px var(--circle-border), 0 0 2px rgba(0,0,0,0.1); 
-            background-clip: padding-box; transform: translateZ(0); 
-        }
+        .color-dot { width: 16px; height: 16px; flex: 0 0 16px; border-radius: 50%; display: block; box-shadow: inset 0 0 0 1.5px var(--circle-border), 0 0 2px rgba(0,0,0,0.1); background-clip: padding-box; transform: translateZ(0); }
         
         .move-bar { display: flex; border-top: 1px solid var(--glass-border); background: rgba(var(--active-accent-rgb), 0.03); }
         .move-btn { flex: 1; padding: 12px 2px; font-size: 11px; font-weight: 800; border: none; background: transparent; cursor: pointer; border-right: 1px solid var(--glass-border); transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -180,20 +163,15 @@
         .move-btn.to-drying { color: var(--theme-drying); }
         .move-btn:active { background: rgba(0,0,0,0.05); }
 
-        /* ПЛАВАЮЩИЕ КНОПКИ (FABs) В СТИЛЕ СТЕКЛА */
-        .fab { 
-            position: fixed; right: 20px; width: 58px; height: 58px; border-radius: 29px; 
-            display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.3); 
-            z-index: 90; cursor: pointer; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s; 
-            color: #fff; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-        }
+        /* ПЛАВАЮЩИЕ КНОПКИ */
+        .fab { position: fixed; right: 20px; width: 58px; height: 58px; border-radius: 29px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.3); z-index: 90; cursor: pointer; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s; color: #fff; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
         .fab:active { transform: scale(0.9); }
         .fab-add { bottom: 20px; background: rgba(var(--active-accent-rgb), 0.85); box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.4); }
         .fab-add svg { width: 28px; height: 28px; stroke-width: 2; }
         .fab-gen { bottom: 90px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.85), rgba(99, 102, 241, 0.85)); box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4); }
         .fab-gen svg { width: 26px; height: 26px; stroke-width: 2; fill: currentColor; }
 
-        /* МОДАЛЬНЫЕ ОКНА И iOS ШТОРКА */
+        /* МОДАЛЬНЫЕ ОКНА */
         .modal { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 200; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
         .modal.active { display: flex; opacity: 1; }
         .modal-sheet { background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); width: 100%; max-width: 500px; height: 92vh; border-radius: 32px 32px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); border-top: 1px solid var(--glass-border); box-shadow: 0 -10px 40px rgba(0,0,0,0.1); }
@@ -206,6 +184,9 @@
         .close-btn-icon { background: var(--input-bg); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 16px; color: var(--subtext); cursor: pointer; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
         .close-btn-icon:active { transform: scale(0.85); }
 
+        /* ФИКСИРОВАННЫЙ ФУТЕР ДЛЯ КНОПОК */
+        .modal-footer { padding: 14px 20px 24px; border-top: 1px solid var(--glass-border); background: var(--glass-bg); display: flex; gap: 12px; flex-shrink: 0; }
+
         .view-mode, .edit-mode { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; min-height: 0; }
         .edit-mode { display: none; }
 
@@ -213,16 +194,16 @@
         .view-blur-bg { position: absolute; inset: -20px; background-size: cover; background-position: center; filter: blur(20px); opacity: 0.4; z-index: 0; }
         .view-photo-area img { position: relative; z-index: 1; max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.15)); }
         
-        .view-info-area { padding: 24px 20px 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; flex-grow: 1; }
+        .view-info-area { padding: 24px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; flex-grow: 1; }
         .view-title { font-size: 24px; font-weight: 800; color: var(--text); margin: 0; line-height: 1.2; letter-spacing: -0.5px; }
         .view-tags { display: flex; gap: 8px; flex-wrap: wrap; }
         .view-tag { background: var(--input-bg); color: var(--text); font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-        .view-details { background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 2px 8px rgba(0,0,0,0.02); }
+        .view-details { background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 2px 8px rgba(0,0,0,0.02); margin-bottom: 20px; }
         .detail-row { display: flex; justify-content: space-between; font-size: 15px; }
         .detail-label { color: var(--subtext); font-weight: 600; }
         .detail-value { color: var(--text); font-weight: 700; text-align: right; }
         
-        .btn-edit-mode { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--text); color: var(--card); border: none; padding: 16px; border-radius: 16px; font-weight: 800; font-size: 16px; cursor: pointer; margin-top: 8px; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+        .btn-edit-mode { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--text); color: var(--card); border: none; padding: 16px; border-radius: 16px; font-weight: 800; font-size: 16px; cursor: pointer; width: 100%; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
         .btn-edit-mode:active { transform: scale(0.96); }
 
         .modal-top { padding: 16px 20px; flex-shrink: 0; background: transparent; z-index: 10; border-bottom: 1px solid var(--glass-border); }
@@ -232,7 +213,7 @@
         .photo-placeholder svg { width: 36px; height: 36px; margin-bottom: 8px; opacity: 0.8; }
         .btn-change-photo { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #fff; border: 1px solid rgba(255,255,255,0.3); padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); cursor: pointer; display: flex; align-items: center; gap: 6px; }
 
-        .modal-body { padding: 20px 20px 40px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 16px; }
+        .modal-body { padding: 20px 20px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 16px; }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .field { display: flex; flex-direction: column; gap: 6px; }
@@ -241,17 +222,13 @@
         .field input:focus, .field select:focus { border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.15); background: var(--glass-bg); }
 
         .color-controls { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
-        .color-circle { 
-            width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; position: relative; overflow: hidden; 
-            border: 2px solid var(--circle-border); transform: translateZ(0); box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
+        .color-circle { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; position: relative; overflow: hidden; border: 2px solid var(--circle-border); transform: translateZ(0); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .color-circle input[type="color"] { position: absolute; top: -10px; left: -10px; width: 64px; height: 64px; opacity: 0; cursor: pointer; }
         
         .btn-color-action { background: var(--input-bg); color: var(--text); border: 1px solid var(--glass-border); border-radius: 12px; padding: 12px 16px; font-size: 13px; cursor: pointer; font-weight: 700; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
         .btn-color-action:active { transform: scale(0.95); }
         .btn-color-action.danger { color: var(--danger); border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.05); }
 
-        .modal-actions { display: flex; gap: 12px; margin-top: 16px; }
         .btn-primary { flex: 2; padding: 16px; background: var(--active-accent); color: #fff; border: none; border-radius: 16px; font-weight: 800; font-size: 16px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.3); }
         .btn-danger { flex: 1; padding: 16px; background: rgba(239,68,68,0.1); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); border-radius: 16px; font-weight: 800; font-size: 16px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
         .btn-primary:active, .btn-danger:active { transform: scale(0.96); }
@@ -261,8 +238,9 @@
 
         /* ИНТЕРФЕЙС ГЕНЕРАТОРА ОБРАЗОВ */
         .gen-modal .modal-sheet { background: var(--bg-base); }
-        .gen-scroll-area { padding: 20px 20px 40px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 16px; }
-        .gen-slot { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 20px; display: flex; align-items: center; padding: 14px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); position: relative; }
+        .gen-header-options { padding: 0 20px 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); }
+        .gen-scroll-area { padding: 20px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 16px; }
+        .gen-slot { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 20px; display: flex; align-items: center; padding: 14px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); position: relative; transition: opacity 0.3s; }
         .gen-slot-title { position: absolute; top: -10px; left: 20px; background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--active-accent); font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 4px 10px; border-radius: 8px; letter-spacing: 0.5px; border: 1px solid var(--glass-border); transition: color 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .gen-img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; background: var(--input-bg); flex-shrink: 0; border: 1px solid var(--glass-border); }
         .gen-info { flex-grow: 1; padding: 0 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
@@ -273,8 +251,17 @@
         .gen-btn.locked { background: var(--active-accent); color: #fff; border-color: transparent; }
         .gen-btn:active { transform: scale(0.9); }
         .gen-empty { text-align: center; color: var(--subtext); font-size: 14px; width: 100%; padding: 16px 0; font-weight: 600; }
-        .btn-gen-all { background: var(--active-accent); color: #fff; border: none; padding: 18px; border-radius: 16px; font-weight: 800; font-size: 16px; cursor: pointer; width: 100%; margin-top: 8px; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.3); }
+        .btn-gen-all { background: var(--active-accent); color: #fff; border: none; padding: 18px; border-radius: 16px; font-weight: 800; font-size: 16px; cursor: pointer; width: 100%; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.3); flex-shrink: 0; }
         .btn-gen-all:active { transform: scale(0.96); }
+
+        /* iOS ТУМБЛЕР (ПЕРЕКЛЮЧАТЕЛЬ ВТОРОГО СЛОЯ) */
+        .toggle-container { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; color: var(--text); }
+        .toggle-switch { position: relative; width: 46px; height: 26px; display: inline-block; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--subtext); transition: .3s cubic-bezier(0.2, 0.8, 0.2, 1); border-radius: 26px; opacity: 0.5; }
+        .toggle-slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 2px; bottom: 2px; background-color: white; transition: .3s cubic-bezier(0.2, 0.8, 0.2, 1); border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .toggle-switch input:checked + .toggle-slider { background-color: var(--active-accent); opacity: 1; }
+        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
 
         /* ПОЛНОЭКРАННЫЙ ZOOM */
         #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 999; flex-direction: column; opacity: 0; transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -296,14 +283,14 @@
 </head>
 <body class="tab-IN_CLOSET">
 
-    <!-- ЗАСТАВКА ВЕРСИИ 3.0 -->
+    <!-- ЗАСТАВКА 3.1 -->
     <div id="splashScreen">
         <svg class="splash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
         </svg>
         <div class="splash-title">Мой Гардероб</div>
         <div class="splash-loader"></div>
-        <div class="splash-version">Версия 3.0 (Liquid Glass)</div>
+        <div class="splash-version">3.1</div>
     </div>
 
     <!-- ПОЛНОЭКРАННЫЙ МУЛЬТИТАЧ ZOOM -->
@@ -373,8 +360,19 @@
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
-            <div class="gen-scroll-area">
-                <div id="genSlotsContainer"></div>
+            <div class="gen-header-options">
+                <div class="toggle-container">
+                    <span>Второй слой</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="toggleOuter" checked onchange="toggleOuterwear()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="gen-scroll-area" id="genSlotsContainer">
+                <!-- Слоты генерируются через JS -->
+            </div>
+            <div class="modal-footer">
                 <button class="btn-gen-all" onclick="rollOutfit()">Сгенерировать другой образ</button>
             </div>
         </div>
@@ -408,6 +406,8 @@
                         <div class="detail-row"><span class="detail-label">Статус</span><span class="detail-value" id="viewStatus"></span></div>
                         <div class="detail-row"><span class="detail-label">Заметки</span><span class="detail-value" id="viewNotes"></span></div>
                     </div>
+                </div>
+                <div class="modal-footer">
                     <button class="btn-edit-mode" onclick="switchToEditMode()">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                         Редактировать
@@ -475,16 +475,17 @@
                         <input type="hidden" id="fHasCustomColors" value="false">
                     </div>
                     <div class="field"><label>Уход / Дополнительно</label><input type="text" id="fNotes" placeholder="Рекомендации по уходу"></div>
-                    <div class="modal-actions">
-                        <button class="btn-danger" id="btnDelete" style="display:none;" onclick="requestDelete()">Удалить</button>
-                        <button class="btn-primary" id="btnSave" onclick="saveCurrentItem()">Сохранить изменения</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-danger" id="btnDelete" style="display:none;" onclick="requestDelete()">Удалить</button>
+                    <button class="btn-primary" id="btnSave" onclick="saveCurrentItem()">Сохранить</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // --- 1. ВАША ССЫЛКА НА GOOGLE SCRIPT ---
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
         var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
@@ -494,7 +495,7 @@
         var myTgId = "default_user";
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { myTgId = tg.initDataUnsafe.user.id; }
 
-        var CACHE_KEY = "wardrobe_v30_" + myTgId;
+        var CACHE_KEY = "wardrobe_v31_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var editingId = null;
@@ -881,9 +882,10 @@
             }
         });
 
-        // --- ГЕНЕРАТОР ОБРАЗОВ ---
+        // --- ГЕНЕРАТОР ОБРАЗОВ С ТУМБЛЕРОМ ---
         var lockedSlots = { TOP: false, OUTER: false, BOTTOM: false, SHOES: false };
         var currentOutfit = { TOP: null, OUTER: null, BOTTOM: null, SHOES: null };
+        var useOuterwear = true;
 
         window.openGenerator = function() {
             if (tg) tg.HapticFeedback.impactOccurred('light');
@@ -893,9 +895,19 @@
 
         window.closeGenerator = function() { document.getElementById('generatorModal').classList.remove('active'); };
 
+        window.toggleOuterwear = function() {
+            if (tg) tg.HapticFeedback.impactOccurred('light');
+            useOuterwear = document.getElementById('toggleOuter').checked;
+            if (useOuterwear && !currentOutfit['OUTER']) rollSlot('OUTER');
+            renderGenerator();
+        };
+
         window.rollOutfit = function() {
             if (tg) tg.HapticFeedback.impactOccurred('light');
-            ['TOP', 'OUTER', 'BOTTOM', 'SHOES'].forEach(function(role) {
+            var rolesToRoll = ['TOP', 'BOTTOM', 'SHOES'];
+            if (useOuterwear) rolesToRoll.unshift('OUTER');
+            
+            rolesToRoll.forEach(function(role) {
                 if (!lockedSlots[role]) rollSlot(role);
             });
             renderGenerator();
@@ -923,12 +935,12 @@
 
         function renderGenerator() {
             var container = document.getElementById('genSlotsContainer');
-            var rolesMap = [
-                { id: 'OUTER', label: 'Второй слой' },
-                { id: 'TOP', label: 'Верх (База)' },
-                { id: 'BOTTOM', label: 'Низ' },
-                { id: 'SHOES', label: 'Обувь' }
-            ];
+            var rolesMap = [];
+            
+            if (useOuterwear) rolesMap.push({ id: 'OUTER', label: 'Второй слой' });
+            rolesMap.push({ id: 'TOP', label: 'Верх (База)' });
+            rolesMap.push({ id: 'BOTTOM', label: 'Низ' });
+            rolesMap.push({ id: 'SHOES', label: 'Обувь' });
             
             var html = '';
             rolesMap.forEach(function(r) {
