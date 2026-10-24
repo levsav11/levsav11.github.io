@@ -50,7 +50,7 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); padding-bottom: 90px; transition: background-color 0.3s; }
 
-        /* ЗАСТАВКА ВЕРСИИ 2.0 */
+        /* ЗАСТАВКА ВЕРСИИ 2.1 */
         #splashScreen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.4s ease; }
         .splash-icon { width: 64px; height: 64px; color: var(--text); margin-bottom: 16px; opacity: 0; animation: fadeUp 0.5s ease forwards; }
         .splash-title { font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: 1px; opacity: 0; animation: fadeUp 0.5s ease 0.1s forwards; }
@@ -115,12 +115,12 @@
         .move-btn.to-drying { color: var(--theme-drying); background: var(--bg-drying-light); }
         .move-btn:active { opacity: 0.7; }
 
-        /* ПЛАВАЮЩИЕ КНОПКИ */
-        .fab { position: fixed; right: 20px; width: 58px; height: 58px; border-radius: 29px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(0,0,0,0.2); border: none; z-index: 90; cursor: pointer; transition: 0.3s; }
+        /* ПЛАВАЮЩИЕ КНОПКИ С АДАПТИВНЫМИ ЦВЕТАМИ */
+        .fab { position: fixed; right: 20px; width: 58px; height: 58px; border-radius: 29px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(0,0,0,0.2); border: none; z-index: 90; cursor: pointer; transition: 0.3s; background: var(--active-accent); color: #fff; }
         .fab:active { transform: scale(0.95); }
-        .fab-add { bottom: 20px; background: var(--active-accent); color: #fff; }
+        .fab-add { bottom: 20px; }
         .fab-add svg { width: 28px; height: 28px; stroke-width: 2; }
-        .fab-gen { bottom: 90px; background: linear-gradient(135deg, #a855f7, #6366f1); color: #fff; }
+        .fab-gen { bottom: 90px; }
         .fab-gen svg { width: 26px; height: 26px; stroke-width: 2; fill: currentColor; }
 
         .modal { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 200; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
@@ -138,7 +138,7 @@
 
         .view-photo-area { position: relative; width: 100%; height: 280px; background: var(--card); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
         .view-blur-bg { position: absolute; inset: -20px; background-size: cover; background-position: center; filter: blur(15px); opacity: 0.35; z-index: 0; }
-        .view-photo-area img { position: relative; z-index: 1; max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .view-photo-area img { position: relative; z-index: 1; max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
         
         .view-info-area { padding: 20px 20px 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; flex-grow: 1; }
         .view-title { font-size: 22px; font-weight: 800; color: var(--text); margin: 0; line-height: 1.2; }
@@ -154,7 +154,7 @@
 
         .modal-top { padding: 15px 18px; flex-shrink: 0; background: var(--card); z-index: 10; border-bottom: 1px solid var(--border); }
         .photo-preview-box { width: 100%; height: 160px; border-radius: 12px; background: var(--input-bg); border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; }
+        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
         .photo-placeholder { color: var(--subtext); font-size: 13px; font-weight: 600; text-align: center; cursor: pointer; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.2s; }
         .photo-placeholder svg { width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.4; }
         .btn-change-photo { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 500; backdrop-filter: blur(4px); cursor: pointer; display: flex; align-items: center; gap: 6px; }
@@ -185,26 +185,11 @@
         .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(17,24,39,0.85); color: #fff; padding: 8px 14px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; font-weight: 500; backdrop-filter: blur(4px); }
         .empty { width: 100%; text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 14px; display: none; }
 
-        #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; opacity: 0; transition: opacity 0.3s ease; }
-        #imageViewer.active { display: flex; opacity: 1; }
-        .viewer-header { height: 60px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; background: linear-gradient(rgba(0,0,0,0.6), transparent); z-index: 1001; }
-        .viewer-close { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; backdrop-filter: blur(4px); }
-        .viewer-img-container { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; touch-action: none; }
-        #viewerImg { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: 50% 50%; }
-
-        #confirmDialog { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 300; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
-        #confirmDialog.active { display: flex; opacity: 1; }
-        .confirm-box { background: var(--card); padding: 24px; border-radius: 16px; width: 300px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1); }
-        #confirmDialog.active .confirm-box { transform: scale(1); }
-        .confirm-box h3 { margin: 0 0 12px 0; color: var(--text); font-size: 18px; }
-        .confirm-box p { color: var(--subtext); font-size: 14px; margin-bottom: 24px; line-height: 1.5; }
-        .confirm-buttons { display: flex; gap: 12px; }
-
-        /* ИНТЕРФЕЙС СТИЛИСТА (ГЕНЕРАТОР) */
+        /* ИНТЕРФЕЙС ГЕНЕРАТОРА ОБРАЗОВ */
         .gen-modal .modal-sheet { background: var(--bg); }
         .gen-scroll-area { padding: 15px 18px 40px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
         .gen-slot { background: var(--card); border-radius: 14px; display: flex; align-items: center; padding: 12px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.04); position: relative; }
-        .gen-slot-title { position: absolute; top: -8px; left: 16px; background: var(--bg); color: var(--theme-drying); font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 6px; letter-spacing: 0.5px; border: 1px solid var(--border); }
+        .gen-slot-title { position: absolute; top: -8px; left: 16px; background: var(--bg); color: var(--active-accent); font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 2px 8px; border-radius: 6px; letter-spacing: 0.5px; border: 1px solid var(--border); transition: color 0.3s ease; }
         .gen-img { width: 75px; height: 75px; border-radius: 10px; object-fit: cover; background: var(--input-bg); flex-shrink: 0; border: 1px solid var(--border); }
         .gen-info { flex-grow: 1; padding: 0 12px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
         .gen-item-title { font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); margin-bottom: 4px; }
@@ -214,8 +199,24 @@
         .gen-btn.locked { background: var(--theme-closet); color: #fff; }
         .gen-btn:active { transform: scale(0.9); }
         .gen-empty { text-align: center; color: var(--subtext); font-size: 13px; width: 100%; padding: 16px 0; font-weight: 500; }
-        .btn-gen-all { background: linear-gradient(135deg, #a855f7, #6366f1); color: #fff; border: none; padding: 16px; border-radius: 14px; font-weight: 800; font-size: 16px; cursor: pointer; width: 100%; margin-top: 8px; box-shadow: 0 6px 16px rgba(139, 92, 246, 0.3); transition: 0.2s; }
+        .btn-gen-all { background: var(--active-accent); color: #fff; border: none; padding: 16px; border-radius: 14px; font-weight: 800; font-size: 16px; cursor: pointer; width: 100%; margin-top: 8px; transition: 0.3s; }
         .btn-gen-all:active { transform: scale(0.97); }
+
+        /* ПОЛНОЭКРАННЫЙ ZOOM */
+        #imageViewer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; opacity: 0; transition: opacity 0.3s ease; }
+        #imageViewer.active { display: flex; opacity: 1; }
+        .viewer-header { height: 60px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; background: linear-gradient(rgba(0,0,0,0.6), transparent); z-index: 1001; }
+        .viewer-close { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 600; backdrop-filter: blur(4px); }
+        .viewer-img-container { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; touch-action: none; }
+        #viewerImg { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: top left; transition: transform 0.1s; }
+
+        #confirmDialog { display: none; position: fixed; inset: 0; background: var(--overlay); z-index: 300; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
+        #confirmDialog.active { display: flex; opacity: 1; }
+        .confirm-box { background: var(--card); padding: 24px; border-radius: 16px; width: 300px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transform: scale(0.95); transition: transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1); }
+        #confirmDialog.active .confirm-box { transform: scale(1); }
+        .confirm-box h3 { margin: 0 0 12px 0; color: var(--text); font-size: 18px; }
+        .confirm-box p { color: var(--subtext); font-size: 14px; margin-bottom: 24px; line-height: 1.5; }
+        .confirm-buttons { display: flex; gap: 12px; }
     </style>
 </head>
 <body class="tab-IN_CLOSET">
@@ -227,10 +228,10 @@
         </svg>
         <div class="splash-title">Мой Гардероб</div>
         <div class="splash-loader"></div>
-        <div class="splash-version">Версия 2.0</div>
+        <div class="splash-version">Версия 2.1</div>
     </div>
 
-    <!-- ПОЛНОЭКРАННЫЙ ZOOM -->
+    <!-- ПОЛНОЭКРАННЫЙ МУЛЬТИТАЧ ZOOM -->
     <div id="imageViewer">
         <div class="viewer-header"><button class="viewer-close" onclick="closeFullscreen()">Закрыть</button></div>
         <div class="viewer-img-container" id="viewerContainer"><img id="viewerImg" src="" alt="Fullscreen"></div>
@@ -287,11 +288,11 @@
         <div id="syncStatus" class="sync-indicator">Синхронизация данных...</div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО СТИЛИСТА (ГЕНЕРАТОР) -->
+    <!-- МОДАЛЬНОЕ ОКНО ГЕНЕРАТОРА ОБРАЗОВ -->
     <div class="modal gen-modal" id="generatorModal" onclick="if(event.target===this) closeGenerator()">
         <div class="modal-sheet">
             <div class="modal-header">
-                <h3 id="genTitle">Стилист: Сборка образа</h3>
+                <h3 id="genTitle">Генератор образов</h3>
                 <button class="close-btn-icon" onclick="closeGenerator()">
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
@@ -360,7 +361,7 @@
                     </div>
                     <div class="form-row">
                         <div class="field">
-                            <label>Роль в образе (Для стилиста)</label>
+                            <label>Роль в образе</label>
                             <select id="fRole">
                                 <option value="UNASSIGNED">Без роли</option>
                                 <option value="TOP">Верх (База)</option>
@@ -407,7 +408,6 @@
     </div>
 
     <script>
-        // --- 1. ВАША ССЫЛКА НА GOOGLE SCRIPT ---
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         
         var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
@@ -417,7 +417,7 @@
         var myTgId = "default_user";
         if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) { myTgId = tg.initDataUnsafe.user.id; }
 
-        var CACHE_KEY = "wardrobe_v26_" + myTgId;
+        var CACHE_KEY = "wardrobe_v27_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var editingId = null;
@@ -430,7 +430,6 @@
             "фиолетовый": "#7c3aed", "оранжевый": "#f97316", "бордовый": "#881337", "хаки": "#78716c", "оливковый": "#65a30d"
         };
 
-        // БЕЗОПАСНОЕ СОКРЫТИЕ ЗАСТАВКИ
         var splashHidden = false;
         function hideSplash() {
             if (splashHidden) return;
@@ -451,7 +450,6 @@
             el.innerText = text; el.style.display = 'block';
         }
 
-        // РАСПОЗНАВАНИЕ ЦВЕТА
         function parseColorField(colorStr) {
             if (!colorStr) return { text: "", dot: "", hex1: "#ffffff", hex2: "#ffffff", hasCustom: false, isColor2Active: false };
             var parts = colorStr.split("||");
@@ -471,14 +469,12 @@
             return { text: text, dot: dotHtml, hex1: h1 || "#ffffff", hex2: h2 || "#ffffff", hasCustom: !!h1, isColor2Active: isTwo, style: bgStyle };
         }
 
-        // УМНАЯ МИГРАЦИЯ КАТЕГОРИЙ 2.0
         function parseCategoryField(catRaw) {
             if (!catRaw) return { role: 'UNASSIGNED', name: '' };
             if (catRaw.indexOf('||') !== -1) {
                 var parts = catRaw.split('||');
                 return { role: parts[0], name: parts[1] || '' };
             }
-            // Автоопределение для старых вещей
             var lower = catRaw.toLowerCase();
             var role = 'UNASSIGNED';
             if (/(футб|рубаш|майк|топ|блуз|поло)/i.test(lower)) role = 'TOP';
@@ -808,7 +804,7 @@
             }
         });
 
-        // --- УПРАВЛЕНИЕ ГЕНЕРАТОРОМ ОБРАЗА ---
+        // --- ГЕНЕРАТОР ОБРАЗОВ ---
         var lockedSlots = { TOP: false, OUTER: false, BOTTOM: false, SHOES: false };
         var currentOutfit = { TOP: null, OUTER: null, BOTTOM: null, SHOES: null };
 
@@ -851,8 +847,8 @@
         function renderGenerator() {
             var container = document.getElementById('genSlotsContainer');
             var rolesMap = [
-                { id: 'TOP', label: 'Верх (База)' },
                 { id: 'OUTER', label: 'Второй слой' },
+                { id: 'TOP', label: 'Верх (База)' },
                 { id: 'BOTTOM', label: 'Низ' },
                 { id: 'SHOES', label: 'Обувь' }
             ];
