@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Мой Гардероб</title>
+    <!-- Синхронный скрипт для предотвращения моргания светлой темы -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+        if (tg) {
+            tg.expand();
+            if (tg.colorScheme === 'dark') document.documentElement.classList.add('dark-theme');
+        }
+    </script>
     <style>
         /* ЦВЕТОВЫЕ ТЕМЫ & LIQUID GLASS ПРЕМИУМ iOS STYLE */
         :root { 
@@ -26,44 +34,26 @@
             --overlay: rgba(0, 0, 0, 0.4);
             --circle-border: rgba(0, 0, 0, 0.35);
             --blur: 25px;
+            --skeleton-a: #e5e5ea;
+            --skeleton-b: #f2f2f7;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root { 
-                --theme-closet: #ff9f0a; 
-                --theme-washing: #64d2ff; 
-                --theme-drying: #bf5af2;
-                
-                --active-accent: var(--theme-closet);
-                --active-accent-rgb: 255, 159, 10;
-
-                --bg-base: #000000;
-                --card: #1c1c1e;
-                --glass-bg: rgba(28, 28, 30, 0.75);
-                --glass-border: rgba(255, 255, 255, 0.08);
-                --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-                --text: #ffffff; 
-                --subtext: #98989d; 
-                --input-bg: rgba(118, 118, 128, 0.24);
-                --overlay: rgba(0, 0, 0, 0.75);
-                --circle-border: rgba(255, 255, 255, 0.45);
-            }
-        }
-
-        body.dark-theme { 
+        html.dark-theme { 
             color-scheme: dark; --bg-base: #000000; --card: #1c1c1e; --glass-bg: rgba(28, 28, 30, 0.75);
             --glass-border: rgba(255, 255, 255, 0.08); --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             --text: #ffffff; --subtext: #98989d; --input-bg: rgba(118, 118, 128, 0.24);
             --overlay: rgba(0, 0, 0, 0.75); --circle-border: rgba(255, 255, 255, 0.45);
+            --skeleton-a: #2c2c2e; --skeleton-b: #3a3a3c;
+            --theme-closet: #ff9f0a; --theme-washing: #64d2ff; --theme-drying: #bf5af2;
         }
+
+        html.dark-theme body.tab-IN_CLOSET { --active-accent: var(--theme-closet); --active-accent-rgb: 255, 159, 10; }
+        html.dark-theme body.tab-WASHING { --active-accent: var(--theme-washing); --active-accent-rgb: 100, 210, 255; }
+        html.dark-theme body.tab-DRYING { --active-accent: var(--theme-drying); --active-accent-rgb: 191, 90, 242; }
 
         body.tab-IN_CLOSET { --active-accent: var(--theme-closet); --active-accent-rgb: 249, 115, 22; }
         body.tab-WASHING { --active-accent: var(--theme-washing); --active-accent-rgb: 50, 173, 230; }
         body.tab-DRYING { --active-accent: var(--theme-drying); --active-accent-rgb: 175, 82, 222; }
-        
-        body.dark-theme.tab-IN_CLOSET { --active-accent-rgb: 255, 159, 10; }
-        body.dark-theme.tab-WASHING { --active-accent-rgb: 100, 210, 255; }
-        body.dark-theme.tab-DRYING { --active-accent-rgb: 191, 90, 242; }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
@@ -72,11 +62,13 @@
             background-color: var(--bg-base); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased;
         }
 
+        /* Полностью скрыт на старте, чтобы не было микро-всплесков */
         #mainWrapper { 
+            opacity: 0; pointer-events: none;
             background-color: var(--bg-base);
             background-image: radial-gradient(circle at 0% 0%, rgba(var(--active-accent-rgb), 0.15), transparent 50%), radial-gradient(circle at 100% 100%, rgba(var(--active-accent-rgb), 0.1), transparent 50%);
             background-attachment: fixed; min-height: 100vh; padding-bottom: 100px; transform-origin: 50% 0%; 
-            transition: filter 0.4s cubic-bezier(0.32, 0.72, 0, 1), transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.4s ease;
+            transition: filter 0.4s cubic-bezier(0.32, 0.72, 0, 1), transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.5s ease;
         }
 
         body.modal-open { overflow: hidden; overscroll-behavior: none; }
@@ -93,6 +85,7 @@
         
         @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes shimmer { 0% { background-position: -200px 0; } 100% { background-position: calc(200px + 100%) 0; } }
 
         .image-loader {
             position: absolute; top: 50%; left: 50%; margin-top: -15px; margin-left: -15px; width: 30px; height: 30px; 
@@ -120,47 +113,43 @@
         .tab.active { opacity: 1; font-weight: 600; color: var(--text); }
         .badge-count { display: inline-flex; align-items: center; justify-content: center; padding: 2px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px; background: rgba(var(--active-accent-rgb), 0.15); color: var(--text); flex-shrink: 0; font-weight: 700; transition: background 0.3s; }
 
-        /* BULK BAR (ПЛАВНАЯ АНИМАЦИЯ) */
-        .bulk-bar { 
-            display: flex; justify-content: space-between; align-items: center; padding: 0 14px; 
-            background: rgba(var(--active-accent-rgb), 0.1); backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); 
-            font-size: 14px; font-weight: 600; color: var(--active-accent); 
-            max-height: 0; opacity: 0; overflow: hidden; border-bottom: 0px solid var(--glass-border); 
-            /* Плавное, но быстрое исчезновение с сохранением анимации цвета */
-            transition: max-height 0.2s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.15s ease, padding 0.2s ease, color 0.4s ease, background-color 0.4s ease; 
-        }
-        .bulk-bar.visible { max-height: 80px; opacity: 1; padding: 12px 14px; border-bottom: 0.5px solid var(--glass-border); transition: max-height 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease, padding 0.4s ease, color 0.4s ease, background-color 0.4s ease; }
+        /* ПЛАВНАЯ ПЛАШКА */
+        .bulk-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 14px; background: rgba(var(--active-accent-rgb), 0.1); backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); font-size: 14px; font-weight: 600; color: var(--active-accent); max-height: 0; opacity: 0; overflow: hidden; border-bottom: 0px solid var(--glass-border); transition: max-height 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease, padding 0.4s ease, color 0.4s ease, background-color 0.4s ease; }
+        .bulk-bar.visible { max-height: 80px; opacity: 1; padding: 12px 14px; border-bottom: 0.5px solid var(--glass-border); }
         .bulk-btn { background: var(--active-accent); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s, background-color 0.4s ease; box-shadow: 0 4px 12px rgba(var(--active-accent-rgb), 0.3); }
         .bulk-btn:active { transform: scale(0.95); opacity: 0.8; }
 
         /* СЕТКА И КАРТОЧКИ */
         .grid { display: flex; flex-wrap: wrap; gap: 12px; padding: 14px; align-items: flex-start; }
         @keyframes scaleInCard { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        
         .card { width: calc(50% - 6px); background: var(--card); border-radius: 20px; overflow: hidden; box-shadow: var(--glass-shadow); display: flex; flex-direction: column; border: 0.5px solid var(--glass-border); transform: translateZ(0); opacity: 0; transition: transform 0.2s; }
         .card.show { opacity: 1; }
         .card:active { transform: scale(0.97); }
         
         .img-wrap { position: relative; width: 100%; height: 185px; background: var(--bg-base); cursor: pointer; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); z-index: 2; position: relative; }
+        .skeleton-loader { position: absolute; inset: 0; background: linear-gradient(90deg, var(--skeleton-a) 25%, var(--skeleton-b) 50%, var(--skeleton-a) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite linear; z-index: 1; }
+        .img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); z-index: 2; position: relative; }
         .card:hover .img-wrap img { transform: scale(1.05); }
+        
         .placeholder-img { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg-base); color: var(--subtext); z-index: 2; position: relative; }
         .placeholder-img svg { width: 40px; height: 40px; opacity: 0.3; }
         .cat-pill { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); backdrop-filter: blur(12px) saturate(180%); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; z-index: 3; }
         
-        /* КАРТОЧКА: ИНФОРМАЦИЯ И ТРОЕТОЧИЕ */
+        /* КАРТОЧКА: ИНФОРМАЦИЯ */
         .card-body { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; cursor: pointer; background: var(--card); overflow: hidden; }
         .card-title { font-weight: 600; font-size: 15px; line-height: 1.25; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
         .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; overflow: hidden; width: 100%; font-weight: 500; white-space: nowrap; }
         .card-meta span.meta-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; flex: 1; }
         .color-dot { width: 16px; height: 16px; flex: 0 0 16px; border-radius: 50%; display: block; box-shadow: inset 0 0 0 1px var(--circle-border), 0 2px 4px rgba(0,0,0,0.1); background-clip: padding-box; transform: translateZ(0); }
         
-        /* КНОПКИ ДЕЙСТВИЙ (CAPS, 2 СТРОКИ, СТИЛИ iOS) */
+        /* КНОПКИ ДЕЙСТВИЙ (ОДНА СТРОКА CAPS) */
         .move-bar { display: flex; border-top: 0.5px solid var(--glass-border); background: var(--input-bg); }
         .move-btn { 
-            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            padding: 10px 4px; font-size: 11px; font-weight: 800; border: none; background: transparent; 
+            flex: 1; display: flex; align-items: center; justify-content: center; 
+            padding: 14px 4px; font-size: 11px; font-weight: 800; border: none; background: transparent; 
             cursor: pointer; border-right: 0.5px solid var(--glass-border); transition: background 0.2s ease, transform 0.1s; 
-            text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.2; text-align: center;
+            text-transform: uppercase; letter-spacing: 0.8px; white-space: nowrap;
         }
         .move-btn:last-child { border-right: none; }
         .move-btn:active { background: rgba(0,0,0,0.05); transform: scale(0.96); }
@@ -213,7 +202,7 @@
         .view-title { font-size: 24px; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; letter-spacing: -0.5px; }
         .view-tags { display: flex; gap: 8px; flex-wrap: wrap; }
         .view-tag { background: var(--input-bg); backdrop-filter: blur(12px); color: var(--text); font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: 10px; border: 0.5px solid var(--glass-border); display: flex; align-items: center; gap: 6px; }
-        .view-details { background: var(--input-bg); border: 0.5px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+        .view-details { background: var(--input-bg); border: 0.5px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
         .detail-row { display: flex; justify-content: space-between; font-size: 15px; }
         .detail-label { color: var(--subtext); font-weight: 500; }
         .detail-value { color: var(--text); font-weight: 600; text-align: right; }
@@ -222,9 +211,9 @@
         .btn-edit-mode:active, .btn-gen-all:active { transform: scale(0.96); opacity: 0.9; }
 
         .modal-top { padding: 16px 20px; flex-shrink: 0; background: transparent; border-bottom: 0.5px solid var(--glass-border); }
-        .photo-preview-box { width: 100%; height: 160px; border-radius: 16px; background: var(--input-bg); border: 1.5px dashed rgba(var(--active-accent-rgb), 0.4); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; z-index: 2; position: relative; }
-        .photo-placeholder { color: var(--active-accent); font-size: 14px; font-weight: 600; display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 100%; height: 100%; justify-content: center; z-index: 2; position: relative; }
+        .photo-preview-box { width: 100%; height: 160px; border-radius: 16px; background: var(--input-bg); border: 1.5px dashed rgba(var(--active-accent-rgb), 0.4); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; transition: 0.3s ease; }
+        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
+        .photo-placeholder { color: var(--active-accent); font-size: 14px; font-weight: 600; text-align: center; cursor: pointer; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.2s; }
         .photo-placeholder svg { width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.8; }
         .btn-change-photo { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; backdrop-filter: blur(15px); cursor: pointer; display: flex; align-items: center; gap: 6px; z-index: 3;}
 
@@ -235,7 +224,7 @@
         .field input:focus { border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.2); }
 
         .color-controls { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
-        .color-circle { width: 44px; height: 44px; border-radius: 22px; flex-shrink: 0; position: relative; overflow: hidden; border: 2.5px solid var(--circle-border); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .color-circle { width: 44px; height: 44px; flex-shrink: 0; position: relative; overflow: hidden; border: 2.5px solid var(--circle-border); box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 22px; }
         .color-circle input[type="color"] { position: absolute; top: -10px; left: -10px; width: 64px; height: 64px; opacity: 0; cursor: pointer; }
         .btn-color-action { background: var(--input-bg); color: var(--text); border: 0.5px solid var(--glass-border); border-radius: 12px; padding: 12px 16px; font-size: 13px; cursor: pointer; font-weight: 600; transition: 0.2s; }
         .btn-color-action:active { transform: scale(0.95); opacity: 0.8; }
@@ -249,7 +238,7 @@
         .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(28,28,30,0.85); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; font-weight: 600; backdrop-filter: blur(15px); border: 0.5px solid rgba(255,255,255,0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         .empty { width: 100%; text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 15px; font-weight: 500; display: none; }
 
-        /* GENERATOR */
+        /* ГЕНЕРАТОР ОБРАЗОВ */
         .gen-header-options { padding: 10px 20px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid var(--glass-border); }
         .gen-scroll-area { padding: 20px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 16px; overscroll-behavior: contain; }
         .gen-slot { background: var(--card); border-radius: 20px; display: flex; align-items: center; padding: 14px; border: 0.5px solid var(--glass-border); box-shadow: var(--glass-shadow); position: relative; }
@@ -269,13 +258,13 @@
         .toggle-container { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; }
         .toggle-switch { position: relative; width: 50px; height: 30px; display: inline-block; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #e5e5ea; transition: .3s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 30px; border: 1px solid rgba(0,0,0,0.1); }
+        .toggle-slider { position: absolute; cursor: pointer; inset: 0; background-color: #e5e5ea; transition: .3s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 30px; border: 1px solid rgba(0,0,0,0.1); }
         body.dark-theme .toggle-slider { background-color: #39393d; border-color: rgba(255,255,255,0.1); }
         .toggle-slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 1px; bottom: 1px; background-color: white; transition: .3s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .toggle-switch input:checked + .toggle-slider { background-color: #34c759; border-color: transparent; }
         .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
 
-        /* VIEWER */
+        /* ИСПРАВЛЕННЫЙ ПОЛНОЭКРАННЫЙ ZOOM */
         #imageViewer { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 999; flex-direction: column; transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.4s; overscroll-behavior: none; }
         #imageViewer.active { visibility: visible; opacity: 1; pointer-events: auto; }
         .viewer-header { height: 70px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; background: linear-gradient(rgba(0,0,0,0.3), transparent); z-index: 1001; }
@@ -284,7 +273,7 @@
         .viewer-img-container { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; touch-action: none; }
         .viewer-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: 50% 50%; transition: transform 0.1s linear, opacity 0.3s; opacity: 0; }
 
-        /* CONFIRM */
+        /* ОКНО ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ */
         #confirmDialog { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: var(--overlay); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 300; align-items: center; justify-content: center; transition: opacity 0.3s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.3s; overscroll-behavior: none; }
         #confirmDialog.active { visibility: visible; opacity: 1; pointer-events: auto; }
         .confirm-box { background: var(--bg-base); border: 0.5px solid var(--glass-border); padding: 28px; border-radius: 20px; width: 300px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
@@ -303,7 +292,7 @@
         </svg>
         <div class="splash-title">Мой Гардероб</div>
         <div class="splash-progress-container"><div class="splash-progress-bar" id="splashProgressBar"></div></div>
-        <div class="splash-version">4.2 Pro</div>
+        <div class="splash-version">Версия 4.2 Pro</div>
     </div>
 
     <!-- ПОЛНОЭКРАННЫЙ VIEWER -->
@@ -508,9 +497,10 @@
         var CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
         
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
+        
+        // Синхронизация с Telegram theme (Дублируется здесь для страховки)
         var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-        if (tg) tg.expand();
-        if (tg && tg.colorScheme === 'dark') document.body.classList.add('dark-theme');
+        if (tg && tg.colorScheme === 'dark') document.documentElement.classList.add('dark-theme');
 
         var myTgId = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "default_user";
         var CACHE_KEY = "wardrobe_v42_" + myTgId;
@@ -603,45 +593,51 @@
             } catch(e) {}
             
             updateProgress(60);
+            
+            // Тегируем первые 6 элементов каждого таба для приоритетной загрузки
+            var countIN = 0, countWASH = 0, countDRY = 0;
+            items.forEach(function(item) {
+                if (item.status === 'IN_CLOSET' && countIN < 6) { item.isPriority = true; countIN++; }
+                else if (item.status === 'WASHING' && countWASH < 6) { item.isPriority = true; countWASH++; }
+                else if (item.status === 'DRYING' && countDRY < 6) { item.isPriority = true; countDRY++; }
+                else { item.isPriority = false; }
+            });
+
             initGrid(); 
             
-            await preloadImagesAcrossTabs();
+            await preloadPriorityImages();
             updateProgress(100);
             
             setTimeout(function() {
                 var splash = document.getElementById('splashScreen');
                 if(splash) {
                     splash.style.opacity = '0';
-                    splash.style.visibility = 'hidden';
+                    setTimeout(() => splash.style.display = 'none', 500);
+                    document.getElementById('mainWrapper').style.opacity = '1';
+                    document.getElementById('mainWrapper').style.pointerEvents = 'auto';
                 }
             }, 300);
         }
 
-        function preloadImagesAcrossTabs() {
+        function preloadPriorityImages() {
             return new Promise(resolve => {
-                const closet = items.filter(i => i.status === 'IN_CLOSET').slice(0, 5);
-                const washing = items.filter(i => i.status === 'WASHING').slice(0, 5);
-                const drying = items.filter(i => i.status === 'DRYING').slice(0, 5);
-                
-                const toLoad = [...closet, ...washing, ...drying].map(i => i.photo).filter(Boolean);
-                if(toLoad.length === 0) return resolve();
+                var priorityImgs = Array.from(document.querySelectorAll('.priority-img'));
+                if(priorityImgs.length === 0) return resolve();
                 
                 let loaded = 0;
                 let isDone = false;
                 const check = () => {
                     if(isDone) return;
                     loaded++;
-                    updateProgress(60 + (loaded / toLoad.length) * 40);
-                    if(loaded >= toLoad.length) { isDone = true; resolve(); }
+                    updateProgress(60 + (loaded / priorityImgs.length) * 40);
+                    if(loaded >= priorityImgs.length) { isDone = true; resolve(); }
                 };
                 
-                setTimeout(() => { if(!isDone) { isDone = true; resolve(); } }, 4000); 
+                setTimeout(() => { if(!isDone) { isDone = true; resolve(); } }, 6000); // Тайм-аут
 
-                toLoad.forEach(src => {
-                    const img = new Image();
-                    img.onload = check;
-                    img.onerror = check;
-                    img.src = src.replace('sz=w1000', 'sz=w400');
+                priorityImgs.forEach(img => {
+                    if (img.complete && img.naturalHeight !== 0) check();
+                    else { img.addEventListener('load', check); img.addEventListener('error', check); }
                 });
             });
         }
@@ -764,11 +760,11 @@
 
         function generateMoveButtons(id, status) {
             if (status === 'IN_CLOSET') {
-                return `<button class="move-btn to-washing" onclick="moveItem('${id}', 'WASHING', event)">В<br>СТИРКУ</button><button class="move-btn to-drying" onclick="moveItem('${id}', 'DRYING', event)">НА<br>СУШИЛКУ</button>`;
+                return `<button class="move-btn to-washing" onclick="moveItem('${id}', 'WASHING', event)">В СТИРКУ</button><button class="move-btn to-drying" onclick="moveItem('${id}', 'DRYING', event)">НА СУШИЛКУ</button>`;
             } else if (status === 'WASHING') {
-                return `<button class="move-btn to-closet" onclick="moveItem('${id}', 'IN_CLOSET', event)">В<br>ШКАФ</button><button class="move-btn to-drying" onclick="moveItem('${id}', 'DRYING', event)">НА<br>СУШИЛКУ</button>`;
+                return `<button class="move-btn to-closet" onclick="moveItem('${id}', 'IN_CLOSET', event)">В ШКАФ</button><button class="move-btn to-drying" onclick="moveItem('${id}', 'DRYING', event)">НА СУШИЛКУ</button>`;
             } else {
-                return `<button class="move-btn to-washing" onclick="moveItem('${id}', 'WASHING', event)">В<br>СТИРКУ</button><button class="move-btn to-closet" onclick="moveItem('${id}', 'IN_CLOSET', event)">В<br>ШКАФ</button>`;
+                return `<button class="move-btn to-washing" onclick="moveItem('${id}', 'WASHING', event)">В СТИРКУ</button><button class="move-btn to-closet" onclick="moveItem('${id}', 'IN_CLOSET', event)">В ШКАФ</button>`;
             }
         }
 
@@ -812,7 +808,11 @@
                 var searchStr = (safeName + " " + safeBrand + " " + safeCat).replace(/"/g, '&quot;');
                 
                 var moveButtons = generateMoveButtons(item.id, item.status);
-                var imgContent = item.photo ? `<img src="${item.photo.replace('sz=w1000', 'sz=w400')}" loading="lazy">` : `<div class="placeholder-img">${NO_PHOTO_SVG}</div>`;
+                var isPriority = item.isPriority;
+                var lazyAttr = isPriority ? '' : 'loading="lazy"';
+                var imgClass = isPriority ? 'priority-img' : '';
+                
+                var imgContent = item.photo ? `<div class="skeleton-loader"></div><img src="${item.photo.replace('sz=w1000', 'sz=w400')}" class="${imgClass}" ${lazyAttr} onload="this.style.opacity=1; this.previousElementSibling.style.display='none';">` : `<div class="placeholder-img">${NO_PHOTO_SVG}</div>`;
                 var metaLabel = (item.brand || '') + (item.brand && colorObj.text ? ' ' : '') + colorObj.text;
 
                 htmlResult += `<div class="card card-item show" id="card-${item.id}" data-status="${item.status}" data-category="${safeCat}" data-search="${searchStr}" data-name="${safeName}" data-brand="${safeBrand}">` +
@@ -831,8 +831,6 @@
             var visibleCount = 0; 
             var filteredCards = [];
             
-            var frag = document.createDocumentFragment();
-            
             cards.forEach(function(card) {
                 var st = card.getAttribute('data-status');
                 var c = card.getAttribute('data-category');
@@ -846,7 +844,6 @@
                 } else { 
                     card.style.display = 'none'; 
                     card.classList.remove('show');
-                    frag.appendChild(card);
                 }
             });
             
@@ -863,24 +860,15 @@
             filteredCards.forEach(function(item, index) {
                 item.elem.style.display = 'flex';
                 item.elem.style.order = index;
-                frag.appendChild(item.elem);
+                
+                if (animate) {
+                    item.elem.style.animation = 'none';
+                    void item.elem.offsetWidth; // Force Reflow
+                    item.elem.style.animation = 'scaleInCard 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards';
+                    item.elem.style.animationDelay = (index * 0.025) + 's';
+                }
+                item.elem.classList.add('show');
             });
-            
-            document.getElementById('grid').appendChild(frag);
-            
-            if (animate) {
-                requestAnimationFrame(function() {
-                    filteredCards.forEach(function(item, index) {
-                        item.elem.style.animation = 'none';
-                        void item.elem.offsetWidth; // Force Reflow
-                        item.elem.style.animation = 'scaleInCard 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards';
-                        item.elem.style.animationDelay = (index * 0.025) + 's';
-                        item.elem.classList.add('show');
-                    });
-                });
-            } else {
-                filteredCards.forEach(function(item) { item.elem.classList.add('show'); });
-            }
             
             document.getElementById('emptyState').style.display = (visibleCount === 0) ? 'block' : 'none';
         };
@@ -889,8 +877,8 @@
             if (tg) tg.HapticFeedback.impactOccurred('light');
             if (currentTab === tab) return;
             
+            // 4. Плавное исчезновение плашки (не мгновенное)
             const bulkBar = document.getElementById('bulkBar');
-            // Убираем класс .visible, запускаем плавное исчезновение с анимацией цвета
             bulkBar.classList.remove('visible');
 
             var tabs = document.querySelectorAll('.tab');
@@ -1266,8 +1254,16 @@
 
                 document.getElementById('fName').value = item.name || "";
                 document.getElementById('fRole').value = pCat.role;
+                
+                var roleLabels = {"UNASSIGNED":"Без роли","TOP":"Верх (База)","OUTER":"Верх (Второй слой)","BOTTOM":"Низ","SHOES":"Обувь","ACCESSORY":"Аксессуары"};
+                document.getElementById('fRoleText').innerText = roleLabels[pCat.role] || "Без роли";
+                
                 document.getElementById('fCategory').value = pCat.name;
                 document.getElementById('fStatus').value = item.status || "IN_CLOSET";
+                
+                var statusLabels = {"IN_CLOSET":"В шкафу","WASHING":"В стирке","DRYING":"На сушилке"};
+                document.getElementById('fStatusText').innerText = statusLabels[item.status] || "В шкафу";
+                
                 document.getElementById('fBrand').value = item.brand || "";
                 document.getElementById('fNotes').value = item.notes || "";
                 
@@ -1303,8 +1299,13 @@
                 document.getElementById('modalTitle').innerText = "Добавление вещи";
                 document.getElementById('fName').value = ""; 
                 document.getElementById('fRole').value = "UNASSIGNED"; 
+                document.getElementById('fRoleText').innerText = "Без роли";
                 document.getElementById('fCategory').value = ""; 
                 document.getElementById('fStatus').value = currentTab; 
+                
+                var statusLabels = {"IN_CLOSET":"В шкафу","WASHING":"В стирке","DRYING":"На сушилке"};
+                document.getElementById('fStatusText').innerText = statusLabels[currentTab] || "В шкафу";
+                
                 document.getElementById('fBrand').value = ""; 
                 document.getElementById('fColorText').value = ""; 
                 document.getElementById('fNotes').value = "";
