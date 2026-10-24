@@ -120,10 +120,17 @@
         .tab.active { opacity: 1; font-weight: 600; color: var(--text); }
         .badge-count { display: inline-flex; align-items: center; justify-content: center; padding: 2px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px; background: rgba(var(--active-accent-rgb), 0.15); color: var(--text); flex-shrink: 0; font-weight: 700; transition: background 0.3s; }
 
-        /* BULK BAR */
-        .bulk-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 14px; background: rgba(var(--active-accent-rgb), 0.1); backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); font-size: 14px; font-weight: 600; color: var(--active-accent); max-height: 0; opacity: 0; overflow: hidden; border-bottom: 0px solid var(--glass-border); transition: max-height 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease, padding 0.4s ease; }
-        .bulk-bar.visible { max-height: 80px; opacity: 1; padding: 12px 14px; border-bottom: 0.5px solid var(--glass-border); }
-        .bulk-btn { background: var(--active-accent); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s; box-shadow: 0 4px 12px rgba(var(--active-accent-rgb), 0.3); }
+        /* BULK BAR (ПЛАВНАЯ АНИМАЦИЯ) */
+        .bulk-bar { 
+            display: flex; justify-content: space-between; align-items: center; padding: 0 14px; 
+            background: rgba(var(--active-accent-rgb), 0.1); backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); 
+            font-size: 14px; font-weight: 600; color: var(--active-accent); 
+            max-height: 0; opacity: 0; overflow: hidden; border-bottom: 0px solid var(--glass-border); 
+            /* Плавное, но быстрое исчезновение с сохранением анимации цвета */
+            transition: max-height 0.2s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.15s ease, padding 0.2s ease, color 0.4s ease, background-color 0.4s ease; 
+        }
+        .bulk-bar.visible { max-height: 80px; opacity: 1; padding: 12px 14px; border-bottom: 0.5px solid var(--glass-border); transition: max-height 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s ease, padding 0.4s ease, color 0.4s ease, background-color 0.4s ease; }
+        .bulk-btn { background: var(--active-accent); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s, background-color 0.4s ease; box-shadow: 0 4px 12px rgba(var(--active-accent-rgb), 0.3); }
         .bulk-btn:active { transform: scale(0.95); opacity: 0.8; }
 
         /* СЕТКА И КАРТОЧКИ */
@@ -140,19 +147,20 @@
         .placeholder-img svg { width: 40px; height: 40px; opacity: 0.3; }
         .cat-pill { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); backdrop-filter: blur(12px) saturate(180%); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; z-index: 3; }
         
-        .card-body { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; cursor: pointer; background: var(--card); }
+        /* КАРТОЧКА: ИНФОРМАЦИЯ И ТРОЕТОЧИЕ */
+        .card-body { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; cursor: pointer; background: var(--card); overflow: hidden; }
         .card-title { font-weight: 600; font-size: 15px; line-height: 1.25; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
-        .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; overflow: hidden; width: 100%; font-weight: 500; }
-        .card-meta span.meta-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+        .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; overflow: hidden; width: 100%; font-weight: 500; white-space: nowrap; }
+        .card-meta span.meta-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; flex: 1; }
         .color-dot { width: 16px; height: 16px; flex: 0 0 16px; border-radius: 50%; display: block; box-shadow: inset 0 0 0 1px var(--circle-border), 0 2px 4px rgba(0,0,0,0.1); background-clip: padding-box; transform: translateZ(0); }
         
-        /* КНОПКИ ДЕЙСТВИЙ (CAPS, 1 СТРОКА, СТИЛИ iOS) */
+        /* КНОПКИ ДЕЙСТВИЙ (CAPS, 2 СТРОКИ, СТИЛИ iOS) */
         .move-bar { display: flex; border-top: 0.5px solid var(--glass-border); background: var(--input-bg); }
         .move-btn { 
-            flex: 1; display: flex; align-items: center; justify-content: center; 
-            padding: 14px 6px; font-size: 11px; font-weight: 800; border: none; background: transparent; 
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            padding: 10px 4px; font-size: 11px; font-weight: 800; border: none; background: transparent; 
             cursor: pointer; border-right: 0.5px solid var(--glass-border); transition: background 0.2s ease, transform 0.1s; 
-            text-transform: uppercase; letter-spacing: 0.8px; white-space: nowrap;
+            text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.2; text-align: center;
         }
         .move-btn:last-child { border-right: none; }
         .move-btn:active { background: rgba(0,0,0,0.05); transform: scale(0.96); }
@@ -165,7 +173,6 @@
         .fab:active { transform: scale(0.9); }
         .fab-add { bottom: 24px; } .fab-add svg { width: 26px; height: 26px; stroke-width: 2.2; }
         .fab-gen { bottom: 94px; } .fab-gen svg { width: 24px; height: 24px; stroke-width: 2.2; fill: currentColor; }
-        body.modal-open .fab { opacity: 0; transform: scale(0.8) translateY(20px); pointer-events: none; }
 
         /* ВСПЛЫВАЮЩИЕ ШТОРКИ */
         #bottomSheet { z-index: 220; }
@@ -206,7 +213,7 @@
         .view-title { font-size: 24px; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; letter-spacing: -0.5px; }
         .view-tags { display: flex; gap: 8px; flex-wrap: wrap; }
         .view-tag { background: var(--input-bg); backdrop-filter: blur(12px); color: var(--text); font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: 10px; border: 0.5px solid var(--glass-border); display: flex; align-items: center; gap: 6px; }
-        .view-details { background: var(--input-bg); border: 0.5px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+        .view-details { background: var(--input-bg); border: 0.5px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
         .detail-row { display: flex; justify-content: space-between; font-size: 15px; }
         .detail-label { color: var(--subtext); font-weight: 500; }
         .detail-value { color: var(--text); font-weight: 600; text-align: right; }
@@ -214,18 +221,18 @@
         .btn-edit-mode, .btn-gen-all { background: var(--active-accent); color: #fff; border: none; padding: 16px; border-radius: 14px; font-weight: 600; font-size: 17px; cursor: pointer; width: 100%; transition: 0.2s; box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.3); display: flex; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; }
         .btn-edit-mode:active, .btn-gen-all:active { transform: scale(0.96); opacity: 0.9; }
 
-        .modal-top { padding: 16px 20px; flex-shrink: 0; background: transparent; z-index: 10; border-bottom: 0.5px solid var(--glass-border); }
-        .photo-preview-box { width: 100%; height: 160px; border-radius: 16px; background: var(--input-bg); border: 1.5px dashed rgba(var(--active-accent-rgb), 0.4); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; transition: 0.3s ease; }
-        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
-        .photo-placeholder { color: var(--active-accent); font-size: 14px; font-weight: 600; text-align: center; cursor: pointer; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.2s; }
+        .modal-top { padding: 16px 20px; flex-shrink: 0; background: transparent; border-bottom: 0.5px solid var(--glass-border); }
+        .photo-preview-box { width: 100%; height: 160px; border-radius: 16px; background: var(--input-bg); border: 1.5px dashed rgba(var(--active-accent-rgb), 0.4); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; z-index: 2; position: relative; }
+        .photo-placeholder { color: var(--active-accent); font-size: 14px; font-weight: 600; display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 100%; height: 100%; justify-content: center; z-index: 2; position: relative; }
         .photo-placeholder svg { width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.8; }
-        .btn-change-photo { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; backdrop-filter: blur(15px); cursor: pointer; display: flex; align-items: center; gap: 6px; border: none; }
+        .btn-change-photo { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; backdrop-filter: blur(15px); cursor: pointer; display: flex; align-items: center; gap: 6px; z-index: 3;}
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .field { display: flex; flex-direction: column; gap: 6px; }
         .field label { font-size: 11px; font-weight: 600; color: var(--subtext); text-transform: uppercase; margin-left: 4px; }
-        .field input, .field select { padding: 14px 16px; border: 0.5px solid var(--glass-border); border-radius: 14px; font-size: 15px; font-weight: 500; background: var(--input-bg); color: var(--text); outline: none; width: 100%; transition: 0.3s; }
-        .field input:focus, .field select:focus { border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.2); }
+        .field input { padding: 14px 16px; border: 0.5px solid var(--glass-border); border-radius: 14px; font-size: 15px; font-weight: 500; background: var(--input-bg); color: var(--text); outline: none; width: 100%; transition: 0.3s; }
+        .field input:focus { border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.2); }
 
         .color-controls { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
         .color-circle { width: 44px; height: 44px; border-radius: 22px; flex-shrink: 0; position: relative; overflow: hidden; border: 2.5px solid var(--circle-border); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
@@ -242,7 +249,7 @@
         .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(28,28,30,0.85); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; font-weight: 600; backdrop-filter: blur(15px); border: 0.5px solid rgba(255,255,255,0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         .empty { width: 100%; text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 15px; font-weight: 500; display: none; }
 
-        /* ГЕНЕРАТОР ОБРАЗОВ */
+        /* GENERATOR */
         .gen-header-options { padding: 10px 20px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid var(--glass-border); }
         .gen-scroll-area { padding: 20px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 16px; overscroll-behavior: contain; }
         .gen-slot { background: var(--card); border-radius: 20px; display: flex; align-items: center; padding: 14px; border: 0.5px solid var(--glass-border); box-shadow: var(--glass-shadow); position: relative; }
@@ -251,7 +258,8 @@
         .gen-img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.3s; z-index: 2; position: relative; }
         .gen-info { flex-grow: 1; padding: 0 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; cursor: pointer; }
         .gen-item-title { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px; }
-        .gen-item-meta { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--subtext); font-weight: 500; }
+        .gen-item-meta { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--subtext); font-weight: 500; white-space: nowrap; }
+        .gen-item-meta span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; flex: 1; }
         .gen-actions { display: flex; flex-direction: column; gap: 10px; }
         .gen-btn { width: 36px; height: 36px; border-radius: 18px; border: 0.5px solid var(--glass-border); display: flex; align-items: center; justify-content: center; background: var(--bg-base); color: var(--text); cursor: pointer; transition: 0.2s; border: none; }
         .gen-btn.locked { background: var(--active-accent); color: #fff; }
@@ -267,8 +275,8 @@
         .toggle-switch input:checked + .toggle-slider { background-color: #34c759; border-color: transparent; }
         .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
 
-        /* ИСПРАВЛЕННЫЙ ПОЛНОЭКРАННЫЙ ZOOM */
-        #imageViewer { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 999; flex-direction: column; transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.4s; overscroll-behavior: none; }
+        /* VIEWER */
+        #imageViewer { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 999; flex-direction: column; transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.4s; overscroll-behavior: none; }
         #imageViewer.active { visibility: visible; opacity: 1; pointer-events: auto; }
         .viewer-header { height: 70px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; background: linear-gradient(rgba(0,0,0,0.3), transparent); z-index: 1001; }
         .viewer-close { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 10px 20px; border-radius: 14px; font-size: 15px; cursor: pointer; font-weight: 600; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1); }
@@ -276,7 +284,7 @@
         .viewer-img-container { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; touch-action: none; }
         .viewer-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: 50% 50%; transition: transform 0.1s linear, opacity 0.3s; opacity: 0; }
 
-        /* ОКНО ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ */
+        /* CONFIRM */
         #confirmDialog { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: var(--overlay); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 300; align-items: center; justify-content: center; transition: opacity 0.3s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.3s; overscroll-behavior: none; }
         #confirmDialog.active { visibility: visible; opacity: 1; pointer-events: auto; }
         .confirm-box { background: var(--bg-base); border: 0.5px solid var(--glass-border); padding: 28px; border-radius: 20px; width: 300px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
@@ -288,14 +296,14 @@
 </head>
 <body class="tab-IN_CLOSET">
 
-    <!-- ЗАСТАВКА 4.1 Pro -->
+    <!-- ЗАСТАВКА 4.2 Pro -->
     <div id="splashScreen">
         <svg class="splash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
         </svg>
         <div class="splash-title">Мой Гардероб</div>
         <div class="splash-progress-container"><div class="splash-progress-bar" id="splashProgressBar"></div></div>
-        <div class="splash-version">Версия 4.1 Pro</div>
+        <div class="splash-version">Версия 4.2 Pro</div>
     </div>
 
     <!-- ПОЛНОЭКРАННЫЙ VIEWER -->
@@ -505,7 +513,7 @@
         if (tg && tg.colorScheme === 'dark') document.body.classList.add('dark-theme');
 
         var myTgId = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "default_user";
-        var CACHE_KEY = "wardrobe_v41_" + myTgId;
+        var CACHE_KEY = "wardrobe_v42_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var currentCat = "ALL";
@@ -729,11 +737,15 @@
         function parseColorField(colorStr) {
             if (!colorStr) return { text: "", dot: "", hex1: "#ffffff", hex2: "#ffffff", hasCustom: false, isColor2Active: false };
             var parts = colorStr.split("||");
-            var text = parts[0] || ""; var h1 = parts[1]; var h2 = parts[2];
+            // Исключаем сырые HEX-теги, случайно попавшие в текст (например, из-за старых багов)
+            var text = (parts[0] || "").replace(/\|\|.*/g, "").trim(); 
+            var h1 = parts[1]; var h2 = parts[2];
             var bgStyle = ""; var isTwo = (h1 && h2 && h1 !== h2);
+            
             if (isTwo) bgStyle = "background: linear-gradient(135deg, " + h1 + " 50%, " + h2 + " 50%)";
             else if (h1) bgStyle = "background: " + h1;
             else { var clean = text.toLowerCase().trim().replace(/ё/g, "е"); if (COLOR_MAP[clean]) bgStyle = "background: " + COLOR_MAP[clean]; }
+            
             var dotHtml = bgStyle ? '<div class="color-dot" style="' + bgStyle + '"></div>' : '';
             return { text: text, dot: dotHtml, hex1: h1 || "#ffffff", hex2: h2 || "#ffffff", hasCustom: !!h1, isColor2Active: isTwo, style: bgStyle };
         }
@@ -752,11 +764,11 @@
 
         function generateMoveButtons(id, status) {
             if (status === 'IN_CLOSET') {
-                return `<button class="move-btn to-washing" onclick="moveItem('${id}', 'WASHING', event)">В СТИРКУ</button><button class="move-btn to-drying" onclick="moveItem('${id}', 'DRYING', event)">НА СУШИЛКУ</button>`;
+                return `<button class="move-btn to-washing" onclick="moveItem('${id}', 'WASHING', event)">В<br>СТИРКУ</button><button class="move-btn to-drying" onclick="moveItem('${id}', 'DRYING', event)">НА<br>СУШИЛКУ</button>`;
             } else if (status === 'WASHING') {
-                return `<button class="move-btn to-closet" onclick="moveItem('${id}', 'IN_CLOSET', event)">В ШКАФ</button><button class="move-btn to-drying" onclick="moveItem('${id}', 'DRYING', event)">НА СУШИЛКУ</button>`;
+                return `<button class="move-btn to-closet" onclick="moveItem('${id}', 'IN_CLOSET', event)">В<br>ШКАФ</button><button class="move-btn to-drying" onclick="moveItem('${id}', 'DRYING', event)">НА<br>СУШИЛКУ</button>`;
             } else {
-                return `<button class="move-btn to-washing" onclick="moveItem('${id}', 'WASHING', event)">В СТИРКУ</button><button class="move-btn to-closet" onclick="moveItem('${id}', 'IN_CLOSET', event)">В ШКАФ</button>`;
+                return `<button class="move-btn to-washing" onclick="moveItem('${id}', 'WASHING', event)">В<br>СТИРКУ</button><button class="move-btn to-closet" onclick="moveItem('${id}', 'IN_CLOSET', event)">В<br>ШКАФ</button>`;
             }
         }
 
@@ -801,10 +813,11 @@
                 
                 var moveButtons = generateMoveButtons(item.id, item.status);
                 var imgContent = item.photo ? `<img src="${item.photo.replace('sz=w1000', 'sz=w400')}" loading="lazy">` : `<div class="placeholder-img">${NO_PHOTO_SVG}</div>`;
+                var metaLabel = (item.brand || '') + (item.brand && colorObj.text ? ' ' : '') + colorObj.text;
 
                 htmlResult += `<div class="card card-item show" id="card-${item.id}" data-status="${item.status}" data-category="${safeCat}" data-search="${searchStr}" data-name="${safeName}" data-brand="${safeBrand}">` +
                             `<div class="img-wrap" onclick="openModal('${item.id}')">${imgContent}<span class="cat-pill">${pCat.name || 'Без категории'}</span></div>` +
-                            `<div class="card-body" onclick="openModal('${item.id}')"><div class="card-title">${item.name || 'Без названия'}</div><div class="card-meta">${colorObj.dot}<span>${item.brand || ''} ${item.color || ''}</span></div></div>` +
+                            `<div class="card-body" onclick="openModal('${item.id}')"><div class="card-title">${item.name || 'Без названия'}</div><div class="card-meta">${colorObj.dot}<span class="meta-text">${metaLabel}</span></div></div>` +
                             `<div class="move-bar">${moveButtons}</div></div>`;
             }
             grid.innerHTML = htmlResult;
@@ -877,9 +890,8 @@
             if (currentTab === tab) return;
             
             const bulkBar = document.getElementById('bulkBar');
-            bulkBar.style.transition = 'none';
+            // Убираем класс .visible, запускаем плавное исчезновение с анимацией цвета
             bulkBar.classList.remove('visible');
-            setTimeout(() => { bulkBar.style.transition = ''; }, 50);
 
             var tabs = document.querySelectorAll('.tab');
             tabs.forEach(t => t.classList.remove('active'));
@@ -1157,11 +1169,12 @@
                 if (it) {
                     var cObj = parseColorField(it.color);
                     var photo = it.photo ? (it.photo.indexOf('sz=w1000') !== -1 ? it.photo.replace('sz=w1000', 'sz=w400') : it.photo) : NO_PHOTO_SVG;
+                    var metaLabel = (it.brand || '') + (it.brand && cObj.text ? ' ' : '') + cObj.text;
                     
                     html += '<div class="gen-img-wrap" onclick="openModal(\'' + it.id + '\')"><div class="image-loader" style="display:block;"></div><img src="' + photo + '" class="gen-img" onload="this.style.opacity=1; this.previousElementSibling.style.display=\'none\';"></div>'; 
                     html += '<div class="gen-info" onclick="openModal(\'' + it.id + '\')">'; 
                     html += '<div class="gen-item-title">' + (it.name || 'Без названия') + '</div>'; 
-                    html += '<div class="gen-item-meta">' + cObj.dot + '<span>' + (it.brand || 'Без бренда') + '</span></div>'; 
+                    html += '<div class="gen-item-meta">' + cObj.dot + '<span>' + metaLabel + '</span></div>'; 
                     html += '</div>'; 
                     
                     html += '<div class="gen-actions">'; 
@@ -1230,6 +1243,7 @@
                 
                 var cObj = parseColorField(item.color);
                 var pCat = parseCategoryField(item.category);
+                var metaLabel = (item.brand || '') + (item.brand && cObj.text ? ' ' : '') + cObj.text;
                 
                 document.getElementById('modalTitle').innerText = "Информация о вещи";
                 document.getElementById('viewName').innerText = item.name || "Без названия";
