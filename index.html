@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Мой Гардероб V5</title>
+    <title>Мой Гардероб</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
@@ -19,17 +19,20 @@
     </script>
     <style>
         /* ==========================================================================
-           ПАЛИТРА iOS 27 V5 PRO (УЛУЧШЕННАЯ СВЕТЛАЯ И ТЕМНАЯ ТЕМА)
+           ПАЛИТРА iOS 27 LIQUID GLASS (ВЕРСИЯ 5.0 PRO)
            ========================================================================== */
         :root { 
-            --theme-closet: #ea6c12; --theme-closet-rgb: 234, 108, 18;
-            --theme-washing: #1d9bf0; --theme-washing-rgb: 29, 155, 240;
-            --theme-drying: #9d4edd; --theme-drying-rgb: 157, 78, 221;
+            --theme-closet: #ea6c12;     
+            --theme-closet-rgb: 234, 108, 18;
+            --theme-washing: #1d9bf0; 
+            --theme-washing-rgb: 29, 155, 240;
+            --theme-drying: #9d4edd;     
+            --theme-drying-rgb: 157, 78, 221;
             
             --active-accent: var(--theme-closet); 
             --active-accent-rgb: 234, 108, 18;
 
-            /* Сатиновая светлая тема */
+            /* Светлая тема: воздушная жемчужная шапка, сатиновые карточки без чистого #ffffff */
             --bg-base: #e6e8f0; 
             --card: #f4f5f9;
             --card-elevated: #f8f9fc;
@@ -42,7 +45,7 @@
             --glass-border: rgba(15, 23, 42, 0.07);
             --control-bg: #eaecf4;
             --control-hover: #dfe2ee;
-            --control-border: rgba(15, 23, 42, 0.06);
+            --control-border: rgba(15, 23, 42, 0.07);
             --active-pill-bg: #f8f9fc;
             --active-pill-shadow: 0 3px 10px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
 
@@ -54,15 +57,19 @@
             --skeleton-a: #dfe2ec;
             --skeleton-b: #eef0f7;
             --dot-ring: rgba(15, 23, 42, 0.22);
+            
             --blend-start: #ffffff;
             --blend-end: rgba(255, 255, 255, 0);
         }
 
         @media (prefers-color-scheme: dark) {
             :root { 
-                --theme-closet: #ff9f0a; --theme-closet-rgb: 255, 159, 10;
-                --theme-washing: #5ac8fa; --theme-washing-rgb: 90, 200, 250;
-                --theme-drying: #bf5af2; --theme-drying-rgb: 191, 90, 242;
+                --theme-closet: #ff9f0a; 
+                --theme-closet-rgb: 255, 159, 10;
+                --theme-washing: #5ac8fa; 
+                --theme-washing-rgb: 90, 200, 250;
+                --theme-drying: #bf5af2;
+                --theme-drying-rgb: 191, 90, 242;
                 
                 --active-accent: var(--theme-closet);
                 --active-accent-rgb: 255, 159, 10;
@@ -86,9 +93,11 @@
                 --text: #f2f3f7; 
                 --subtext: #8e93a6; 
                 --overlay: rgba(0, 0, 0, 0.76);
+                
                 --skeleton-a: #1d202b; 
                 --skeleton-b: #282c3a;
                 --dot-ring: rgba(255, 255, 255, 0.34);
+
                 --blend-start: #000000;
                 --blend-end: rgba(0, 0, 0, 0);
             }
@@ -103,11 +112,13 @@
             --card-border: rgba(255, 255, 255, 0.09); --card-inner-shine: inset 0 1px 0 rgba(255, 255, 255, 0.06);
             --card-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.25);
             --header-bg: linear-gradient(180deg, rgba(12, 14, 20, 0.95) 0%, rgba(20, 22, 30, 0.84) 100%);
-            --glass-border: rgba(255, 255, 255, 0.08); --control-bg: rgba(255, 255, 255, 0.08); 
-            --control-hover: rgba(255, 255, 255, 0.13); --control-border: rgba(255, 255, 255, 0.10); 
-            --active-pill-bg: #252836; --active-pill-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --control-bg: rgba(255, 255, 255, 0.08); --control-hover: rgba(255, 255, 255, 0.13);
+            --control-border: rgba(255, 255, 255, 0.10); --active-pill-bg: #252836;
+            --active-pill-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             --text: #f2f3f7; --subtext: #8e93a6; --overlay: rgba(0, 0, 0, 0.76);
-            --skeleton-a: #1d202b; --skeleton-b: #282c3a; --dot-ring: rgba(255, 255, 255, 0.34);
+            --skeleton-a: #1d202b; --skeleton-b: #282c3a;
+            --dot-ring: rgba(255, 255, 255, 0.34);
             --blend-start: #000000; --blend-end: rgba(0, 0, 0, 0);
         }
 
@@ -118,16 +129,25 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            margin: 0; font-family: -apple-system, "SF Pro Display", "SF Pro Text", BlinkMacSystemFont, "Helvetica Neue", sans-serif; 
-            background-color: var(--bg-base); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; letter-spacing: -0.01em;
+            margin: 0; 
+            font-family: -apple-system, "SF Pro Display", "SF Pro Text", BlinkMacSystemFont, "Helvetica Neue", sans-serif; 
+            background-color: var(--bg-base); color: var(--text); overflow-x: hidden; 
+            -webkit-font-smoothing: antialiased; letter-spacing: -0.01em;
         }
 
-        .tg-header-blend { position: fixed; top: 0; left: 0; right: 0; height: calc(env(safe-area-inset-top, 20px) + 30px); background: linear-gradient(to bottom, var(--blend-start) 20%, var(--blend-end) 100%); z-index: 9999; pointer-events: none; }
+        .tg-header-blend {
+            position: fixed; top: 0; left: 0; right: 0; height: 10px;
+            background: linear-gradient(to bottom, var(--blend-start) 0%, var(--blend-end) 100%);
+            z-index: 9999; pointer-events: none;
+        }
 
         #mainWrapper { 
-            opacity: 0; pointer-events: none; max-width: 480px; margin: 0 auto;
+            opacity: 0; pointer-events: none;
+            max-width: 480px; margin: 0 auto;
             background-color: var(--bg-base);
-            background-image: radial-gradient(circle at 8% 12%, rgba(var(--active-accent-rgb), 0.14), transparent 50%), radial-gradient(circle at 92% 95%, rgba(var(--active-accent-rgb), 0.10), transparent 50%);
+            background-image: 
+                radial-gradient(circle at 8% 12%, rgba(var(--active-accent-rgb), 0.14), transparent 50%), 
+                radial-gradient(circle at 92% 95%, rgba(var(--active-accent-rgb), 0.10), transparent 50%);
             background-attachment: fixed; min-height: 100vh; padding-bottom: 108px; transform-origin: 50% 0%; 
             transition: filter 0.42s cubic-bezier(0.22, 1, 0.36, 1), transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
         }
@@ -149,98 +169,209 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes shimmer { 0% { background-position: -200px 0; } 100% { background-position: calc(200px + 100%) 0; } }
 
-        .image-loader { position: absolute; top: 50%; left: 50%; margin-top: -15px; margin-left: -15px; width: 30px; height: 30px; border: 3px solid var(--control-border); border-top-color: var(--active-accent); border-radius: 50%; animation: spin 0.75s linear infinite; z-index: 2; display: none; }
+        .image-loader {
+            position: absolute; top: 50%; left: 50%; margin-top: -15px; margin-left: -15px; width: 30px; height: 30px; 
+            border: 3px solid var(--control-border); border-top-color: var(--active-accent); border-radius: 50%;
+            animation: spin 0.75s linear infinite; z-index: 2; display: none;
+        }
 
-        /* HEADER */
-        .header { background: var(--header-bg); backdrop-filter: blur(var(--blur)) saturate(190%); -webkit-backdrop-filter: blur(var(--blur)) saturate(190%); padding: calc(env(safe-area-inset-top, 20px) + 20px) 14px 12px; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--glass-border); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); }
-        .search-container { display: flex; flex-direction: column; gap: 9px; margin-bottom: 11px; }
+        /* ==========================================================================
+           ШАПКА И ЭЛЕМЕНТЫ УПРАВЛЕНИЯ
+           ========================================================================== */
+        .header { 
+            background: var(--header-bg); 
+            backdrop-filter: blur(var(--blur)) saturate(190%); -webkit-backdrop-filter: blur(var(--blur)) saturate(190%); 
+            padding: 12px 14px 12px; position: sticky; top: 0; z-index: 50; 
+            border-bottom: 1px solid var(--glass-border); 
+            box-shadow: 0 6px 24px rgba(15, 23, 42, 0.04);
+        }
+        .search-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+        
         .search-input-wrap { position: relative; display: flex; align-items: center; width: 100%; }
         .search-icon { position: absolute; left: 13px; width: 16px; height: 16px; color: var(--subtext); pointer-events: none; }
         .search-clear { position: absolute; right: 10px; width: 20px; height: 20px; border-radius: 50%; background: var(--subtext); color: var(--card); border: none; display: none; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; cursor: pointer; padding: 0; opacity: 0.75; }
         .search-clear:active { transform: scale(0.9); }
-        .search-input { width: 100%; padding: 10px 36px; border: 1px solid var(--control-border); border-radius: 13px; font-size: 15px; font-weight: 500; background-color: var(--control-bg); color: var(--text); outline: none; transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1); box-shadow: var(--card-inner-shine); }
+        
+        .search-input { 
+            width: 100%; padding: 10px 36px 10px 36px; 
+            border: 1px solid var(--control-border); border-radius: 13px; 
+            font-size: 15px; font-weight: 500; background-color: var(--control-bg); color: var(--text); 
+            outline: none; transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1); 
+            box-shadow: var(--card-inner-shine);
+        }
         .search-input::placeholder { color: var(--subtext); }
-        .search-input:focus { background-color: var(--card); border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.18); }
+        .search-input:focus { background-color: var(--card-elevated); border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.16); }
+        
         .search-row-inner { display: flex; gap: 8px; }
-        .custom-select { flex: 1; padding: 10px 12px; border: 1px solid var(--control-border); border-radius: 13px; font-size: 14px; font-weight: 600; background-color: var(--control-bg); color: var(--text); display: flex; align-items: center; justify-content: space-between; gap: 6px; cursor: pointer; transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1); white-space: nowrap; overflow: hidden; box-shadow: var(--card-inner-shine); }
+        .custom-select { 
+            flex: 1; padding: 10px 12px; 
+            border: 1px solid var(--control-border); border-radius: 13px; 
+            font-size: 14px; font-weight: 600; background-color: var(--control-bg); color: var(--text); 
+            display: flex; align-items: center; justify-content: space-between; gap: 6px;
+            cursor: pointer; transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1); 
+            white-space: nowrap; overflow: hidden; box-shadow: var(--card-inner-shine);
+        }
         .custom-select:active { transform: scale(0.96); background-color: var(--control-hover); }
         .custom-select-text { overflow: hidden; text-overflow: ellipsis; }
         .custom-select svg { width: 15px; height: 15px; flex-shrink: 0; color: var(--subtext); }
 
-        .tabs { display: flex; position: relative; background: var(--control-bg); border: 1px solid var(--control-border); padding: 3px; border-radius: 12px; }
-        .tab-indicator { position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(33.333% - 2px); background: var(--active-pill-bg); border-radius: 9px; box-shadow: var(--active-pill-shadow); transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1); z-index: 1; }
-        body.tab-IN_CLOSET .tab-indicator { transform: translateX(0); } body.tab-WASHING .tab-indicator { transform: translateX(100%); } body.tab-DRYING .tab-indicator { transform: translateX(200%); }
-        .tab { flex: 1; padding: 7px 4px; font-weight: 600; font-size: 13px; color: var(--subtext); cursor: pointer; position: relative; z-index: 2; transition: color 0.25s ease; display: flex; align-items: center; justify-content: center; white-space: nowrap; user-select: none; }
+        .tabs { 
+            display: flex; position: relative; 
+            background: var(--control-bg); border: 1px solid var(--control-border);
+            padding: 3px; border-radius: 12px; 
+        }
+        .tab-indicator { 
+            position: absolute; top: 3px; bottom: 3px; left: 3px; 
+            width: calc(33.333% - 2px); background: var(--active-pill-bg); 
+            border-radius: 9px; box-shadow: var(--active-pill-shadow);
+            transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1); z-index: 1; 
+        }
+        body.tab-IN_CLOSET #tabIndicator { transform: translateX(0); } 
+        body.tab-WASHING #tabIndicator { transform: translateX(100%); } 
+        body.tab-DRYING #tabIndicator { transform: translateX(200%); }
+        
+        .tab { 
+            flex: 1; padding: 7px 4px; font-weight: 600; font-size: 13px; color: var(--subtext); 
+            cursor: pointer; position: relative; z-index: 2; 
+            transition: color 0.25s ease; display: flex; align-items: center; justify-content: center; 
+            white-space: nowrap; user-select: none;
+        }
         .tab.active { font-weight: 700; color: var(--text); }
-        .badge-count { display: inline-flex; align-items: center; justify-content: center; padding: 2px 6px; border-radius: 99px; font-size: 11px; margin-left: 5px; background: rgba(var(--active-accent-rgb), 0.16); color: var(--active-accent); flex-shrink: 0; font-weight: 800; transition: all 0.3s ease; }
+        .badge-count { 
+            display: inline-flex; align-items: center; justify-content: center; 
+            padding: 2px 6px; border-radius: 99px; font-size: 11px; margin-left: 5px; 
+            background: rgba(var(--active-accent-rgb), 0.16); color: var(--active-accent); 
+            flex-shrink: 0; font-weight: 800; transition: all 0.3s ease; 
+        }
 
-        .bulk-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 14px; background: rgba(var(--active-accent-rgb), 0.12); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); font-size: 14px; font-weight: 700; color: var(--active-accent); max-height: 0; opacity: 0; overflow: hidden; border-bottom: 0px solid var(--glass-border); transition: max-height 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease, padding 0.28s ease, color 0.35s ease, background-color 0.35s ease; }
+        .bulk-bar { 
+            display: flex; justify-content: space-between; align-items: center; padding: 0 14px; 
+            background: rgba(var(--active-accent-rgb), 0.12); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
+            font-size: 14px; font-weight: 700; color: var(--active-accent); 
+            max-height: 0; opacity: 0; overflow: hidden; border-bottom: 0px solid var(--glass-border); 
+            transition: max-height 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease, padding 0.28s ease, color 0.35s ease, background-color 0.35s ease; 
+        }
         .bulk-bar.visible { max-height: 72px; opacity: 1; padding: 11px 14px; border-bottom: 1px solid var(--glass-border); }
-        .bulk-btn { background: var(--active-accent); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.35s ease; box-shadow: 0 4px 12px rgba(var(--active-accent-rgb), 0.3); }
+        .bulk-btn { 
+            background: var(--active-accent); color: #fff; border: none; padding: 8px 14px; 
+            border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; 
+            transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.35s ease; 
+            box-shadow: 0 4px 12px rgba(var(--active-accent-rgb), 0.3); 
+        }
         .bulk-btn:active { transform: scale(0.95); }
 
-        /* GRID */
+        /* ==========================================================================
+           СЕТКА И КАРТОЧКИ (ФИКСИРОВАННАЯ ПРОПОРЦИЯ ОБЛОЖКИ 4 : 4.7)
+           ========================================================================== */
         .grid { display: flex; flex-wrap: wrap; gap: 12px; padding: 14px; align-items: flex-start; }
-        .card { width: calc(50% - 6px); background: var(--card); border-radius: 22px; overflow: hidden; box-shadow: var(--card-shadow), var(--card-inner-shine); display: flex; flex-direction: column; border: 1px solid var(--card-border); transform: translateZ(0); transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1); }
+        
+        .card { 
+            width: calc(50% - 6px); background: var(--card); border-radius: 22px; overflow: hidden; 
+            box-shadow: var(--card-shadow), var(--card-inner-shine); 
+            display: flex; flex-direction: column; border: 1px solid var(--card-border); 
+            transform: translateZ(0); transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1); 
+        }
         .card:active { transform: scale(0.975); }
-        .img-wrap { position: relative; width: 100%; aspect-ratio: 4 / 4.7; background: var(--card-well); cursor: pointer; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 1px solid var(--card-border); }
-        .img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 0.35s ease; z-index: 2; position: relative; pointer-events: none; transform-origin: 50% 50%; }
-        .card:hover .img-wrap img { filter: brightness(0.95); }
+        
+        .img-wrap { 
+            position: relative; width: 100%; aspect-ratio: 4 / 4.7; background: var(--card-well); 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; overflow: hidden; 
+            border-bottom: 1px solid var(--card-border);
+        }
+        .skeleton-loader { position: absolute; inset: 0; background: linear-gradient(90deg, var(--skeleton-a) 25%, var(--skeleton-b) 50%, var(--skeleton-a) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite linear; z-index: 1; }
+        .img-wrap img { 
+            width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; 
+            transition: opacity 0.35s ease; z-index: 2; position: relative; pointer-events: none;
+            transform-origin: 50% 50%;
+        }
+        
         .placeholder-img { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--card-well); color: var(--subtext); z-index: 2; position: relative; }
         .placeholder-img svg { width: 42px; height: 42px; opacity: 0.35; }
-        .cat-pill { position: absolute; top: 10px; left: 10px; background: rgba(18, 20, 28, 0.58); backdrop-filter: blur(12px) saturate(180%); -webkit-backdrop-filter: blur(12px) saturate(180%); border: 0.5px solid rgba(255, 255, 255, 0.22); color: #f5f6fa; padding: 4px 10px; border-radius: 9px; font-size: 11px; font-weight: 700; letter-spacing: 0.02em; z-index: 3; }
+        .cat-pill { 
+            position: absolute; top: 10px; left: 10px; 
+            background: rgba(18, 20, 28, 0.58); backdrop-filter: blur(12px) saturate(180%); -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: 0.5px solid rgba(255, 255, 255, 0.22); color: #f5f6fa; 
+            padding: 4px 10px; border-radius: 9px; font-size: 11px; font-weight: 700; letter-spacing: 0.02em; z-index: 3; 
+        }
+        
         .card-body { padding: 11px 12px 9px; flex-grow: 1; display: flex; flex-direction: column; gap: 5px; cursor: pointer; background: var(--card); overflow: hidden; }
         .card-title { font-weight: 700; font-size: 15px; line-height: 1.22; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; letter-spacing: -0.02em; }
-        .card-meta { font-size: 12.5px; color: var(--subtext); display: flex; align-items: center; gap: 7px; overflow: hidden; width: 100%; font-weight: 600; white-space: nowrap; }
+        .card-meta { font-size: 12.5px; color: var(--subtext); display: flex; align-items: center; gap: 6px; overflow: hidden; width: 100%; font-weight: 600; white-space: nowrap; }
         .card-meta span.meta-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; flex: 1; }
-        .color-dot-svg { width: 16px; height: 16px; min-width: 16px; min-height: 16px; flex: 0 0 16px; display: block; overflow: visible; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.08)); }
+        
+        .color-dot-svg { 
+            width: 16px; height: 16px; min-width: 16px; min-height: 16px; flex: 0 0 16px; 
+            display: block; overflow: visible; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.08));
+        }
         
         .move-bar { display: flex; gap: 7px; padding: 4px 9px 9px; background: var(--card); }
-        .move-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 7px 4px; border-radius: 12px; cursor: pointer; transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), filter 0.18s ease; text-transform: uppercase; white-space: nowrap; line-height: 1.12; }
+        .move-btn { 
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+            padding: 7px 4px; border-radius: 12px; cursor: pointer; 
+            transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), filter 0.18s ease; 
+            text-transform: uppercase; white-space: nowrap; line-height: 1.12;
+        }
         .move-btn span:first-child { font-size: 8.5px; opacity: 0.82; font-weight: 700; letter-spacing: 0.06em; }
         .move-btn span:last-child { font-size: 10.5px; font-weight: 800; letter-spacing: 0.05em; }
         .move-btn:active { transform: scale(0.93); filter: brightness(0.92); }
-        .move-btn.to-closet { color: var(--theme-closet); background: rgba(var(--theme-closet-rgb), 0.12); border: 1px solid rgba(var(--theme-closet-rgb), 0.28); }
-        .move-btn.to-washing { color: var(--theme-washing); background: rgba(var(--theme-washing-rgb), 0.12); border: 1px solid rgba(var(--theme-washing-rgb), 0.28); }
-        .move-btn.to-drying { color: var(--theme-drying); background: rgba(var(--theme-drying-rgb), 0.12); border: 1px solid rgba(var(--theme-drying-rgb), 0.28); }
+        
+        .move-btn.to-closet { color: var(--theme-closet); background: rgba(var(--theme-closet-rgb), 0.11); border: 1px solid rgba(var(--theme-closet-rgb), 0.25); }
+        .move-btn.to-washing { color: var(--theme-washing); background: rgba(var(--theme-washing-rgb), 0.11); border: 1px solid rgba(var(--theme-washing-rgb), 0.25); }
+        .move-btn.to-drying { color: var(--theme-drying); background: rgba(var(--theme-drying-rgb), 0.11); border: 1px solid rgba(var(--theme-drying-rgb), 0.25); }
 
-        .fab { position: fixed; right: max(18px, calc(50vw - 222px)); width: 56px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.32); z-index: 90; cursor: pointer; transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.35s ease, box-shadow 0.35s ease; color: #fff; backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); background: rgba(var(--active-accent-rgb), 0.94); box-shadow: 0 10px 26px rgba(var(--active-accent-rgb), 0.42), inset 0 1px 0 rgba(255,255,255,0.35); }
+        .fab { 
+            position: fixed; right: max(18px, calc(50vw - 222px)); width: 56px; height: 56px; border-radius: 28px; 
+            display: flex; align-items: center; justify-content: center; 
+            border: 1px solid rgba(255,255,255,0.32); z-index: 90; cursor: pointer; 
+            transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.35s ease, box-shadow 0.35s ease; 
+            color: #fff; backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); 
+            background: rgba(var(--active-accent-rgb), 0.94); 
+            box-shadow: 0 10px 26px rgba(var(--active-accent-rgb), 0.42), inset 0 1px 0 rgba(255,255,255,0.35); 
+        }
         .fab:active { transform: scale(0.9); }
         .fab-add { bottom: 24px; } .fab-add svg { width: 26px; height: 26px; stroke-width: 2.3; }
         .fab-gen { bottom: 92px; } .fab-gen svg { width: 24px; height: 24px; stroke-width: 2.2; fill: currentColor; }
 
-        /* ВСПЛЫВАЮЩИЕ ШТОРКИ */
+        /* ==========================================================================
+           МОДАЛЬНЫЕ ОКНА И ШТОРКИ
+           ========================================================================== */
         #bottomSheet { z-index: 220; }
         #bottomSheet .modal-sheet { height: auto; max-height: 80vh; padding-bottom: 20px; }
         .sheet-options { overflow-y: auto; max-height: 60vh; padding: 6px 16px 10px; display: flex; flex-direction: column; gap: 6px; }
-        .sheet-option { padding: 14px 16px; border-radius: 14px; background: var(--card); border: 1px solid var(--card-border); font-size: 15px; font-weight: 600; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: transform 0.15s ease, background 0.2s; }
+        .sheet-option { 
+            padding: 14px 16px; border-radius: 14px; background: var(--card); border: 1px solid var(--card-border);
+            font-size: 15px; font-weight: 600; color: var(--text); cursor: pointer; 
+            display: flex; justify-content: space-between; align-items: center; transition: transform 0.15s ease, background 0.2s; 
+        }
         .sheet-option:active { transform: scale(0.98); background: var(--control-bg); }
         .sheet-option svg { width: 19px; height: 19px; color: var(--active-accent); opacity: 0; }
         .sheet-option.selected svg { opacity: 1; }
         .sheet-option.selected { color: var(--active-accent); border-color: rgba(var(--active-accent-rgb), 0.4); background: rgba(var(--active-accent-rgb), 0.08); font-weight: 700; }
 
-        /* МОДАЛЬНЫЕ ОКНА */
         .modal { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: var(--overlay); z-index: 200; align-items: flex-end; justify-content: center; transition: opacity 0.36s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.36s; overscroll-behavior: none; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
         .modal.active { visibility: visible; opacity: 1; pointer-events: auto; }
+        
         .modal-sheet { background: var(--bg-base); width: 100%; max-width: 480px; height: 92vh; border-radius: 30px 30px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); border-top: 1px solid var(--card-border); box-shadow: 0 -12px 44px rgba(0,0,0,0.28); overscroll-behavior: none; }
         .modal.active .modal-sheet { transform: translateY(0); }
-        #generatorModal .modal-sheet { height: 96vh; }
+        #generatorModal .modal-sheet { height: 95vh; }
         
         .modal-drag-pill { width: 40px; height: 5px; border-radius: 3px; background: var(--text); opacity: 0.22; margin: 11px auto 0; cursor: grab; flex-shrink: 0; }
-        .modal-header { padding: 12px 20px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); flex-shrink: 0; }
+        .modal-header { padding: 10px 18px 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); flex-shrink: 0; }
         .modal-header h3 { margin: 0; font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
         .close-btn-icon { background: var(--control-bg); display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 16px; color: var(--text); cursor: pointer; transition: 0.2s; border: 1px solid var(--control-border); }
         .close-btn-icon:active { transform: scale(0.86); }
-        .modal-footer { padding: 14px 20px 24px; border-top: 1px solid var(--card-border); background: var(--card); display: flex; gap: 12px; flex-shrink: 0; }
+        .modal-footer { padding: 12px 18px 22px; border-top: 1px solid var(--card-border); background: var(--card); display: flex; gap: 10px; flex-shrink: 0; }
 
         .view-mode, .edit-mode { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; min-height: 0; }
         .edit-mode { display: none; }
-        .view-photo-area { position: relative; width: 100%; height: 290px; background: var(--card-well); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; border-bottom: 1px solid var(--card-border); }
+
+        .view-photo-area { position: relative; width: 100%; height: 280px; background: var(--card-well); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; border-bottom: 1px solid var(--card-border); }
         .view-blur-bg { position: absolute; inset: -30px; background-size: cover; background-position: center; filter: blur(26px); opacity: 0.55; z-index: 0; }
         .view-photo-area img { position: relative; z-index: 2; max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.18)); transition: opacity 0.3s; opacity: 0; }
         
-        .view-info-area, .gen-scroll-area, .modal-body { padding: 18px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; flex-grow: 1; overscroll-behavior: contain; }
-        .view-title { font-size: 24px; font-weight: 800; color: var(--text); margin: 0; line-height: 1.2; letter-spacing: -0.03em; }
+        .view-info-area, .gen-scroll-area, .modal-body { padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; flex-grow: 1; overscroll-behavior: contain; }
+        .view-title { font-size: 23px; font-weight: 800; color: var(--text); margin: 0; line-height: 1.2; letter-spacing: -0.03em; }
         .view-tags { display: flex; gap: 8px; flex-wrap: wrap; }
         .view-tag { background: var(--card); color: var(--text); font-size: 13px; font-weight: 600; padding: 8px 14px; border-radius: 12px; border: 1px solid var(--card-border); display: flex; align-items: center; gap: 7px; box-shadow: var(--card-inner-shine); }
         .view-details { background: var(--card); border: 1px solid var(--card-border); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 13px; box-shadow: var(--card-inner-shine); }
@@ -248,45 +379,92 @@
         .detail-label { color: var(--subtext); font-weight: 600; }
         .detail-value { color: var(--text); font-weight: 700; text-align: right; }
         
-        .btn-edit-mode, .btn-gen-all { background: var(--active-accent); color: #fff; border: none; padding: 16px; border-radius: 15px; font-weight: 700; font-size: 16px; cursor: pointer; width: 100%; transition: 0.2s; box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.32); display: flex; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; }
+        .btn-edit-mode, .btn-gen-all { background: var(--active-accent); color: #fff; border: none; padding: 15px; border-radius: 15px; font-weight: 700; font-size: 15.5px; cursor: pointer; width: 100%; transition: 0.2s; box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.32); display: flex; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; }
         .btn-edit-mode:active, .btn-gen-all:active { transform: scale(0.96); opacity: 0.9; }
 
-        /* ИНТЕРАКТИВНОЕ КАДРИРОВАНИЕ ОБЛОЖКИ 4:4.7 В РЕДАКТОРЕ */
-        .modal-top { padding: 14px 20px; flex-shrink: 0; background: var(--card); border-bottom: 1px solid var(--card-border); display: flex; flex-direction: column; gap: 10px; }
+        /* ==========================================================================
+           СТУДИЯ КАДРИРОВАНИЯ ОБЛОЖКИ 1-В-1 (ТОЧНАЯ ПРОПОРЦИЯ 4 : 4.7 + ПОВОРОТ iOS)
+           ========================================================================== */
+        .modal-top { 
+            padding: 12px 18px; flex-shrink: 0; background: var(--card); 
+            border-bottom: 1px solid var(--card-border); 
+            display: flex; flex-direction: column; align-items: center; gap: 10px; 
+        }
         .crop-stage-wrap { width: 100%; display: flex; align-items: center; justify-content: center; gap: 14px; }
-        .photo-preview-box { width: 164px; aspect-ratio: 4 / 4.7; border-radius: 18px; background: var(--card-well); border: 1.5px dashed rgba(var(--active-accent-rgb), 0.45); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; touch-action: none; user-select: none; flex-shrink: 0; box-shadow: var(--card-shadow); }
+        .photo-preview-box { 
+            width: 156px; aspect-ratio: 4 / 4.7; border-radius: 18px; background: var(--card-well); 
+            border: 1.5px dashed rgba(var(--active-accent-rgb), 0.45); 
+            display: flex; align-items: center; justify-content: center; 
+            position: relative; overflow: hidden; touch-action: none; user-select: none; flex-shrink: 0;
+            box-shadow: var(--card-shadow);
+        }
         .photo-preview-box.has-photo { border-style: solid; border-color: var(--card-border); cursor: grab; }
         .photo-preview-box.has-photo:active { cursor: grabbing; }
-        .photo-preview-box img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; transition: opacity 0.25s ease; z-index: 2; position: relative; transform-origin: 50% 50%; }
-        .crop-grid-overlay { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; transition: opacity 0.2s ease; background-image: linear-gradient(to right, rgba(255,255,255,0.38) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.38) 1px, transparent 1px); background-size: 33.333% 33.333%; box-shadow: inset 0 0 0 2px var(--active-accent); }
+        .photo-preview-box img { 
+            width: 100%; height: 100%; object-fit: cover; pointer-events: none; 
+            transition: opacity 0.25s ease; z-index: 2; position: relative;
+            transform-origin: 50% 50%;
+        }
+        .crop-grid-overlay {
+            position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.38) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.38) 1px, transparent 1px);
+            background-size: 33.333% 33.333%;
+            box-shadow: inset 0 0 0 2px var(--active-accent);
+        }
         .photo-preview-box.dragging .crop-grid-overlay { opacity: 1; }
-        .crop-live-pill { position: absolute; top: 8px; left: 8px; z-index: 4; pointer-events: none; background: rgba(18, 20, 28, 0.58); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #f5f6fa; font-size: 9.5px; font-weight: 700; padding: 3px 8px; border-radius: 7px; border: 0.5px solid rgba(255,255,255,0.22); display: none; }
+        .crop-live-pill {
+            position: absolute; top: 8px; left: 8px; z-index: 4; pointer-events: none;
+            background: rgba(18, 20, 28, 0.58); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            color: #f5f6fa; font-size: 9.5px; font-weight: 700; padding: 3px 8px; border-radius: 7px;
+            border: 0.5px solid rgba(255,255,255,0.22); display: none;
+        }
         .photo-placeholder { color: var(--active-accent); font-size: 12.5px; font-weight: 700; text-align: center; cursor: pointer; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; z-index: 2; }
         .photo-placeholder svg { width: 30px; height: 30px; margin-bottom: 6px; opacity: 0.85; }
         
-        .crop-studio-panel { flex: 1; display: none; flex-direction: column; gap: 9px; min-width: 0; }
-        .crop-studio-hint { font-size: 11.5px; font-weight: 600; color: var(--subtext); line-height: 1.3; }
-        .crop-control-group { background: var(--control-bg); border: 1px solid var(--control-border); border-radius: 12px; padding: 7px 10px; display: flex; flex-direction: column; gap: 4px; }
-        .crop-control-header { display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; font-weight: 700; color: var(--subtext); text-transform: uppercase; letter-spacing: 0.04em; }
+        .crop-studio-panel { flex: 1; display: none; flex-direction: column; gap: 8px; min-width: 0; }
+        .crop-studio-hint { font-size: 11px; font-weight: 600; color: var(--subtext); line-height: 1.25; }
+        .crop-control-group { background: var(--control-bg); border: 1px solid var(--control-border); border-radius: 12px; padding: 6px 10px; display: flex; flex-direction: column; gap: 3px; }
+        .crop-control-header { display: flex; justify-content: space-between; align-items: center; font-size: 10px; font-weight: 700; color: var(--subtext); text-transform: uppercase; letter-spacing: 0.04em; }
         .crop-control-val { color: var(--text); font-weight: 800; font-variant-numeric: tabular-nums; }
         .crop-slider { width: 100%; accent-color: var(--active-accent); height: 4px; cursor: pointer; margin: 2px 0; }
         .crop-studio-actions { display: flex; gap: 6px; }
-        .crop-action-btn { flex: 1; background: var(--control-bg); color: var(--text); border: 1px solid var(--control-border); border-radius: 10px; padding: 8px 6px; font-size: 11.5px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; transition: transform 0.15s ease, background 0.2s; box-shadow: var(--card-inner-shine); }
+        .crop-action-btn {
+            flex: 1; background: var(--control-bg); color: var(--text); border: 1px solid var(--control-border);
+            border-radius: 10px; padding: 7px 6px; font-size: 11px; font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap;
+            transition: transform 0.15s ease, background 0.2s; box-shadow: var(--card-inner-shine);
+        }
         .crop-action-btn:active { transform: scale(0.94); background: var(--control-hover); }
-        .crop-action-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+        .crop-action-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
 
-        /* ТЕГИ V5 */
-        .season-tags-wrap { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
-        .season-tags-wrap::-webkit-scrollbar { display: none; }
-        .tag-pill { background: var(--control-bg); border: 1px solid var(--control-border); color: var(--subtext); font-size: 13px; font-weight: 600; padding: 8px 14px; border-radius: 12px; cursor: pointer; white-space: nowrap; transition: 0.2s; box-shadow: var(--card-inner-shine); display: flex; align-items: center; gap: 6px; }
-        .tag-pill:active { transform: scale(0.95); }
-        .tag-pill.active { background: rgba(var(--active-accent-rgb), 0.15); border-color: rgba(var(--active-accent-rgb), 0.4); color: var(--active-accent); font-weight: 700; }
+        .season-tags-wrap { display: flex; gap: 7px; flex-wrap: wrap; }
+        .tag-pill { 
+            background: var(--control-bg); border: 1px solid var(--control-border); color: var(--subtext); 
+            font-size: 12.5px; font-weight: 600; padding: 7px 12px; border-radius: 11px; 
+            cursor: pointer; white-space: nowrap; transition: all 0.2s ease; box-shadow: var(--card-inner-shine); 
+            display: inline-flex; align-items: center; gap: 5px; user-select: none;
+        }
+        .tag-pill:active { transform: scale(0.94); }
+        .tag-pill.active { background: rgba(var(--active-accent-rgb), 0.14); border-color: rgba(var(--active-accent-rgb), 0.42); color: var(--active-accent); font-weight: 700; }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .field { display: flex; flex-direction: column; gap: 6px; }
         .field label { font-size: 11px; font-weight: 700; color: var(--subtext); text-transform: uppercase; letter-spacing: 0.04em; margin-left: 4px; }
-        .field input { padding: 13px 15px; border: 1px solid var(--control-border); border-radius: 14px; font-size: 15px; font-weight: 500; background: var(--control-bg); color: var(--text); outline: none; width: 100%; transition: 0.25s; box-shadow: var(--card-inner-shine); }
-        .field input:focus { background: var(--card); border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.2); }
+        .field input { padding: 12px 14px; border: 1px solid var(--control-border); border-radius: 14px; font-size: 15px; font-weight: 500; background: var(--control-bg); color: var(--text); outline: none; width: 100%; transition: 0.25s; box-shadow: var(--card-inner-shine); }
+        .field input:focus { background: var(--card-elevated); border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.16); }
+
+        .color-controls { display: flex; align-items: center; gap: 12px; margin-top: 2px; flex-wrap: wrap; }
+        .color-circle { 
+            width: 42px; height: 42px; min-width: 42px; min-height: 42px; flex: 0 0 42px; 
+            position: relative; overflow: hidden; border-radius: 50%; aspect-ratio: 1 / 1;
+            border: 1.5px solid var(--dot-ring); box-shadow: 0 3px 10px rgba(0,0,0,0.08); 
+        }
+        .color-circle input[type="color"] { position: absolute; top: -12px; left: -12px; width: 68px; height: 68px; opacity: 0; cursor: pointer; }
+        .btn-color-action { background: var(--control-bg); color: var(--text); border: 1px solid var(--control-border); border-radius: 12px; padding: 10px 14px; font-size: 13px; cursor: pointer; font-weight: 700; transition: 0.2s; }
+        .btn-color-action:active { transform: scale(0.95); }
+        .btn-color-action.danger { color: #ff3b30; border-color: rgba(255,59,48,0.3); background: rgba(255,59,48,0.1); }
 
         .btn-primary, .btn-danger { padding: 15px; border: none; border-radius: 15px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; }
         .btn-primary { flex: 2; background: var(--active-accent); color: #fff; box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.3); }
@@ -297,65 +475,143 @@
         .empty { width: 100%; text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 15px; font-weight: 600; display: none; }
 
         /* ==========================================================================
-           ГЕНЕРАТОР ОБРАЗОВ V5 (УМНАЯ РУЛЕТКА + ЛУКБУК)
+           ГЕНЕРАТОР ОБРАЗОВ V5 PRO (БАРАБАНЫ + ХОЛСТ + ЦВЕТОВОЙ ДВИЖОК + ЛУКБУК)
            ========================================================================== */
-        .gen-top-tabs { display: flex; padding: 12px 20px; border-bottom: 1px solid var(--card-border); background: var(--card); }
-        
-        .gen-mode-studio { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; }
-        .gen-mode-looks { display: none; flex-direction: column; flex-grow: 1; overflow-y: auto; padding: 16px; background: var(--bg-base); gap: 16px;}
-        
-        .gen-filter-bar { display: flex; gap: 8px; padding: 12px 20px; background: var(--bg-base); border-bottom: 1px solid var(--card-border); overflow-x: auto; scrollbar-width: none; }
-        .gen-filter-bar::-webkit-scrollbar { display: none; }
-        
-        .gen-engine-select { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: var(--card); border-bottom: 1px solid var(--card-border); cursor: pointer; }
-        .gen-engine-info { display: flex; flex-direction: column; gap: 2px; }
-        .gen-engine-title { font-weight: 800; font-size: 14px; color: var(--text); }
-        .gen-engine-desc { font-weight: 500; font-size: 11.5px; color: var(--subtext); }
-        .gen-engine-select svg { width: 16px; height: 16px; color: var(--subtext); }
+        .gen-top-bar { padding: 10px 16px; background: var(--card); border-bottom: 1px solid var(--card-border); display: flex; flex-direction: column; gap: 9px; flex-shrink: 0; }
+        .gen-top-row { display: flex; align-items: center; gap: 8px; }
+        .gen-seg-tabs { flex: 1; display: flex; position: relative; background: var(--control-bg); border: 1px solid var(--control-border); padding: 3px; border-radius: 11px; }
+        .gen-seg-ind { position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); background: var(--active-pill-bg); border-radius: 8px; box-shadow: var(--active-pill-shadow); transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1); z-index: 1; }
+        .gen-seg-btn { flex: 1; padding: 6px 6px; font-size: 13px; font-weight: 700; color: var(--subtext); text-align: center; position: relative; z-index: 2; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .gen-seg-btn.active { color: var(--text); }
 
-        .gen-scroll-area { padding: 16px 0; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 16px; overscroll-behavior: contain; background: var(--bg-base); }
-        
-        /* ГОРИЗОНТАЛЬНЫЕ КАРУСЕЛИ РУЛЕТКИ */
-        .gen-role-row { display: flex; flex-direction: column; gap: 8px; }
-        .gen-role-header { padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
-        .gen-role-title { font-size: 13px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.05em; }
-        .gen-role-count { font-size: 11px; font-weight: 700; color: var(--subtext); background: var(--control-bg); padding: 2px 8px; border-radius: 8px; }
-        
-        .gen-carousel { display: flex; gap: 12px; overflow-x: auto; padding: 0 20px 8px; scroll-snap-type: x mandatory; scrollbar-width: none; }
-        .gen-carousel::-webkit-scrollbar { display: none; }
-        .gen-carousel-item { 
-            width: 100px; flex-shrink: 0; scroll-snap-align: center; 
-            background: var(--card); border-radius: 16px; border: 1.5px solid var(--card-border); 
-            box-shadow: var(--card-shadow), var(--card-inner-shine); display: flex; flex-direction: column; 
-            overflow: hidden; cursor: pointer; transition: transform 0.2s, border-color 0.2s; 
+        .gen-view-switch { display: flex; background: var(--control-bg); border: 1px solid var(--control-border); padding: 3px; border-radius: 11px; gap: 2px; }
+        .gen-view-btn { padding: 6px 10px; border-radius: 8px; border: none; background: transparent; color: var(--subtext); font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .gen-view-btn.active { background: var(--active-pill-bg); color: var(--text); box-shadow: var(--active-pill-shadow); }
+
+        .gen-SubStrip { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+        .gen-SubStrip::-webkit-scrollbar { display: none; }
+        .gen-chip { 
+            padding: 6px 11px; border-radius: 10px; font-size: 12px; font-weight: 700; 
+            background: var(--control-bg); border: 1px solid var(--control-border); color: var(--subtext);
+            white-space: nowrap; cursor: pointer; transition: 0.2s; user-select: none; display: inline-flex; align-items: center; gap: 4px;
         }
-        .gen-carousel-item:active { transform: scale(0.95); }
-        .gen-carousel-item.active { border-color: var(--active-accent); box-shadow: 0 0 0 1px var(--active-accent), var(--card-shadow); }
-        .gen-carousel-img { width: 100%; aspect-ratio: 4 / 4.7; background: var(--card-well); border-bottom: 1px solid var(--card-border); overflow: hidden; position: relative; }
-        .gen-carousel-img img { width: 100%; height: 100%; object-fit: cover; }
-        .gen-carousel-info { padding: 8px; display: flex; align-items: center; justify-content: center; }
-        .gen-carousel-info svg { width: 14px; height: 14px; }
-        .gen-carousel-empty { padding: 20px; font-size: 13px; font-weight: 600; color: var(--subtext); text-align: center; width: 100%; background: var(--card); border-radius: 16px; border: 1px dashed var(--control-border); margin: 0 20px; }
+        .gen-chip:active { transform: scale(0.95); }
+        .gen-chip.active { background: rgba(var(--active-accent-rgb), 0.14); border-color: rgba(var(--active-accent-rgb), 0.42); color: var(--active-accent); }
 
-        .look-card { background: var(--card); border-radius: 24px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow), var(--card-inner-shine); overflow: hidden; display: flex; flex-direction: column; }
-        .look-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--card-border); }
-        .look-grid-item { aspect-ratio: 4/4.7; background: var(--card-well); position: relative; overflow: hidden; }
-        .look-grid-item img { width: 100%; height: 100%; object-fit: cover; }
-        .look-footer { padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; background: var(--card); }
-        .look-date { font-size: 12px; font-weight: 700; color: var(--subtext); }
-        .look-del-btn { background: rgba(255,59,48,0.1); color: #ff3b30; border: none; padding: 6px 12px; border-radius: 8px; font-weight: 700; font-size: 11px; cursor: pointer; }
+        .gen-harmony-banner {
+            margin: 0 16px; padding: 9px 13px; border-radius: 14px;
+            background: var(--card); border: 1px solid var(--card-border); box-shadow: var(--card-inner-shine);
+            display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-shrink: 0;
+        }
+        .gen-harmony-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
+        .gen-palette-dots { display: flex; align-items: center; }
+        .gen-palette-dots .color-dot-svg { margin-right: -4px; width: 18px; height: 18px; min-width: 18px; min-height: 18px; }
+        .gen-harmony-text { font-size: 12.5px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 6px; }
+        .gen-harmony-score { font-size: 11.5px; font-weight: 800; color: var(--active-accent); background: rgba(var(--active-accent-rgb), 0.13); padding: 4px 9px; border-radius: 99px; white-space: nowrap; }
 
+        /* РЕЖИМ БАРАБАНОВ (SLOT MACHINE REELS) */
+        .gen-reel-block { 
+            background: var(--card); border: 1px solid var(--card-border); border-radius: 20px; 
+            padding: 11px 0 12px; box-shadow: var(--card-shadow), var(--card-inner-shine); 
+            display: flex; flex-direction: column; gap: 9px;
+        }
+        .gen-reel-head { padding: 0 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+        .gen-reel-title-wrap { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; cursor: pointer; }
+        .gen-reel-role { font-size: 10px; font-weight: 800; color: var(--active-accent); text-transform: uppercase; letter-spacing: 0.05em; }
+        .gen-reel-active-name { font-size: 14.5px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 6px; }
+        .gen-reel-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        
+        .gen-btn { width: 34px; height: 34px; border-radius: 11px; border: 1px solid var(--control-border); display: flex; align-items: center; justify-content: center; background: var(--control-bg); color: var(--text); cursor: pointer; transition: 0.2s; }
+        .gen-btn.locked { background: var(--active-accent); color: #fff; border-color: transparent; }
+        .gen-btn:active { transform: scale(0.88); }
+
+        .gen-reel-track { 
+            display: flex; gap: 10px; overflow-x: auto; padding: 2px 14px 4px; 
+            scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+        }
+        .gen-reel-track::-webkit-scrollbar { display: none; }
+        .gen-reel-card { 
+            width: 92px; flex-shrink: 0; scroll-snap-align: center; 
+            background: var(--card-elevated); border-radius: 15px; border: 2px solid var(--card-border); 
+            overflow: hidden; cursor: pointer; transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.22s ease, box-shadow 0.22s ease;
+            display: flex; flex-direction: column; position: relative;
+        }
+        .gen-reel-card:active { transform: scale(0.94); }
+        .gen-reel-card.selected { 
+            border-color: var(--active-accent); 
+            box-shadow: 0 6px 16px rgba(var(--active-accent-rgb), 0.25); 
+            transform: translateY(-2px);
+        }
+        .gen-reel-thumb { width: 100%; aspect-ratio: 4 / 4.7; background: var(--card-well); position: relative; overflow: hidden; }
+        .gen-reel-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; transform-origin: 50% 50%; }
+        .gen-reel-caption { padding: 5px 6px; font-size: 10.5px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px; }
+        .gen-reel-caption .color-dot-svg { width: 11px; height: 11px; min-width: 11px; min-height: 11px; flex: 0 0 11px; }
+
+        /* РЕЖИМ ВИЗУАЛЬНОГО ХОЛСТА (FLAT-LAY COLLAGE CANVAS) */
+        .gen-canvas-board {
+            background: var(--card); border: 1px solid var(--card-border); border-radius: 24px;
+            padding: 14px; box-shadow: var(--card-shadow), var(--card-inner-shine);
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: stretch;
+        }
+        .gen-canvas-card {
+            background: var(--card-elevated); border: 1px solid var(--card-border); border-radius: 18px;
+            overflow: hidden; position: relative; display: flex; flex-direction: column;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06); cursor: pointer; transition: transform 0.2s;
+        }
+        .gen-canvas-card:active { transform: scale(0.97); }
+        .gen-canvas-card.span-full { grid-column: span 2; display: flex; flex-direction: row; align-items: center; height: 110px; }
+        .gen-canvas-card.span-full .gen-canvas-img { width: 96px; height: 100%; aspect-ratio: auto; border-bottom: none; border-right: 1px solid var(--card-border); }
+        .gen-canvas-img { width: 100%; aspect-ratio: 4 / 4.7; background: var(--card-well); position: relative; overflow: hidden; border-bottom: 1px solid var(--card-border); flex-shrink: 0; }
+        .gen-canvas-img img { width: 100%; height: 100%; object-fit: cover; display: block; transform-origin: 50% 50%; }
+        .gen-canvas-role-badge {
+            position: absolute; top: 8px; left: 8px; z-index: 3;
+            background: rgba(18, 20, 28, 0.62); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            color: #fff; font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+            padding: 3px 8px; border-radius: 7px; border: 0.5px solid rgba(255,255,255,0.22);
+        }
+        .gen-canvas-actions { position: absolute; top: 8px; right: 8px; z-index: 3; display: flex; gap: 5px; }
+        .gen-mini-btn {
+            width: 28px; height: 28px; border-radius: 9px; border: 0.5px solid rgba(255,255,255,0.28);
+            background: rgba(18, 20, 28, 0.62); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        .gen-mini-btn.locked { background: var(--active-accent); border-color: transparent; }
+        .gen-canvas-meta { padding: 9px 11px; display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; justify-content: center; }
+        .gen-canvas-title { font-size: 13.5px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .gen-canvas-sub { font-size: 11.5px; font-weight: 600; color: var(--subtext); display: flex; align-items: center; gap: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* ЛУКБУК (СОХРАНЕННЫЕ ОБРАЗЫ) */
+        .lookbook-grid { display: flex; flex-direction: column; gap: 14px; }
+        .look-card { 
+            background: var(--card); border-radius: 22px; border: 1px solid var(--card-border); 
+            box-shadow: var(--card-shadow), var(--card-inner-shine); overflow: hidden; display: flex; flex-direction: column; 
+        }
+        .look-collage { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 2px; background: var(--card-border); }
+        .look-collage-cell { aspect-ratio: 4 / 4.7; background: var(--card-well); position: relative; overflow: hidden; cursor: pointer; }
+        .look-collage-cell img { width: 100%; height: 100%; object-fit: cover; display: block; transform-origin: 50% 50%; }
+        .look-card-bar { padding: 11px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--card); }
+        .look-card-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+        .look-card-title { font-size: 14.5px; font-weight: 800; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .look-card-sub { font-size: 11.5px; font-weight: 600; color: var(--subtext); }
+        .look-card-btns { display: flex; gap: 7px; flex-shrink: 0; }
+        .look-act-btn { padding: 7px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; border: 1px solid var(--control-border); background: var(--control-bg); color: var(--text); cursor: pointer; }
+        .look-act-btn.primary { background: rgba(var(--active-accent-rgb), 0.14); color: var(--active-accent); border-color: rgba(var(--active-accent-rgb), 0.35); }
+        .look-act-btn.danger { background: rgba(255,59,48,0.12); color: #ff3b30; border-color: rgba(255,59,48,0.28); }
+        .look-act-btn:active { transform: scale(0.94); }
+
+        /* ПОЛНОЭКРАННЫЙ ZOOM */
         #imageViewer { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: rgba(8, 10, 15, 0.92); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 999; flex-direction: column; transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.35s; overscroll-behavior: none; }
         #imageViewer.active { visibility: visible; opacity: 1; pointer-events: auto; }
-        .viewer-header { height: calc(env(safe-area-inset-top, 20px) + 70px); display: flex; justify-content: flex-end; align-items: flex-end; padding: 0 20px 16px; z-index: 1001; }
+        .viewer-header { height: 70px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; z-index: 1001; }
         .viewer-close { background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.22); padding: 9px 18px; border-radius: 14px; font-size: 14px; cursor: pointer; font-weight: 700; transition: transform 0.2s; }
         .viewer-close:active { transform: scale(0.92); }
         .viewer-img-container { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; touch-action: none; }
         .viewer-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: 50% 50%; transition: transform 0.1s linear, opacity 0.3s; opacity: 0; }
 
+        /* ОКНО ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ */
         #confirmDialog { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: var(--overlay); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 300; align-items: center; justify-content: center; transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.3s; overscroll-behavior: none; }
         #confirmDialog.active { visibility: visible; opacity: 1; pointer-events: auto; }
-        .confirm-box { background: var(--card); border: 1px solid var(--card-border); padding: 26px; border-radius: 24px; width: 310px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.35); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+        .confirm-box { background: var(--card); border: 1px solid var(--card-border); padding: 26px; border-radius: 24px; width: 310px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.35); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
         #confirmDialog.active .confirm-box { transform: scale(1); }
         .confirm-box h3 { margin: 0 0 10px 0; color: var(--text); font-size: 18px; font-weight: 800; }
         .confirm-box p { color: var(--subtext); font-size: 14px; margin-bottom: 22px; line-height: 1.45; font-weight: 500; }
@@ -364,7 +620,7 @@
 </head>
 <body class="tab-IN_CLOSET">
 
-    <!-- ГРАДИЕНТНАЯ ПОЛОСА ДЛЯ СВЯЗИ С TELEGRAM (IOS EDGE-BLEND) -->
+    <!-- ГРАДИЕНТНЫЙ ПЕРЕХОД К ШАПКЕ TELEGRAM -->
     <div class="tg-header-blend"></div>
 
     <!-- ЗАСТАВКА 5.0 Pro -->
@@ -379,25 +635,28 @@
         <div class="splash-version">Версия 5.0 Pro</div>
     </div>
 
+    <!-- ПОЛНОЭКРАННЫЙ VIEWER -->
     <div id="imageViewer">
         <div class="viewer-header"><button class="viewer-close" onclick="closeFullscreen()">Закрыть</button></div>
         <div class="viewer-img-container" id="viewerContainer">
-            <div class="image-loader" id="fullscreenLoader" style="display:block;"></div>
+            <div class="image-loader" id="fullscreenLoader"></div>
             <img id="viewerImg" src="" alt="Fullscreen">
         </div>
     </div>
 
+    <!-- ДИАЛОГ УДАЛЕНИЯ -->
     <div id="confirmDialog">
         <div class="confirm-box">
-            <h3 id="confirmTitle">Удаление вещи</h3>
-            <p id="confirmText">Вы уверены, что хотите удалить данную вещь? Это действие необратимо.</p>
+            <h3>Удаление вещи</h3>
+            <p>Вы уверены, что хотите удалить данную вещь? Это действие необратимо.</p>
             <div class="confirm-buttons">
                 <button class="btn-primary" style="background:var(--control-bg); color:var(--text); flex:1; box-shadow:none; border: 1px solid var(--control-border);" onclick="document.getElementById('confirmDialog').classList.remove('active')">Отмена</button>
-                <button class="btn-danger" style="flex:1;" id="confirmActionBtn" onclick="executeDelete()">Удалить</button>
+                <button class="btn-danger" style="flex:1;" onclick="executeDelete()">Удалить</button>
             </div>
         </div>
     </div>
 
+    <!-- ВСПЛЫВАЮЩАЯ ШТОРКА ДЛЯ SELECT'ОВ -->
     <div class="modal" id="bottomSheet">
         <div class="modal-sheet">
             <div class="modal-drag-pill"></div>
@@ -411,12 +670,13 @@
         </div>
     </div>
 
+    <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
     <div id="mainWrapper">
         <div class="header">
             <div class="search-container">
                 <div class="search-input-wrap">
                     <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Поиск по гардеробу..." oninput="onSearchInput()">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Поиск по гардеробу и тегам..." oninput="onSearchInput()">
                     <button id="searchClearBtn" class="search-clear" onclick="clearSearch()">✕</button>
                 </div>
                 <div class="search-row-inner">
@@ -454,61 +714,84 @@
     
     <div id="syncStatus" class="sync-indicator">Синхронизация...</div>
 
-    <!-- ГЕНЕРАТОР V5 -->
+    <!-- ==========================================================================
+         УМНЫЙ ГЕНЕРАТОР ОБРАЗОВ V5 PRO
+         ========================================================================== -->
     <div class="modal gen-modal" id="generatorModal">
         <div class="modal-sheet">
             <div class="modal-drag-pill"></div>
             <div class="modal-header">
-                <h3 id="genTitle">Умный генератор</h3>
+                <h3 id="genTitle">Нейро-Стилист 5.0</h3>
                 <button class="close-btn-icon" onclick="closeGenerator()">
                     <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
-            
-            <div class="gen-top-tabs">
-                <div class="tabs" style="width:100%;">
-                    <div class="tab-indicator" id="genTabIndicator" style="width: calc(50% - 3px);"></div>
-                    <div class="tab active" data-gentab="STUDIO" onclick="setGenTab('STUDIO')">Студия</div>
-                    <div class="tab" data-gentab="LOOKS" onclick="setGenTab('LOOKS')">Мои образы</div>
-                </div>
-            </div>
 
-            <!-- Режим: СТУДИЯ -->
-            <div class="gen-mode-studio" id="genModeStudio">
-                <div class="gen-filter-bar" id="genSeasonFilters">
-                    <div class="tag-pill active" onclick="toggleGenFilter('')">Все сезоны</div>
-                    <div class="tag-pill" onclick="toggleGenFilter('☀️ Лето')">☀️ Лето</div>
-                    <div class="tag-pill" onclick="toggleGenFilter('❄️ Зима')">❄️ Зима</div>
-                    <div class="tag-pill" onclick="toggleGenFilter('🍂 Демисезон')">🍂 Демисезон</div>
-                    <div class="tag-pill" onclick="toggleGenFilter('💼 Офис')">💼 Офис</div>
-                    <div class="tag-pill" onclick="toggleGenFilter('👟 Спорт')">👟 Спорт</div>
-                </div>
-                
-                <div class="gen-engine-select" onclick="openEngineSheet()">
-                    <div class="gen-engine-info">
-                        <span class="gen-engine-title" id="engineTitleText">🎲 Рандомный подбор</span>
-                        <span class="gen-engine-desc" id="engineDescText">Случайные вещи из гардероба</span>
+            <!-- Верхняя панель управления генератором -->
+            <div class="gen-top-bar">
+                <div class="gen-top-row">
+                    <div class="gen-seg-tabs">
+                        <div class="gen-seg-ind" id="genTabIndicator"></div>
+                        <div class="gen-seg-btn active" id="genTabBtnStudio" onclick="setGenTab('STUDIO')">Студия</div>
+                        <div class="gen-seg-btn" id="genTabBtnLooks" onclick="setGenTab('LOOKS')">Лукбук <span class="badge-count" id="cnt-LOOKS">0</span></div>
                     </div>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    <div class="gen-view-switch" id="genViewSwitch">
+                        <button type="button" class="gen-view-btn active" id="btnViewReel" onclick="setGenViewMode('REEL')">Барабаны</button>
+                        <button type="button" class="gen-view-btn" id="btnViewCanvas" onclick="setGenViewMode('CANVAS')">Холст</button>
+                    </div>
                 </div>
 
-                <div class="gen-scroll-area" id="genSlotsContainer">
-                    <!-- Карусели будут сгенерированы здесь -->
+                <!-- Полоса алгоритмов цвета и слоев (видна в Студии) -->
+                <div class="gen-SubStrip" id="genEngineStrip">
+                    <div class="gen-chip active" data-cmode="harmony" onclick="setGenColorMode('harmony')">🎨 Гармония</div>
+                    <div class="gen-chip" data-cmode="mono" onclick="setGenColorMode('mono')">⚫️ Монохром</div>
+                    <div class="gen-chip" data-cmode="neutral" onclick="setGenColorMode('neutral')">☕️ База</div>
+                    <div class="gen-chip" data-cmode="random" onclick="setGenColorMode('random')">🎲 Рандом</div>
+                    <div class="gen-chip active" id="chipLayerOuter" onclick="toggleGenLayer('OUTER')">🧥 +2-й слой</div>
+                    <div class="gen-chip" id="chipLayerAcc" onclick="toggleGenLayer('ACCESSORY')">🕶 +Аксессуар</div>
                 </div>
-                <div class="modal-footer" style="gap:10px;">
-                    <button class="btn-gen-all" style="flex:1; background:var(--card); color:var(--text); border:1px solid var(--card-border); box-shadow:none;" onclick="saveCurrentLook()">❤️ Сохранить</button>
-                    <button class="btn-gen-all" style="flex:2;" onclick="smartRollOutfit()">Сгенерировать</button>
+
+                <!-- Полоса фильтров погоды и дресс-кода -->
+                <div class="gen-SubStrip" id="genSeasonStrip">
+                    <div class="gen-chip active" data-stag="ALL" onclick="setGenSeasonFilter('ALL')">Любой повод</div>
+                    <div class="gen-chip" data-stag="☀️ Жарко" onclick="setGenSeasonFilter('☀️ Жарко')">☀️ Жарко</div>
+                    <div class="gen-chip" data-stag="❄️ Холодно" onclick="setGenSeasonFilter('❄️ Холодно')">❄️ Холодно</div>
+                    <div class="gen-chip" data-stag="🍂 Демисезон" onclick="setGenSeasonFilter('🍂 Демисезон')">🍂 Демисезон</div>
+                    <div class="gen-chip" data-stag="💼 Офис" onclick="setGenSeasonFilter('💼 Офис')">💼 Офис</div>
+                    <div class="gen-chip" data-stag="👟 Спорт" onclick="setGenSeasonFilter('👟 Спорт')">👟 Спорт</div>
                 </div>
             </div>
 
-            <!-- Режим: ЛУКБУК -->
-            <div class="gen-mode-looks" id="genModeLooks">
-                <!-- Сохраненные образы -->
+            <!-- Индикатор цветовой гармонии текущего лука -->
+            <div class="gen-harmony-banner" id="genHarmonyBanner" style="margin-top: 10px;">
+                <div class="gen-harmony-left">
+                    <div class="gen-palette-dots" id="genPaletteDots"></div>
+                    <span class="gen-harmony-text" id="genHarmonyText">Подбор сочетания...</span>
+                </div>
+                <span class="gen-harmony-score" id="genHarmonyScore">98%</span>
+            </div>
+
+            <!-- Контейнер Студии (Барабаны / Холст) -->
+            <div class="gen-scroll-area" id="genSlotsContainer"></div>
+
+            <!-- Контейнер Лукбука (Сохраненные образы) -->
+            <div class="gen-scroll-area" id="genLookbookContainer" style="display:none;"></div>
+
+            <!-- Футер генератора -->
+            <div class="modal-footer" id="genStudioFooter">
+                <button type="button" class="btn-gen-all" style="flex: 1; background: var(--control-bg); color: var(--text); border: 1px solid var(--control-border); box-shadow: var(--card-inner-shine);" onclick="saveCurrentLook()">
+                    ❤️ В Лукбук
+                </button>
+                <button type="button" class="btn-gen-all" style="flex: 1.6;" onclick="smartRollOutfit()">
+                    ✨ Сгенерировать
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- РЕДАКТОР ВЕЩИ -->
+    <!-- ==========================================================================
+         ПРОСМОТР И РЕДАКТИРОВАНИЕ ВЕЩИ
+         ========================================================================== -->
     <div class="modal" id="itemModal">
         <div class="modal-sheet">
             <div class="modal-drag-pill"></div>
@@ -521,7 +804,7 @@
 
             <div class="view-mode" id="viewMode">
                 <div class="view-photo-area" onclick="openFullscreen(document.getElementById('viewPhotoImg').src)">
-                    <div class="image-loader" id="viewPhotoLoader" style="display:block;"></div>
+                    <div class="image-loader" id="viewPhotoLoader"></div>
                     <div class="view-blur-bg" id="viewBlurBg"></div>
                     <img id="viewPhotoImg" src="">
                 </div>
@@ -531,9 +814,7 @@
                         <div class="view-tag" id="viewCatTag"></div>
                         <div class="view-tag" id="viewColorTag"></div>
                     </div>
-                    <!-- Блок тегов сезона -->
-                    <div class="view-tags" id="viewSeasonTags" style="display:none; padding-bottom:4px;"></div>
-
+                    <div class="view-tags" id="viewSeasonTags" style="display:none;"></div>
                     <div class="view-details">
                         <div class="detail-row"><span class="detail-label">Бренд</span><span class="detail-value" id="viewBrand"></span></div>
                         <div class="detail-row"><span class="detail-label">Статус</span><span class="detail-value" id="viewStatus"></span></div>
@@ -553,7 +834,7 @@
                     <div class="crop-stage-wrap">
                         <div class="photo-preview-box" id="photoBox">
                             <div class="crop-grid-overlay"></div>
-                            <div class="crop-live-pill" id="cropLivePill">Обложка 4:4.7</div>
+                            <div class="crop-live-pill" id="cropLivePill">Обложка 1:1</div>
                             <div class="photo-placeholder" id="photoPlaceholder" onclick="document.getElementById('photoInput').click()">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 4.5a2.5 2.5 0 0 0-2.5 2.5v.5L3 13a1 1 0 0 0 .7 1.7h16.6a1 1 0 0 0 .7-1.7L14.5 7.5v-.5A2.5 2.5 0 0 0 12 4.5z"></path><path d="M12 7v10"></path><path d="M9 17h6"></path></svg>
                                 <span>Добавить фото</span>
@@ -565,6 +846,7 @@
 
                         <div class="crop-studio-panel" id="cropStudioPanel">
                             <div class="crop-studio-hint">Тяните фото в рамке для выбора кадра обложки</div>
+                            
                             <div class="crop-control-group">
                                 <div class="crop-control-header">
                                     <span>Масштаб</span>
@@ -572,6 +854,7 @@
                                 </div>
                                 <input type="range" id="cropZoomRange" class="crop-slider" min="1" max="2.6" step="0.05" value="1" oninput="onCropZoomChange(this.value)">
                             </div>
+
                             <div class="crop-control-group">
                                 <div class="crop-control-header">
                                     <span>Поворот</span>
@@ -579,6 +862,7 @@
                                 </div>
                                 <input type="range" id="cropTiltRange" class="crop-slider" min="-45" max="45" step="1" value="0" oninput="onCropTiltChange(this.value)">
                             </div>
+
                             <div class="crop-studio-actions">
                                 <button type="button" class="crop-action-btn" onclick="rotateCrop90()" title="Повернуть на 90°">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><polyline points="21 3 21 8 16 8"/></svg>
@@ -615,43 +899,40 @@
                         </div>
                         <div class="field"><label>Бренд</label><input type="text" id="fBrand" placeholder="Бренд"></div>
                     </div>
-                    
-                    <!-- ТЕГИ V5 -->
+
                     <div class="field">
-                        <label>Сезон и контекст (можно несколько)</label>
-                        <div class="season-tags-wrap">
-                            <div class="tag-pill" id="tag-summer" onclick="toggleItemTag('☀️ Лето')">☀️ Лето</div>
-                            <div class="tag-pill" id="tag-winter" onclick="toggleItemTag('❄️ Зима')">❄️ Зима</div>
-                            <div class="tag-pill" id="tag-demi" onclick="toggleItemTag('🍂 Демисезон')">🍂 Демисезон</div>
-                            <div class="tag-pill" id="tag-office" onclick="toggleItemTag('💼 Офис')">💼 Офис</div>
-                            <div class="tag-pill" id="tag-sport" onclick="toggleItemTag('👟 Спорт')">👟 Спорт</div>
+                        <label>Погода и дресс-код (для генератора)</label>
+                        <div class="season-tags-wrap" id="editSeasonTags">
+                            <div class="tag-pill" onclick="toggleItemTag('☀️ Жарко')">☀️ Жарко</div>
+                            <div class="tag-pill" onclick="toggleItemTag('❄️ Холодно')">❄️ Холодно</div>
+                            <div class="tag-pill" onclick="toggleItemTag('🍂 Демисезон')">🍂 Демисезон</div>
+                            <div class="tag-pill" onclick="toggleItemTag('💼 Офис')">💼 Офис</div>
+                            <div class="tag-pill" onclick="toggleItemTag('👟 Спорт')">👟 Спорт</div>
                         </div>
-                        <input type="hidden" id="fTags" value="">
                     </div>
 
                     <div class="field">
                         <label>Цвета вещи</label>
                         <div class="color-controls">
                             <div class="color-circle" id="circle1" style="background-color: #ffffff;"><input type="color" id="fColorHex1" value="#ffffff" oninput="updateCircle(1)" onchange="markCustomColorUsed()"></div>
-                            <button id="btnToggleColor2" class="btn-color-action" onclick="toggleColor2()">+ 2-й цвет</button>
+                            <button type="button" id="btnToggleColor2" class="btn-color-action" onclick="toggleColor2()">+ 2-й цвет</button>
                             <div class="color-circle" id="circle2" style="background-color: #ffffff; display:none;"><input type="color" id="fColorHex2" value="#ffffff" oninput="updateCircle(2)" onchange="markCustomColorUsed()"></div>
-                            <button id="btnRemoveColor2" class="btn-color-action danger" style="display:none;" onclick="toggleColor2()">- Убрать</button>
+                            <button type="button" id="btnRemoveColor2" class="btn-color-action danger" style="display:none;" onclick="toggleColor2()">- Убрать</button>
                         </div>
                         <input type="text" id="fColorText" placeholder="Описание цвета (Например: Белый)">
-                        <button id="btnClearColors" class="btn-color-action danger" style="display:none; width: 100%; margin-top: 8px;" onclick="clearCustomColors()">Сбросить ручные настройки</button>
+                        <button type="button" id="btnClearColors" class="btn-color-action danger" style="display:none; width: 100%; margin-top: 8px;" onclick="clearCustomColors()">Сбросить ручные настройки</button>
                         <input type="hidden" id="fHasCustomColors" value="false">
                     </div>
                     <div class="field"><label>Заметки</label><input type="text" id="fNotes" placeholder="Рекомендации по уходу"></div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn-danger" id="btnDelete" style="display:none;" onclick="requestDeletePrompt('item')">Удалить</button>
+                    <button class="btn-danger" id="btnDelete" style="display:none;" onclick="requestDelete()">Удалить</button>
                     <button class="btn-primary" id="btnSave" onclick="saveCurrentItem()">Сохранить</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MAIN JAVASCRIPT ENGINE V5 -->
     <script>
         var NO_PHOTO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5a2.5 2.5 0 0 0-2.5 2.5v.5L3 13a1 1 0 0 0 .7 1.7h16.6a1 1 0 0 0 .7-1.7L14.5 7.5v-.5A2.5 2.5 0 0 0 12 4.5z"></path><path d="M12 7v10"></path><path d="M9 17h6"></path></svg>';
         var CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
@@ -659,21 +940,32 @@
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         var myTgId = typeof tg !== 'undefined' && tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "default_user";
         var CACHE_KEY = "wardrobe_v50_" + myTgId;
+        var LOOKS_KEY = "wardrobe_looks_v50_" + myTgId;
+        
         var items = [];
-        var savedLooks = []; // V5: Хранилище луков
+        var savedLooks = [];
         var currentTab = "IN_CLOSET";
         var currentCat = "ALL";
         var currentSort = "newest";
         var editingId = null;
         var currentPhotoData = "";
         var isColor2Active = false;
-        
-        // V5: Состояние тегов в редакторе
         var currentItemTags = [];
 
+        // Состояние кадрирования обложки
         var currentCrop = { x: 50, y: 50, s: 1, r: 0 };
         var cropBase90 = 0;
         var cropTilt = 0;
+
+        // Состояние умного генератора V5
+        var genActiveTab = "STUDIO";
+        var genViewMode = "REEL"; // 'REEL' | 'CANVAS'
+        var genColorMode = "harmony"; // 'harmony' | 'mono' | 'neutral' | 'random'
+        var genSeasonFilter = "ALL";
+        var useOuterwear = true;
+        var useAccessory = false;
+        var lockedSlots = { OUTER: false, TOP: false, BOTTOM: false, SHOES: false, ACCESSORY: false };
+        var currentOutfit = { OUTER: null, TOP: null, BOTTOM: null, SHOES: null, ACCESSORY: null };
 
         var COLOR_MAP = { 
             "черный": "#14161f", "белый": "#f5f6fa", "серый": "#8e93a6", "светло-серый": "#c5c8d4", "темно-серый": "#4a4e5d", "графитовый": "#343742",
@@ -696,7 +988,7 @@
         }
 
         // ==========================================================================
-        // МАТЕМАТИКА КАДРИРОВАНИЯ И КОЛОР-ДВИЖОК
+        // МАТЕМАТИКА КАДРИРОВАНИЯ 1-В-1 (СДВИГ + МАСШТАБ + ПОВОРОТ БЕЗ ПУСТЫХ УГЛОВ)
         // ==========================================================================
         function computeCropTransform(crop) {
             var cx = crop && !isNaN(crop.x) ? crop.x : 50;
@@ -726,7 +1018,10 @@
                 ? `translate3d(${tx.toFixed(2)}%, ${ty.toFixed(2)}%, 0) rotate(${r}deg) scale(${effS.toFixed(3)})`
                 : 'none';
 
-            return { objectPosition: `${locX.toFixed(1)}% ${locY.toFixed(1)}%`, transform: transformStr };
+            return {
+                objectPosition: `${locX.toFixed(1)}% ${locY.toFixed(1)}%`,
+                transform: transformStr
+            };
         }
 
         function applyCropToImgElement(imgEl, crop) {
@@ -750,57 +1045,21 @@
             return { base90: b90, tilt: tilt };
         }
 
-        // V5: COLOR THEORY ENGINE
-        function hexToHSL(hex) {
-            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            if(!result) return {h:0, s:0, l:100};
-            var r = parseInt(result[1], 16)/255, g = parseInt(result[2], 16)/255, b = parseInt(result[3], 16)/255;
-            var max = Math.max(r, g, b), min = Math.min(r, g, b);
-            var h, s, l = (max + min) / 2;
-            if(max === min) { h = s = 0; }
-            else {
-                var d = max - min;
-                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-                switch(max) {
-                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-                    case g: h = (b - r) / d + 2; break;
-                    case b: h = (r - g) / d + 4; break;
-                }
-                h /= 6;
-            }
-            return {h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100)};
-        }
-
-        function isColorMatch(hex1, hex2, mode) {
-            if(!hex1 || !hex2 || hex1==='#ffffff' || hex2==='#ffffff') return true; 
-            if(hex1==='#14161f' || hex2==='#14161f') return true; // Базовые цвета подходят ко всему
-            
-            var c1 = hexToHSL(hex1), c2 = hexToHSL(hex2);
-            var dh = Math.abs(c1.h - c2.h);
-            
-            if (mode === 'mono') {
-                return dh < 25 || dh > 335; // Тот же тон
-            } else if (mode === 'harmony') {
-                // Монохром ИЛИ аналоговые (~30 град) ИЛИ комплементарные (~180 град)
-                return (dh < 40 || dh > 320) || (dh > 150 && dh < 210);
-            }
-            return true; // random
-        }
-
-        // ==========================================================================
-        // ИНТЕРАКТИВНОЕ КАДРИРОВАНИЕ
-        // ==========================================================================
         function initCoverCropDrag() {
             var box = document.getElementById('photoBox');
             var prevImg = document.getElementById('photoPreview');
-            var dragging = false, pinching = false;
+            var dragging = false;
+            var pinching = false;
             var startX = 0, startY = 0, startCropX = 50, startCropY = 50;
             var startPinchDist = 0, startPinchScale = 1;
 
             function startDrag(clientX, clientY, target) {
                 if (!currentPhotoData || target.closest('button') || target.closest('input')) return;
-                dragging = true; startX = clientX; startY = clientY;
-                startCropX = currentCrop.x; startCropY = currentCrop.y;
+                dragging = true;
+                startX = clientX;
+                startY = clientY;
+                startCropX = currentCrop.x;
+                startCropY = currentCrop.y;
                 box.classList.add('dragging');
             }
 
@@ -815,12 +1074,17 @@
                 applyCropToImgElement(prevImg, currentCrop);
             }
 
-            function endDrag() { dragging = false; pinching = false; box.classList.remove('dragging'); }
+            function endDrag() {
+                dragging = false;
+                pinching = false;
+                box.classList.remove('dragging');
+            }
 
             box.addEventListener('touchstart', function(e) {
                 if (!currentPhotoData) return;
                 if (e.touches.length === 2) {
-                    dragging = false; pinching = true;
+                    dragging = false;
+                    pinching = true;
                     startPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
                     startPinchScale = currentCrop.s || 1;
                     box.classList.add('dragging');
@@ -834,8 +1098,11 @@
                     if (e.cancelable) e.preventDefault();
                     var dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
                     var newS = Math.max(1, Math.min(2.6, Math.round((startPinchScale * (dist / startPinchDist)) * 20) / 20));
-                    currentCrop.s = newS; document.getElementById('cropZoomRange').value = newS; document.getElementById('cropZoomVal').innerText = newS.toFixed(1) + '×';
-                    applyCropToImgElement(prevImg, currentCrop); return;
+                    currentCrop.s = newS;
+                    document.getElementById('cropZoomRange').value = newS;
+                    document.getElementById('cropZoomVal').innerText = newS.toFixed(1) + '×';
+                    applyCropToImgElement(prevImg, currentCrop);
+                    return;
                 }
                 if (!dragging) return;
                 if (e.cancelable) e.preventDefault();
@@ -848,45 +1115,108 @@
             window.addEventListener('mouseup', endDrag);
         }
 
-        window.onCropZoomChange = function(val) { currentCrop.s = parseFloat(val) || 1; document.getElementById('cropZoomVal').innerText = currentCrop.s.toFixed(1) + '×'; applyCropToImgElement(document.getElementById('photoPreview'), currentCrop); };
-        window.onCropTiltChange = function(val) { cropTilt = parseInt(val, 10) || 0; currentCrop.r = cropBase90 + cropTilt; document.getElementById('cropTiltVal').innerText = (currentCrop.r > 0 ? '+' : '') + currentCrop.r + '°'; applyCropToImgElement(document.getElementById('photoPreview'), currentCrop); };
-        window.rotateCrop90 = function() { if (tg) tg.HapticFeedback.impactOccurred('light'); cropBase90 = (cropBase90 + 90) % 360; if (cropBase90 === 270) cropBase90 = -90; currentCrop.r = cropBase90 + cropTilt; document.getElementById('cropTiltVal').innerText = (currentCrop.r > 0 ? '+' : '') + currentCrop.r + '°'; applyCropToImgElement(document.getElementById('photoPreview'), currentCrop); };
-        window.resetCropFraming = function() { if (tg) tg.HapticFeedback.impactOccurred('light'); cropBase90 = 0; cropTilt = 0; currentCrop = { x: 50, y: 50, s: 1, r: 0 }; document.getElementById('cropZoomRange').value = 1; document.getElementById('cropZoomVal').innerText = '1.0×'; document.getElementById('cropTiltRange').value = 0; document.getElementById('cropTiltVal').innerText = '0°'; applyCropToImgElement(document.getElementById('photoPreview'), currentCrop); };
+        window.onCropZoomChange = function(val) {
+            currentCrop.s = parseFloat(val) || 1;
+            document.getElementById('cropZoomVal').innerText = currentCrop.s.toFixed(1) + '×';
+            applyCropToImgElement(document.getElementById('photoPreview'), currentCrop);
+        };
+
+        window.onCropTiltChange = function(val) {
+            cropTilt = parseInt(val, 10) || 0;
+            currentCrop.r = cropBase90 + cropTilt;
+            document.getElementById('cropTiltVal').innerText = (currentCrop.r > 0 ? '+' : '') + currentCrop.r + '°';
+            applyCropToImgElement(document.getElementById('photoPreview'), currentCrop);
+        };
+
+        window.rotateCrop90 = function() {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            cropBase90 = (cropBase90 + 90) % 360;
+            if (cropBase90 === 270) cropBase90 = -90;
+            currentCrop.r = cropBase90 + cropTilt;
+            document.getElementById('cropTiltVal').innerText = (currentCrop.r > 0 ? '+' : '') + currentCrop.r + '°';
+            applyCropToImgElement(document.getElementById('photoPreview'), currentCrop);
+        };
+
+        window.resetCropFraming = function() {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            cropBase90 = 0;
+            cropTilt = 0;
+            currentCrop = { x: 50, y: 50, s: 1, r: 0 };
+            document.getElementById('cropZoomRange').value = 1;
+            document.getElementById('cropZoomVal').innerText = '1.0×';
+            document.getElementById('cropTiltRange').value = 0;
+            document.getElementById('cropTiltVal').innerText = '0°';
+            applyCropToImgElement(document.getElementById('photoPreview'), currentCrop);
+        };
 
         function updateCropUIState(hasPhoto) {
-            var box = document.getElementById('photoBox'); var panel = document.getElementById('cropStudioPanel'); var pill = document.getElementById('cropLivePill');
+            var box = document.getElementById('photoBox');
+            var panel = document.getElementById('cropStudioPanel');
+            var pill = document.getElementById('cropLivePill');
             if (hasPhoto) {
-                box.classList.add('has-photo'); panel.style.display = 'flex'; pill.style.display = 'block';
-                var dec = decomposeRotation(currentCrop.r); cropBase90 = dec.base90; cropTilt = dec.tilt;
-                document.getElementById('cropZoomRange').value = currentCrop.s || 1; document.getElementById('cropZoomVal').innerText = (currentCrop.s || 1).toFixed(1) + '×';
-                document.getElementById('cropTiltRange').value = cropTilt; document.getElementById('cropTiltVal').innerText = (currentCrop.r > 0 ? '+' : '') + (currentCrop.r || 0) + '°';
+                box.classList.add('has-photo');
+                panel.style.display = 'flex';
+                pill.style.display = 'block';
+                var dec = decomposeRotation(currentCrop.r);
+                cropBase90 = dec.base90;
+                cropTilt = dec.tilt;
+                document.getElementById('cropZoomRange').value = currentCrop.s || 1;
+                document.getElementById('cropZoomVal').innerText = (currentCrop.s || 1).toFixed(1) + '×';
+                document.getElementById('cropTiltRange').value = cropTilt;
+                document.getElementById('cropTiltVal').innerText = (currentCrop.r > 0 ? '+' : '') + (currentCrop.r || 0) + '°';
                 applyCropToImgElement(document.getElementById('photoPreview'), currentCrop);
-            } else { box.classList.remove('has-photo'); panel.style.display = 'none'; pill.style.display = 'none'; }
+            } else {
+                box.classList.remove('has-photo');
+                panel.style.display = 'none';
+                pill.style.display = 'none';
+            }
         }
 
         // ==========================================================================
-        // ИНИЦИАЛИЗАЦИЯ И СЕТЬ
+        // SWIPE-TO-CLOSE
         // ==========================================================================
         function enableSwipeToClose(modalId, closeAction) {
-            var modal = document.getElementById(modalId); var sheet = modal.querySelector('.modal-sheet'); var startY = 0, currentY = 0, isDragging = false;
+            var modal = document.getElementById(modalId);
+            var sheet = modal.querySelector('.modal-sheet');
+            var startY = 0, currentY = 0, isDragging = false;
+            
             sheet.addEventListener('touchstart', function(e) {
-                if (e.target.closest('button, input, .custom-select, .toggle-switch, .color-circle, .photo-preview-box, .gen-carousel, .tag-pill')) return;
-                var scrollArea = e.target.closest('.modal-body, .view-info-area, .gen-scroll-area, .sheet-options, .gen-mode-looks');
+                var target = e.target;
+                if (target.closest('button, input, .custom-select, .toggle-switch, .color-circle, .photo-preview-box, .gen-reel-track, .gen-SubStrip, .tag-pill')) return;
+                var scrollArea = target.closest('.modal-body, .view-info-area, .gen-scroll-area, .sheet-options');
                 if (scrollArea && scrollArea.scrollTop > 0) return;
-                startY = e.touches[0].clientY; isDragging = true; sheet.style.transition = 'none';
+                
+                startY = e.touches[0].clientY;
+                isDragging = true;
+                sheet.style.transition = 'none';
             }, {passive: true});
+
             sheet.addEventListener('touchmove', function(e) {
                 if (!isDragging) return;
-                var scrollArea = e.target.closest('.modal-body, .view-info-area, .gen-scroll-area, .sheet-options, .gen-mode-looks');
+                var scrollArea = e.target.closest('.modal-body, .view-info-area, .gen-scroll-area, .sheet-options');
                 if (scrollArea && scrollArea.scrollTop > 0) { isDragging = false; sheet.style.transform = ''; return; }
+                
                 var deltaY = e.touches[0].clientY - startY;
-                if (deltaY > 0) { currentY = deltaY; sheet.style.transform = 'translateY(' + deltaY + 'px)'; if (e.cancelable) e.preventDefault(); }
+                if (deltaY > 0) {
+                    currentY = deltaY;
+                    sheet.style.transform = 'translateY(' + deltaY + 'px)';
+                    if (e.cancelable) e.preventDefault();
+                }
             }, {passive: false});
+
             sheet.addEventListener('touchend', function() {
                 if (!isDragging) return;
-                isDragging = false; sheet.style.transition = 'transform 0.38s cubic-bezier(0.22, 1, 0.36, 1)';
-                if (currentY > 100) { sheet.style.transform = 'translateY(100%)'; setTimeout(function() { closeAction(); sheet.style.transform = ''; }, 280); } 
-                else { sheet.style.transform = ''; }
+                isDragging = false;
+                sheet.style.transition = 'transform 0.38s cubic-bezier(0.22, 1, 0.36, 1)';
+                if (currentY > 100) {
+                    sheet.style.transform = 'translateY(100%)';
+                    setTimeout(function() {
+                        closeAction();
+                        sheet.style.transform = ''; 
+                    }, 280);
+                } else {
+                    sheet.style.transform = '';
+                }
                 currentY = 0;
             });
             modal.addEventListener('click', function(e) { if(e.target === modal) closeAction(); });
@@ -900,12 +1230,14 @@
             
             updateProgress(15);
             try { 
-                var saved = localStorage.getItem(CACHE_KEY) || localStorage.getItem("wardrobe_v49_" + myTgId) || localStorage.getItem("wardrobe_v47_" + myTgId); 
+                var saved = localStorage.getItem(CACHE_KEY) || localStorage.getItem("wardrobe_v491_" + myTgId) || localStorage.getItem("wardrobe_v49_" + myTgId); 
                 if(saved) items = JSON.parse(saved); 
                 if(!Array.isArray(items)) items = []; 
-                var savedL = localStorage.getItem(CACHE_KEY + "_looks");
+
+                var savedL = localStorage.getItem(LOOKS_KEY);
                 if(savedL) savedLooks = JSON.parse(savedL);
                 if(!Array.isArray(savedLooks)) savedLooks = [];
+                updateLooksBadge();
             } catch(e) {}
             fetchFromCloud();
         });
@@ -957,18 +1289,28 @@
                 var priorityImgs = Array.from(document.querySelectorAll('.priority-img'));
                 if(priorityImgs.length === 0) return resolve();
                 
-                var loaded = 0, isDone = false;
-                var finish = function() { if(!isDone) { isDone = true; resolve(); } };
+                var loaded = 0;
+                var isDone = false;
+                
+                var finish = function() {
+                    if(!isDone) { isDone = true; resolve(); }
+                };
+                
                 var check = function() {
                     if(isDone) return;
-                    loaded++; updateProgress(60 + (loaded / priorityImgs.length) * 40);
+                    loaded++;
+                    updateProgress(60 + (loaded / priorityImgs.length) * 40);
                     if(loaded >= priorityImgs.length) finish();
                 };
+                
                 setTimeout(finish, 2400); 
 
                 priorityImgs.forEach(function(img) {
-                    if (img.complete && img.naturalHeight !== 0) check();
-                    else { img.addEventListener('load', check, { once: true }); img.addEventListener('error', check, { once: true }); }
+                    if (img.complete) check();
+                    else {
+                        img.addEventListener('load', check, { once: true });
+                        img.addEventListener('error', check, { once: true });
+                    }
                 });
             });
         }
@@ -979,7 +1321,10 @@
             function loadNext() {
                 if(index >= remaining.length) return;
                 var img = new Image();
-                img.onload = img.onerror = function() { index++; setTimeout(loadNext, 90); };
+                img.onload = img.onerror = function() {
+                    index++;
+                    setTimeout(loadNext, 90); 
+                };
                 img.src = remaining[index];
             }
             loadNext();
@@ -998,14 +1343,99 @@
         };
 
         window.clearSearch = function() {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
             document.getElementById('searchInput').value = '';
             document.getElementById('searchClearBtn').style.display = 'none';
             applyFilters(true);
         };
 
         // ==========================================================================
-        // ПАРСИНГ И РЕНДЕРИНГ ЭЛЕМЕНТОВ
+        // ШТОРКИ ВЫБОРА (CUSTOM SELECT SHEETS)
+        // ==========================================================================
+        var currentSheetCallback = null;
+        window.openSheet = function(title, options, selectedValue, callback) {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            document.getElementById('sheetTitle').innerText = title;
+            var html = '';
+            options.forEach(function(opt) {
+                var isSel = (opt.value === selectedValue);
+                html += '<div class="sheet-option ' + (isSel ? 'selected' : '') + '" onclick="selectSheetOption(\'' + opt.value + '\', \'' + opt.label.replace(/'/g, "\\'") + '\')">' +
+                        opt.label + (isSel ? CHECK_SVG : '<svg></svg>') + '</div>';
+            });
+            document.getElementById('sheetOptions').innerHTML = html;
+            currentSheetCallback = callback;
+            
+            var sheet = document.querySelector('#bottomSheet .modal-sheet');
+            sheet.style.transition = 'none';
+            sheet.style.transform = 'translateY(100%)';
+            setTimeout(function() {
+                sheet.style.transition = '';
+                sheet.style.transform = '';
+                document.getElementById('bottomSheet').classList.add('active');
+            }, 10);
+        };
+
+        window.closeSheet = function() {
+            document.getElementById('bottomSheet').classList.remove('active');
+        };
+
+        window.selectSheetOption = function(value, label) {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            if(currentSheetCallback) currentSheetCallback(value, label);
+            closeSheet();
+        };
+
+        window.openCatSheet = function() {
+            var uniqueCats = [];
+            for (var i = 0; i < items.length; i++) { 
+                var cat = parseCategoryField(items[i].category).name;
+                if (cat && uniqueCats.indexOf(cat) === -1) uniqueCats.push(cat); 
+            }
+            uniqueCats.sort();
+            var opts = [{value: "ALL", label: "Все категории"}];
+            uniqueCats.forEach(function(c) { opts.push({value: c.toLowerCase(), label: c}); });
+            openSheet("Категория", opts, currentCat, function(val, label) {
+                currentCat = val;
+                document.getElementById('catSelectText').innerText = label;
+                applyFilters(true);
+            });
+        };
+
+        window.openSortSheet = function() {
+            var opts = [
+                {value: "newest", label: "Сначала новые"}, {value: "oldest", label: "Сначала старые"},
+                {value: "az", label: "По алфавиту (А–Я)"}, {value: "za", label: "По алфавиту (Я–А)"},
+                {value: "brand", label: "По бренду"}, {value: "category", label: "По типу"}
+            ];
+            openSheet("Сортировка", opts, currentSort, function(val, label) {
+                currentSort = val;
+                document.getElementById('sortSelectText').innerText = label;
+                applyFilters(true);
+            });
+        };
+
+        window.openRoleSheet = function() {
+            var opts = [
+                {value: "UNASSIGNED", label: "Без роли"}, {value: "TOP", label: "Верх (База)"},
+                {value: "OUTER", label: "Верх (Второй слой)"}, {value: "BOTTOM", label: "Низ"},
+                {value: "SHOES", label: "Обувь"}, {value: "ACCESSORY", label: "Аксессуары"}
+            ];
+            openSheet("Роль в образе", opts, document.getElementById('fRole').value, function(val, label) {
+                document.getElementById('fRole').value = val;
+                document.getElementById('fRoleText').innerText = label;
+            });
+        };
+
+        window.openStatusSheet = function() {
+            var opts = [{value: "IN_CLOSET", label: "В шкафу"}, {value: "WASHING", label: "В стирке"}, {value: "DRYING", label: "На сушилке"}];
+            openSheet("Расположение", opts, document.getElementById('fStatus').value, function(val, label) {
+                document.getElementById('fStatus').value = val;
+                document.getElementById('fStatusText').innerText = label;
+            });
+        };
+
+        // ==========================================================================
+        // ВЕКТОРНАЯ ГЕНЕРАЦИЯ КРУЖКОВ ЦВЕТА (SVG) И ПАРСИНГ МЕТАДАННЫХ
         // ==========================================================================
         function buildColorDotSvg(c1, c2) {
             if (!c1) return '';
@@ -1016,20 +1446,23 @@
         }
 
         function parseColorField(colorStr) {
-            if (!colorStr) return { text: "", dot: "", hex1: "#ffffff", hex2: "#ffffff", hasCustom: false, isColor2Active: false };
+            if (!colorStr) return { text: "", dot: "", hex1: "#ffffff", hex2: "#ffffff", primaryHex: "", hasCustom: false, isColor2Active: false };
             var parts = colorStr.split("||");
             var text = (parts[0] || "").replace(/\|\|.*/g, "").trim(); 
             var h1 = parts[1]; var h2 = parts[2];
             var c1 = "", c2 = "";
             var isTwo = Boolean(h1 && h2 && h1 !== h2);
             
-            if (isTwo) { c1 = h1; c2 = h2; } 
-            else if (h1) { c1 = h1; } 
-            else { 
+            if (isTwo) {
+                c1 = h1; c2 = h2;
+            } else if (h1) {
+                c1 = h1;
+            } else { 
                 var clean = text.toLowerCase().trim().replace(/ё/g, "е"); 
                 var tokens = clean.split(/[\s,;/]+/).filter(Boolean);
-                if (COLOR_MAP[clean]) { c1 = COLOR_MAP[clean]; } 
-                else if (tokens.length > 0 && COLOR_MAP[tokens[0]]) {
+                if (COLOR_MAP[clean]) {
+                    c1 = COLOR_MAP[clean];
+                } else if (tokens.length > 0 && COLOR_MAP[tokens[0]]) {
                     c1 = COLOR_MAP[tokens[0]];
                     if (tokens.length > 1 && COLOR_MAP[tokens[1]] && COLOR_MAP[tokens[1]] !== c1) {
                         c2 = COLOR_MAP[tokens[1]];
@@ -1038,27 +1471,28 @@
             }
             
             var dotHtml = buildColorDotSvg(c1, c2);
-            return { text: text, dot: dotHtml, hex1: h1 || "#ffffff", hex2: h2 || "#ffffff", hasCustom: !!h1, isColor2Active: isTwo, color1: c1 };
-        }
-
-        function parseTagsField(tagsRaw) {
-            if(!tagsRaw) return [];
-            return tagsRaw.split(',').map(function(t){return t.trim()}).filter(Boolean);
+            return { text: text, dot: dotHtml, hex1: h1 || "#ffffff", hex2: h2 || "#ffffff", primaryHex: c1, secondaryHex: c2, hasCustom: !!h1, isColor2Active: isTwo };
         }
 
         function parseCategoryField(catRaw) {
             var defaultCrop = { x: 50, y: 50, s: 1, r: 0 };
-            if (!catRaw) return { role: 'UNASSIGNED', name: '', crop: defaultCrop };
+            if (!catRaw) return { role: 'UNASSIGNED', name: '', crop: defaultCrop, tags: [] };
             if (catRaw.indexOf('||') !== -1) { 
                 var p = catRaw.split('||'); 
                 var cropObj = defaultCrop;
                 if (p[2]) {
                     var cp = p[2].split(',');
                     if (cp.length >= 3) {
-                        cropObj = { x: parseFloat(cp[0]) || 50, y: parseFloat(cp[1]) || 50, s: parseFloat(cp[2]) || 1, r: parseFloat(cp[3]) || 0 };
+                        cropObj = { 
+                            x: parseFloat(cp[0]) || 50, 
+                            y: parseFloat(cp[1]) || 50, 
+                            s: parseFloat(cp[2]) || 1,
+                            r: parseFloat(cp[3]) || 0
+                        };
                     }
                 }
-                return { role: p[0], name: p[1] || '', crop: cropObj }; 
+                var tagList = p[3] ? p[3].split(';').filter(Boolean) : [];
+                return { role: p[0], name: p[1] || '', crop: cropObj, tags: tagList }; 
             }
             var lower = catRaw.toLowerCase(); var role = 'UNASSIGNED';
             if (/(футб|рубаш|майк|топ|блуз|поло)/i.test(lower)) role = 'TOP';
@@ -1066,7 +1500,22 @@
             else if (/(штан|джинс|брюк|шорт|юбк|треник)/i.test(lower)) role = 'BOTTOM';
             else if (/(обув|кросс|ботинк|туфл|кед|сапог|тапок)/i.test(lower)) role = 'SHOES';
             else if (/(шапк|шарф|сумк|рем|очк|аксес)/i.test(lower)) role = 'ACCESSORY';
-            return { role: role, name: catRaw, crop: defaultCrop };
+            return { role: role, name: catRaw, crop: defaultCrop, tags: [] };
+        }
+
+        window.toggleItemTag = function(tag) {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            var idx = currentItemTags.indexOf(tag);
+            if (idx === -1) currentItemTags.push(tag);
+            else currentItemTags.splice(idx, 1);
+            renderEditSeasonTags();
+        };
+
+        function renderEditSeasonTags() {
+            var pills = document.querySelectorAll('#editSeasonTags .tag-pill');
+            pills.forEach(function(pill) {
+                pill.classList.toggle('active', currentItemTags.indexOf(pill.innerText.trim()) !== -1);
+            });
         }
 
         function generateMoveButtons(id, status) {
@@ -1092,18 +1541,27 @@
             var currentCount = items.filter(function(i) { return i.status === currentTab; }).length;
             
             if (currentTab === "WASHING" && currentCount > 0) {
-                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = "В стирке: " + currentCount; document.getElementById('bulkBtn').innerText = "Все на сушилку";
+                bulkBar.classList.add('visible'); 
+                document.getElementById('bulkText').innerText = "В стирке: " + currentCount; 
+                document.getElementById('bulkBtn').innerText = "Все на сушилку";
             } else if (currentTab === "DRYING" && currentCount > 0) {
-                bulkBar.classList.add('visible'); document.getElementById('bulkText').innerText = "На сушилке: " + currentCount; document.getElementById('bulkBtn').innerText = "Вернуть в шкаф";
+                bulkBar.classList.add('visible'); 
+                document.getElementById('bulkText').innerText = "На сушилке: " + currentCount; 
+                document.getElementById('bulkBtn').innerText = "Вернуть в шкаф";
             } else { 
                 bulkBar.classList.remove('visible'); 
             }
         }
 
+        // ==========================================================================
+        // PERSISTENT DOM ENGINE (0% МОРГАНИЯ ФОТОГРАФИЙ)
+        // ==========================================================================
         function syncGrid() {
             var grid = document.getElementById('grid');
             var existingMap = {};
-            Array.from(grid.querySelectorAll('.card-item')).forEach(function(el) { existingMap[el.id.replace('card-', '')] = el; });
+            Array.from(grid.querySelectorAll('.card-item')).forEach(function(el) {
+                existingMap[el.id.replace('card-', '')] = el;
+            });
 
             var activeIds = {};
 
@@ -1114,12 +1572,11 @@
 
                 var colorObj = parseColorField(item.color);
                 var pCat = parseCategoryField(item.category);
-                var itemTagsStr = (item.tags || '').toLowerCase();
-                
                 var safeName = (item.name || '').toLowerCase();
                 var safeCat = (pCat.name || '').toLowerCase();
                 var safeBrand = (item.brand || '').toLowerCase();
-                var searchStr = safeName + " " + safeBrand + " " + safeCat + " " + itemTagsStr;
+                var safeTags = pCat.tags.join(' ').toLowerCase();
+                var searchStr = safeName + " " + safeBrand + " " + safeCat + " " + safeTags;
                 var metaLabel = (item.brand || '') + (item.brand && colorObj.text ? ' · ' : '') + colorObj.text;
                 var thumbSrc = item.photo ? item.photo.replace('sz=w1000', 'sz=w400') : '';
                 var cropStyle = getCropStyleString(pCat.crop);
@@ -1132,10 +1589,17 @@
                     card.setAttribute('data-name', safeName);
                     card.setAttribute('data-brand', safeBrand);
 
-                    var pill = card.querySelector('.cat-pill'); if (pill) pill.innerText = pCat.name || 'Без категории';
-                    var titleEl = card.querySelector('.card-title'); if (titleEl) titleEl.innerText = item.name || 'Без названия';
-                    var metaEl = card.querySelector('.card-meta'); if (metaEl) metaEl.innerHTML = colorObj.dot + '<span class="meta-text">' + metaLabel + '</span>';
-                    var moveBar = card.querySelector('.move-bar'); if (moveBar) moveBar.innerHTML = generateMoveButtons(item.id, item.status);
+                    var pill = card.querySelector('.cat-pill');
+                    if (pill) pill.innerText = pCat.name || 'Без категории';
+
+                    var titleEl = card.querySelector('.card-title');
+                    if (titleEl) titleEl.innerText = item.name || 'Без названия';
+
+                    var metaEl = card.querySelector('.card-meta');
+                    if (metaEl) metaEl.innerHTML = colorObj.dot + '<span class="meta-text">' + metaLabel + '</span>';
+
+                    var moveBar = card.querySelector('.move-bar');
+                    if (moveBar) moveBar.innerHTML = generateMoveButtons(item.id, item.status);
 
                     var existingImg = card.querySelector('.img-wrap img');
                     if (thumbSrc) {
@@ -1233,22 +1697,14 @@
         };
 
         window.setTab = function(tab) {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
             if (currentTab === tab) return;
             
-            const bulkBar = document.getElementById('bulkBar');
-            bulkBar.style.transition = 'none';
-            bulkBar.classList.remove('visible');
-            setTimeout(() => { bulkBar.style.transition = ''; }, 50);
+            document.getElementById('bulkBar').classList.remove('visible');
 
-            var tabs = document.querySelectorAll('#mainWrapper > .header > .tabs .tab');
-            tabs.forEach(t => t.classList.remove('active'));
-            document.querySelector(`#mainWrapper > .header > .tabs .tab[data-tab="${tab}"]`).classList.add('active');
-            
-            var indicator = document.getElementById('tabIndicator');
-            if(tab === 'IN_CLOSET') indicator.style.transform = 'translateX(0)';
-            else if(tab === 'WASHING') indicator.style.transform = 'translateX(100%)';
-            else if(tab === 'DRYING') indicator.style.transform = 'translateX(200%)';
+            var tabs = document.querySelectorAll('.header .tab');
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+            document.querySelector('.header .tab[data-tab="' + tab + '"]').classList.add('active');
 
             currentTab = tab;
             document.body.className = document.body.className.replace(/tab-\w+/g, '');
@@ -1259,7 +1715,7 @@
 
         window.moveItem = function(id, newStatus, event) {
             if (event) event.stopPropagation(); 
-            if (tg) tg.HapticFeedback.impactOccurred('light');
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
             
             var item = items.find(function(i) { return String(i.id) === String(id); });
             if (!item) return;
@@ -1277,7 +1733,7 @@
         };
 
         window.executeBulkAction = function() {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
             var targetStatus = currentTab === "WASHING" ? "DRYING" : "IN_CLOSET";
             var affectedIds = items.filter(function(i) { return i.status === currentTab; }).map(function(i) { return i.id; });
             if (affectedIds.length === 0) return;
@@ -1298,32 +1754,120 @@
         };
 
         // ==========================================================================
-        // V5: УПРАВЛЕНИЕ ТЕГАМИ (СЕЗОН И ПОВОД)
+        // ЦВЕТОВОЙ ДВИЖОК И НЕЙРО-ГЕНЕРАТОР V5 PRO
         // ==========================================================================
-        window.toggleItemTag = function(tag) {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            var idx = currentItemTags.indexOf(tag);
-            if (idx === -1) currentItemTags.push(tag); else currentItemTags.splice(idx, 1);
-            renderItemTagsUI();
-        };
+        function hexToHsl(hex) {
+            if (!hex || typeof hex !== 'string') return null;
+            var clean = hex.replace('#', '').trim();
+            if (clean.length === 3) clean = clean[0]+clean[0]+clean[1]+clean[1]+clean[2]+clean[2];
+            if (clean.length !== 6) return null;
+            var r = parseInt(clean.substring(0,2), 16) / 255;
+            var g = parseInt(clean.substring(2,4), 16) / 255;
+            var b = parseInt(clean.substring(4,6), 16) / 255;
+            if (isNaN(r) || isNaN(g) || isNaN(b)) return null;
 
-        function renderItemTagsUI() {
-            var pills = document.querySelectorAll('.season-tags-wrap .tag-pill');
-            pills.forEach(function(pill) {
-                if (currentItemTags.includes(pill.innerText)) pill.classList.add('active');
-                else pill.classList.remove('active');
-            });
-            document.getElementById('fTags').value = currentItemTags.join(',');
+            var max = Math.max(r, g, b), min = Math.min(r, g, b);
+            var h = 0, s = 0, l = (max + min) / 2;
+            if (max !== min) {
+                var d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100), isNeutral: (s < 16 || l < 13 || l > 90) };
         }
 
-        // ==========================================================================
-        // ГЕНЕРАТОР V5 PRO (УМНАЯ РУЛЕТКА + COLOR MATCH)
-        // ==========================================================================
-        var genFilterTag = '';
-        var genEngineMode = 'random'; // random, harmony, mono
-        
+        function getItemHsl(item) {
+            if (!item) return null;
+            var cObj = parseColorField(item.color);
+            return hexToHsl(cObj.primaryHex || '#8e93a6');
+        }
+
+        function scoreColorPair(hslA, hslB, mode) {
+            if (!hslA || !hslB) return 82;
+            var diffH = Math.abs(hslA.h - hslB.h);
+            var hueDist = Math.min(diffH, 360 - diffH);
+            var diffL = Math.abs(hslA.l - hslB.l);
+
+            if (mode === 'mono') {
+                if (hslA.isNeutral && hslB.isNeutral) return 96 - Math.min(15, Math.abs(hslA.l - hslB.l) * 0.2);
+                if (hslA.isNeutral || hslB.isNeutral) return 80;
+                if (hueDist <= 22) return 98 - hueDist * 0.4;
+                return Math.max(40, 75 - hueDist * 0.3);
+            }
+            if (mode === 'neutral') {
+                if (hslA.isNeutral && hslB.isNeutral) return 98;
+                if ((hslA.isNeutral && hslB.s < 42) || (hslB.isNeutral && hslA.s < 42)) return 92;
+                if (hslA.s < 35 && hslB.s < 35) return 89;
+                return Math.max(45, 85 - (hslA.s + hslB.s) * 0.35);
+            }
+            if (mode === 'harmony') {
+                // Базовый нейтральный цвет отлично сочетается с любым акцентом
+                if (hslA.isNeutral && hslB.isNeutral) return 92;
+                if (hslA.isNeutral || hslB.isNeutral) return 95;
+                // Аналоговая гармония (соседние цвета)
+                if (hueDist <= 38) return 94;
+                // Комплементарная / триадная гармония
+                if (hueDist >= 145 && hueDist <= 215) return 97;
+                if (hueDist >= 105 && hueDist <= 135) return 91;
+                return Math.max(55, 78 - Math.abs(diffL - 30) * 0.2);
+            }
+            return 85;
+        }
+
+        function getActiveRolesList() {
+            var list = [];
+            if (useOuterwear) list.push({ id: 'OUTER', label: 'Второй слой' });
+            list.push({ id: 'TOP', label: 'Верх (База)' });
+            list.push({ id: 'BOTTOM', label: 'Низ' });
+            list.push({ id: 'SHOES', label: 'Обувь' });
+            if (useAccessory) list.push({ id: 'ACCESSORY', label: 'Аксессуар' });
+            return list;
+        }
+
+        function getCandidatesForRole(role) {
+            var base = items.filter(function(i) {
+                return i.status === 'IN_CLOSET' && parseCategoryField(i.category).role === role;
+            });
+            if (genSeasonFilter === 'ALL') return base;
+            var filtered = base.filter(function(i) {
+                var tags = parseCategoryField(i.category).tags;
+                return tags.indexOf(genSeasonFilter) !== -1;
+            });
+            // Если по строгому сезонному фильтру в категории пока нет размеченных вещей, берем все доступные из шкафа
+            return filtered.length > 0 ? filtered : base;
+        }
+
+        function pickBestCandidateForRole(role, anchorItems) {
+            var pool = getCandidatesForRole(role);
+            if (pool.length === 0) return null;
+            if (genColorMode === 'random' || anchorItems.length === 0) {
+                return pool[Math.floor(Math.random() * pool.length)];
+            }
+
+            var scored = pool.map(function(cand) {
+                var cHsl = getItemHsl(cand);
+                var total = 0;
+                anchorItems.forEach(function(anc) {
+                    total += scoreColorPair(cHsl, getItemHsl(anc), genColorMode);
+                });
+                var avg = total / anchorItems.length;
+                // Легкий стохастический разброс, чтобы каждый клик давал свежие топовые комбинации
+                var jitter = (Math.random() * 8) - 4;
+                return { item: cand, score: avg + jitter };
+            });
+
+            scored.sort(function(a, b) { return b.score - a.score; });
+            var topCount = Math.min(3, scored.length);
+            return scored[Math.floor(Math.random() * topCount)].item;
+        }
+
         window.openGenerator = function() {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
             toggleBodyScroll(true);
             
             var sheet = document.querySelector('#generatorModal .modal-sheet');
@@ -1335,262 +1879,556 @@
                 sheet.style.transform = '';
                 document.getElementById('generatorModal').classList.add('active');
             }, 10);
-            
-            if(!currentOutfit['TOP']) rollOutfit();
-            else renderGeneratorV5();
+
+            var hasAny = Object.keys(currentOutfit).some(function(k) { return !!currentOutfit[k]; });
+            if (!hasAny) smartRollOutfit();
+            else renderGenerator();
         };
 
-        window.closeGenerator = function() { document.getElementById('generatorModal').classList.remove('active'); toggleBodyScroll(false); };
+        window.closeGenerator = function() { 
+            document.getElementById('generatorModal').classList.remove('active'); 
+            toggleBodyScroll(false);
+        };
 
         window.setGenTab = function(tab) {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            var tabs = document.querySelectorAll('.gen-top-tabs .tab');
-            tabs.forEach(function(t){ t.classList.remove('active'); });
-            document.querySelector('.gen-top-tabs .tab[data-gentab="'+tab+'"]').classList.add('active');
-            
-            var indicator = document.getElementById('genTabIndicator');
-            if(tab === 'STUDIO') { indicator.style.transform = 'translateX(0)'; document.getElementById('genModeStudio').style.display='flex'; document.getElementById('genModeLooks').style.display='none'; }
-            else { indicator.style.transform = 'translateX(100%)'; document.getElementById('genModeStudio').style.display='none'; document.getElementById('genModeLooks').style.display='flex'; renderLookbook(); }
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            genActiveTab = tab;
+            document.getElementById('genTabBtnStudio').classList.toggle('active', tab === 'STUDIO');
+            document.getElementById('genTabBtnLooks').classList.toggle('active', tab === 'LOOKS');
+            document.getElementById('genTabIndicator').style.transform = tab === 'STUDIO' ? 'translateX(0)' : 'translateX(100%)';
+
+            var isStudio = (tab === 'STUDIO');
+            document.getElementById('genViewSwitch').style.display = isStudio ? 'flex' : 'none';
+            document.getElementById('genEngineStrip').style.display = isStudio ? 'flex' : 'none';
+            document.getElementById('genSeasonStrip').style.display = isStudio ? 'flex' : 'none';
+            document.getElementById('genHarmonyBanner').style.display = isStudio ? 'flex' : 'none';
+            document.getElementById('genSlotsContainer').style.display = isStudio ? 'flex' : 'none';
+            document.getElementById('genStudioFooter').style.display = isStudio ? 'flex' : 'none';
+            document.getElementById('genLookbookContainer').style.display = isStudio ? 'none' : 'flex';
+
+            if (!isStudio) renderLookbook();
+            else renderGenerator();
         };
 
-        window.toggleGenFilter = function(tag) {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            genFilterTag = tag;
-            var pills = document.querySelectorAll('#genSeasonFilters .tag-pill');
-            pills.forEach(function(p) {
-                if((tag === '' && p.innerText === 'Все сезоны') || p.innerText === tag) p.classList.add('active');
-                else p.classList.remove('active');
+        window.setGenViewMode = function(mode) {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            genViewMode = mode;
+            document.getElementById('btnViewReel').classList.toggle('active', mode === 'REEL');
+            document.getElementById('btnViewCanvas').classList.toggle('active', mode === 'CANVAS');
+            renderGenerator();
+        };
+
+        window.setGenColorMode = function(mode) {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            genColorMode = mode;
+            document.querySelectorAll('#genEngineStrip [data-cmode]').forEach(function(el) {
+                el.classList.toggle('active', el.getAttribute('data-cmode') === mode);
             });
-            rollOutfit();
+            smartRollOutfit();
         };
 
-        window.openEngineSheet = function() {
-            var opts = [
-                {value: "random", label: "🎲 Рандомный подбор"},
-                {value: "harmony", label: "🎨 Цветовая гармония"},
-                {value: "mono", label: "⚫️ Тон-в-тон (Монохром)"}
-            ];
-            openSheet("Алгоритм", opts, genEngineMode, function(val, label) {
-                genEngineMode = val;
-                document.getElementById('engineTitleText').innerText = label;
-                var desc = {"random":"Случайные вещи из гардероба", "harmony":"Контрастные или аналоговые цвета", "mono":"Только в оттенках одного цвета"};
-                document.getElementById('engineDescText').innerText = desc[val];
-                rollOutfit();
+        window.setGenSeasonFilter = function(tag) {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            genSeasonFilter = tag;
+            document.querySelectorAll('#genSeasonStrip [data-stag]').forEach(function(el) {
+                el.classList.toggle('active', el.getAttribute('data-stag') === tag);
             });
+            smartRollOutfit();
         };
 
-        window.toggleOuterwear = function() {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            useOuterwear = document.getElementById('toggleOuter').checked;
-            if (useOuterwear && !currentOutfit['OUTER']) smartRollSlot('OUTER');
-            renderGeneratorV5();
+        window.toggleGenLayer = function(role) {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            if (role === 'OUTER') {
+                useOuterwear = !useOuterwear;
+                document.getElementById('chipLayerOuter').classList.toggle('active', useOuterwear);
+                if (useOuterwear && !currentOutfit.OUTER) refreshSlot('OUTER');
+            } else if (role === 'ACCESSORY') {
+                useAccessory = !useAccessory;
+                document.getElementById('chipLayerAcc').classList.toggle('active', useAccessory);
+                if (useAccessory && !currentOutfit.ACCESSORY) refreshSlot('ACCESSORY');
+            }
+            renderGenerator();
         };
 
-        window.rollOutfit = function() {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            var roles = ['TOP', 'BOTTOM', 'SHOES'];
-            if (useOuterwear) roles.unshift('OUTER');
-            
-            // Если выбран умный цвет, сначала роллим TOP, чтобы от него строить гармонию
-            if (!lockedSlots['TOP']) smartRollSlot('TOP');
-            
-            roles.forEach(function(role) { 
-                if (role !== 'TOP' && !lockedSlots[role]) smartRollSlot(role); 
+        window.smartRollOutfit = function() {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('medium');
+            var activeRoles = getActiveRolesList().map(function(r) { return r.id; });
+            var anchors = [];
+
+            // Сперва фиксируем заблокированные пользователем вещи как цветовые якоря
+            activeRoles.forEach(function(role) {
+                if (lockedSlots[role] && currentOutfit[role]) anchors.push(currentOutfit[role]);
             });
-            renderGeneratorV5();
-        };
 
-        function smartRollSlot(role) {
-            // 1. Сначала фильтр по шкафу и тегу сезона
-            var available = items.filter(function(i) { 
-                if(i.status !== 'IN_CLOSET') return false;
-                if(parseCategoryField(i.category).role !== role) return false;
-                if(genFilterTag && !(i.tags || '').includes(genFilterTag)) return false;
-                return true;
-            });
-            
-            // Если с тегом ничего нет, ищем без тега
-            if(available.length === 0) {
-                available = items.filter(function(i) { return i.status === 'IN_CLOSET' && parseCategoryField(i.category).role === role; });
+            // Если ничего не заблокировано, выбираем якорную вещь (Верх или Низ)
+            var unlockedRoles = activeRoles.filter(function(r) { return !lockedSlots[r]; });
+            if (anchors.length === 0 && unlockedRoles.length > 0) {
+                var seedRole = unlockedRoles.indexOf('TOP') !== -1 ? 'TOP' : unlockedRoles[0];
+                var seedPool = getCandidatesForRole(seedRole);
+                if (genColorMode === 'neutral' && seedPool.length > 0) {
+                    var neutralPool = seedPool.filter(function(i) { var h = getItemHsl(i); return h && (h.isNeutral || h.s < 35); });
+                    if (neutralPool.length > 0) seedPool = neutralPool;
+                }
+                currentOutfit[seedRole] = seedPool.length > 0 ? seedPool[Math.floor(Math.random() * seedPool.length)] : null;
+                if (currentOutfit[seedRole]) anchors.push(currentOutfit[seedRole]);
+                unlockedRoles = unlockedRoles.filter(function(r) { return r !== seedRole; });
             }
 
-            // 2. Цветовой движок (если не рандом и уже есть TOP)
-            if (genEngineMode !== 'random' && role !== 'TOP' && currentOutfit['TOP'] && available.length > 0) {
-                var topColorHex = parseColorField(currentOutfit['TOP'].color).color1;
-                var colorMatched = available.filter(function(i) {
-                    var itemColorHex = parseColorField(i.color).color1;
-                    return isColorMatch(topColorHex, itemColorHex, genEngineMode);
-                });
-                if (colorMatched.length > 0) available = colorMatched; // Если нашли совпадения, берем из них
+            unlockedRoles.forEach(function(role) {
+                var picked = pickBestCandidateForRole(role, anchors);
+                currentOutfit[role] = picked;
+                if (picked) anchors.push(picked);
+            });
+
+            renderGenerator(true);
+        };
+
+        window.toggleLock = function(role, ev) { 
+            if (ev) ev.stopPropagation();
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light'); 
+            lockedSlots[role] = !lockedSlots[role]; 
+            renderGenerator(false); 
+        };
+
+        window.refreshSlot = function(role, ev) { 
+            if (ev) ev.stopPropagation();
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light'); 
+            lockedSlots[role] = false; 
+            var activeRoles = getActiveRolesList().map(function(r) { return r.id; });
+            var anchors = activeRoles.filter(function(r) { return r !== role && currentOutfit[r]; }).map(function(r) { return currentOutfit[r]; });
+            currentOutfit[role] = pickBestCandidateForRole(role, anchors);
+            renderGenerator(true); 
+        };
+
+        window.selectReelItem = function(role, itemId) {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.selectionChanged();
+            var found = items.find(function(i) { return String(i.id) === String(itemId); });
+            if (!found) return;
+            if (currentOutfit[role] && String(currentOutfit[role].id) === String(itemId)) {
+                openModal(itemId);
+                return;
+            }
+            currentOutfit[role] = found;
+            renderGenerator(false);
+        };
+
+        function updateHarmonyBanner() {
+            var activeRoles = getActiveRolesList();
+            var chosen = activeRoles.map(function(r) { return currentOutfit[r.id]; }).filter(Boolean);
+            var dotsHtml = '';
+            chosen.forEach(function(it) {
+                var cObj = parseColorField(it.color);
+                if (cObj.dot) dotsHtml += cObj.dot;
+            });
+            document.getElementById('genPaletteDots').innerHTML = dotsHtml;
+
+            if (chosen.length < 2) {
+                document.getElementById('genHarmonyText').innerText = "Добавьте вещи в шкаф для расчета";
+                document.getElementById('genHarmonyScore').innerText = "—";
+                return;
             }
 
-            if (available.length > 0) { 
-                currentOutfit[role] = available[Math.floor(Math.random() * available.length)]; 
-            } else { 
-                currentOutfit[role] = null; 
+            var sum = 0, pairs = 0;
+            for (var i = 0; i < chosen.length; i++) {
+                for (var j = i + 1; j < chosen.length; j++) {
+                    sum += scoreColorPair(getItemHsl(chosen[i]), getItemHsl(chosen[j]), genColorMode === 'random' ? 'harmony' : genColorMode);
+                    pairs++;
+                }
             }
+            var score = Math.min(99, Math.max(68, Math.round(sum / Math.max(1, pairs))));
+            var modeNames = {
+                harmony: "Гармония оттенков",
+                mono: "Монохромный баланс",
+                neutral: "Спокойная капсула",
+                random: "Свободный микс"
+            };
+            document.getElementById('genHarmonyText').innerText = modeNames[genColorMode] || "Баланс образа";
+            document.getElementById('genHarmonyScore').innerText = score + "% · Стиль";
         }
 
-        window.selectGenItem = function(role, id) {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            var item = items.find(function(i) { return String(i.id) === String(id); });
-            if (item) {
-                currentOutfit[role] = item;
-                renderGeneratorV5();
-            }
-        };
-
-        function renderGeneratorV5() {
+        function renderGenerator(scrollReels) {
+            updateHarmonyBanner();
             var container = document.getElementById('genSlotsContainer');
-            var rolesMap = [];
-            if (useOuterwear) rolesMap.push({ id: 'OUTER', label: 'Второй слой' });
-            rolesMap.push({ id: 'TOP', label: 'Верх (База)' });
-            rolesMap.push({ id: 'BOTTOM', label: 'Низ' });
-            rolesMap.push({ id: 'SHOES', label: 'Обувь' });
-            
+            var rolesMap = getActiveRolesList();
+
+            if (genViewMode === 'CANVAS') {
+                var cHtml = '<div class="gen-canvas-board">';
+                rolesMap.forEach(function(r, idx) {
+                    var it = currentOutfit[r.id];
+                    var locked = lockedSlots[r.id];
+                    var isFullWidth = (rolesMap.length % 2 === 1 && idx === rolesMap.length - 1);
+                    if (it) {
+                        var cObj = parseColorField(it.color);
+                        var pCat = parseCategoryField(it.category);
+                        var cropStyle = getCropStyleString(pCat.crop);
+                        var photo = it.photo ? it.photo.replace('sz=w1000', 'sz=w400') : '';
+                        var metaLabel = (it.brand || '') + (it.brand && cObj.text ? ' · ' : '') + cObj.text;
+                        var imgEl = photo ? `<img src="${photo}" style="${cropStyle}">` : `<div class="placeholder-img">${NO_PHOTO_SVG}</div>`;
+
+                        cHtml += `<div class="gen-canvas-card ${isFullWidth ? 'span-full' : ''}" onclick="openModal('${it.id}')">` +
+                            `<div class="gen-canvas-img"><span class="gen-canvas-role-badge">${r.label}</span>` +
+                            `<div class="gen-canvas-actions">` +
+                                `<button type="button" class="gen-mini-btn ${locked ? 'locked' : ''}" onclick="toggleLock('${r.id}', event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></button>` +
+                                `<button type="button" class="gen-mini-btn" onclick="refreshSlot('${r.id}', event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg></button>` +
+                            `</div>${imgEl}</div>` +
+                            `<div class="gen-canvas-meta"><div class="gen-canvas-title">${it.name || 'Без названия'}</div><div class="gen-canvas-sub">${cObj.dot}<span>${metaLabel || 'Без бренда'}</span></div></div>` +
+                        `</div>`;
+                    } else {
+                        cHtml += `<div class="gen-canvas-card ${isFullWidth ? 'span-full' : ''}" style="padding:18px; align-items:center; justify-content:center; text-align:center;"><span class="gen-reel-role">${r.label}</span><div class="gen-empty">Нет вещей в шкафу</div></div>`;
+                    }
+                });
+                cHtml += '</div>';
+                container.innerHTML = cHtml;
+                return;
+            }
+
+            // РЕЖИМ БАРАБАНОВ (REEL)
             var html = '';
             rolesMap.forEach(function(r) {
-                var activeItem = currentOutfit[r.id];
+                var candidates = getCandidatesForRole(r.id);
+                var activeIt = currentOutfit[r.id];
                 var locked = lockedSlots[r.id];
-                
-                // Получаем все вещи для карусели
-                var availableForRole = items.filter(function(i) { return i.status === 'IN_CLOSET' && parseCategoryField(i.category).role === r.id; });
-                
-                // Чтобы активная вещь (даже если она не подходит по тегу, но была выбрана) была в карусели
-                if (activeItem && !availableForRole.find(function(i){return i.id===activeItem.id})) availableForRole.unshift(activeItem);
+                var activeC = activeIt ? parseColorField(activeIt.color) : null;
+                var activeTitle = activeIt ? (activeIt.name || 'Без названия') : 'Нет подходящих вещей';
 
-                html += '<div class="gen-role-row">';
-                html += '<div class="gen-role-header"><span class="gen-role-title">' + r.label + '</span>';
-                html += '<button class="gen-btn ' + (locked ? 'locked' : '') + '" onclick="toggleLock(\'' + r.id + '\')" style="width:28px;height:28px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></button>';
-                html += '</div>';
-                
-                if (availableForRole.length > 0) {
-                    html += '<div class="gen-carousel">';
-                    availableForRole.forEach(function(i) {
-                        var isActive = activeItem && String(i.id) === String(activeItem.id);
-                        var photo = i.photo ? i.photo.replace('sz=w1000', 'sz=w400') : '';
-                        var cObj = parseColorField(i.color);
-                        var pCat = parseCategoryField(i.category);
+                html += `<div class="gen-reel-block">`;
+                html += `<div class="gen-reel-head">` +
+                    `<div class="gen-reel-title-wrap" onclick="${activeIt ? `openModal('${activeIt.id}')` : ''}">` +
+                        `<span class="gen-reel-role">${r.label} · ${candidates.length} шт.</span>` +
+                        `<div class="gen-reel-active-name">${activeC ? activeC.dot : ''}<span>${activeTitle}</span></div>` +
+                    `</div>` +
+                    `<div class="gen-reel-controls">` +
+                        `<button type="button" class="gen-btn ${locked ? 'locked' : ''}" onclick="toggleLock('${r.id}', event)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></button>` +
+                        `<button type="button" class="gen-btn" onclick="refreshSlot('${r.id}', event)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg></button>` +
+                    `</div>` +
+                `</div>`;
+
+                if (candidates.length > 0) {
+                    html += `<div class="gen-reel-track" id="reel-${r.id}">`;
+                    candidates.forEach(function(cand) {
+                        var isSel = activeIt && String(cand.id) === String(activeIt.id);
+                        var cObj = parseColorField(cand.color);
+                        var pCat = parseCategoryField(cand.category);
                         var cropStyle = getCropStyleString(pCat.crop);
+                        var thumb = cand.photo ? cand.photo.replace('sz=w1000', 'sz=w400') : '';
+                        var imgMarkup = thumb ? `<img src="${thumb}" style="${cropStyle}">` : `<div class="placeholder-img">${NO_PHOTO_SVG}</div>`;
 
-                        var imgBlock = photo ? '<img src="' + photo + '" style="' + cropStyle + '" loading="lazy">' : '<div class="placeholder-img" style="transform:scale(0.6);">' + NO_PHOTO_SVG + '</div>';
-
-                        html += '<div class="gen-carousel-item ' + (isActive ? 'active' : '') + '" onclick="selectGenItem(\'' + r.id + '\', \'' + i.id + '\')">';
-                        html += '<div class="gen-carousel-img">' + imgBlock + '</div>';
-                        html += '<div class="gen-carousel-info">' + cObj.dot + '</div>';
-                        html += '</div>';
+                        html += `<div class="gen-reel-card ${isSel ? 'selected' : ''}" id="reel-item-${r.id}-${cand.id}" onclick="selectReelItem('${r.id}', '${cand.id}')">` +
+                            `<div class="gen-reel-thumb">${imgMarkup}</div>` +
+                            `<div class="gen-reel-caption">${cObj.dot}<span>${cand.name || 'Вещь'}</span></div>` +
+                        `</div>`;
                     });
-                    html += '</div>';
+                    html += `</div>`;
                 } else {
-                    html += '<div class="gen-carousel-empty">В шкафу нет вещей для этой категории</div>';
+                    html += `<div class="gen-empty" style="padding: 8px 14px;">В шкафу нет вещей для этой роли</div>`;
                 }
-                html += '</div>';
+                html += `</div>`;
             });
+
             container.innerHTML = html;
+
+            if (scrollReels) {
+                setTimeout(function() {
+                    rolesMap.forEach(function(r) {
+                        var activeIt = currentOutfit[r.id];
+                        if (!activeIt) return;
+                        var el = document.getElementById('reel-item-' + r.id + '-' + activeIt.id);
+                        if (el && el.scrollIntoView) {
+                            el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                        }
+                    });
+                }, 40);
+            }
         }
 
         // ==========================================================================
-        // ЛУКБУК (СОХРАНЕНИЕ ОБРАЗОВ)
+        // ЛУКБУК: СОХРАНЕНИЕ И УПРАВЛЕНИЕ ОБРАЗАМИ
         // ==========================================================================
+        function updateLooksBadge() {
+            var el = document.getElementById('cnt-LOOKS');
+            if (el) el.innerText = savedLooks.length;
+        }
+
         window.saveCurrentLook = function() {
-            if(!currentOutfit['TOP'] && !currentOutfit['BOTTOM']) {
-                alert("Сначала соберите образ!"); return;
-            }
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            var look = {
-                id: Date.now(),
-                date: new Date().toLocaleDateString(),
-                items: {
-                    OUTER: currentOutfit['OUTER'] ? currentOutfit['OUTER'].id : null,
-                    TOP: currentOutfit['TOP'] ? currentOutfit['TOP'].id : null,
-                    BOTTOM: currentOutfit['BOTTOM'] ? currentOutfit['BOTTOM'].id : null,
-                    SHOES: currentOutfit['SHOES'] ? currentOutfit['SHOES'].id : null
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.notificationOccurred('success');
+            var activeRoles = getActiveRolesList();
+            var slots = {};
+            var count = 0;
+            activeRoles.forEach(function(r) {
+                if (currentOutfit[r.id]) {
+                    slots[r.id] = currentOutfit[r.id].id;
+                    count++;
                 }
+            });
+            if (count === 0) return;
+
+            var now = new Date();
+            var dateStr = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+            var seasonLabel = genSeasonFilter === 'ALL' ? 'Базовый образ' : genSeasonFilter;
+
+            var newLook = {
+                id: String(Date.now()),
+                title: seasonLabel + ' #' + (savedLooks.length + 1),
+                date: dateStr,
+                useOuter: useOuterwear,
+                useAcc: useAccessory,
+                slots: slots
             };
-            savedLooks.unshift(look);
-            localStorage.setItem(CACHE_KEY + "_looks", JSON.stringify(savedLooks));
-            showSync("Образ сохранён ❤️");
-            setTimeout(function(){showSync("");}, 1500);
+
+            savedLooks.unshift(newLook);
+            localStorage.setItem(LOOKS_KEY, JSON.stringify(savedLooks));
+            updateLooksBadge();
+            showSync("Образ сохранен в Лукбук!");
+            setTimeout(function() { showSync(""); }, 1800);
         };
 
-        window.deleteLook = function(id) {
-            if (tg) tg.HapticFeedback.impactOccurred('light');
-            savedLooks = savedLooks.filter(function(l) { return String(l.id) !== String(id); });
-            localStorage.setItem(CACHE_KEY + "_looks", JSON.stringify(savedLooks));
+        window.applySavedLook = function(lookId) {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('medium');
+            var look = savedLooks.find(function(l) { return String(l.id) === String(lookId); });
+            if (!look) return;
+
+            useOuterwear = !!look.useOuter;
+            useAccessory = !!look.useAcc;
+            document.getElementById('chipLayerOuter').classList.toggle('active', useOuterwear);
+            document.getElementById('chipLayerAcc').classList.toggle('active', useAccessory);
+
+            ['OUTER', 'TOP', 'BOTTOM', 'SHOES', 'ACCESSORY'].forEach(function(role) {
+                var itemId = look.slots && look.slots[role];
+                currentOutfit[role] = itemId ? (items.find(function(i) { return String(i.id) === String(itemId); }) || null) : null;
+            });
+
+            setGenTab('STUDIO');
+        };
+
+        window.deleteSavedLook = function(lookId) {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            savedLooks = savedLooks.filter(function(l) { return String(l.id) !== String(lookId); });
+            localStorage.setItem(LOOKS_KEY, JSON.stringify(savedLooks));
+            updateLooksBadge();
             renderLookbook();
         };
 
-        function getLookGridHtml(lookItems) {
-            var roles = ['OUTER', 'TOP', 'BOTTOM', 'SHOES'];
-            var html = '';
-            roles.forEach(function(r) {
-                var id = lookItems[r];
-                if(id) {
-                    var item = items.find(function(i){return String(i.id)===String(id)});
-                    if(item && item.photo) {
-                        var pCat = parseCategoryField(item.category);
-                        html += '<div class="look-grid-item"><img src="' + item.photo.replace('sz=w1000', 'sz=w400') + '" style="' + getCropStyleString(pCat.crop) + '"></div>';
-                    }
-                }
-            });
-            return html;
-        }
-
         function renderLookbook() {
-            var container = document.getElementById('genModeLooks');
+            var container = document.getElementById('genLookbookContainer');
             if (savedLooks.length === 0) {
-                container.innerHTML = '<div style="text-align:center; color:var(--subtext); padding:40px 20px; font-weight:600;">У вас пока нет сохраненных образов. Создайте их в Студии!</div>';
+                container.innerHTML = `<div class="empty" style="display:block; padding: 50px 20px;">В вашем Лукбуке пока нет сохраненных образов.<br><br>Соберите сочетание в Студии и нажмите «❤️ В Лукбук».</div>`;
                 return;
             }
-            var html = '';
+
+            var html = '<div class="lookbook-grid">';
             savedLooks.forEach(function(look) {
-                html += '<div class="look-card">';
-                html += '<div class="look-grid">' + getLookGridHtml(look.items) + '</div>';
-                html += '<div class="look-footer">';
-                html += '<span class="look-date">' + look.date + '</span>';
-                html += '<button class="look-del-btn" onclick="deleteLook(\'' + look.id + '\')">Удалить</button>';
-                html += '</div></div>';
+                var pieces = [];
+                ['OUTER', 'TOP', 'BOTTOM', 'SHOES', 'ACCESSORY'].forEach(function(role) {
+                    var itemId = look.slots && look.slots[role];
+                    if (itemId) {
+                        var found = items.find(function(i) { return String(i.id) === String(itemId); });
+                        if (found) pieces.push(found);
+                    }
+                });
+
+                var collageHtml = '';
+                pieces.forEach(function(p) {
+                    var pCat = parseCategoryField(p.category);
+                    var cropStyle = getCropStyleString(pCat.crop);
+                    var thumb = p.photo ? p.photo.replace('sz=w1000', 'sz=w400') : '';
+                    var imgEl = thumb ? `<img src="${thumb}" style="${cropStyle}">` : `<div class="placeholder-img">${NO_PHOTO_SVG}</div>`;
+                    collageHtml += `<div class="look-collage-cell" onclick="openModal('${p.id}')">${imgEl}</div>`;
+                });
+
+                html += `<div class="look-card">` +
+                    `<div class="look-collage">${collageHtml}</div>` +
+                    `<div class="look-card-bar">` +
+                        `<div class="look-card-info">` +
+                            `<div class="look-card-title">${look.title}</div>` +
+                            `<div class="look-card-sub">${look.date} · ${pieces.length} вещ.</div>` +
+                        `</div>` +
+                        `<div class="look-card-btns">` +
+                            `<button type="button" class="look-act-btn primary" onclick="applySavedLook('${look.id}')">В студию</button>` +
+                            `<button type="button" class="look-act-btn danger" onclick="deleteSavedLook('${look.id}')">✕</button>` +
+                        `</div>` +
+                    `</div>` +
+                `</div>`;
             });
+            html += '</div>';
             container.innerHTML = html;
         }
 
+        // ==========================================================================
+        // ЦВЕТА И ПОЛНОЭКРАННЫЙ ЗУМ
+        // ==========================================================================
+        window.updateCircle = function(num) {
+            var hex = document.getElementById('fColorHex' + num).value;
+            document.getElementById('circle' + num).style.backgroundColor = hex;
+        };
+
+        function checkResetBtnVisibility() {
+            var isCustom = document.getElementById('fHasCustomColors').value === "true";
+            document.getElementById('btnClearColors').style.display = isCustom ? 'inline-block' : 'none';
+        }
+
+        window.markCustomColorUsed = function() { 
+            document.getElementById('fHasCustomColors').value = "true"; 
+            checkResetBtnVisibility();
+        };
+
+        window.toggleColor2 = function() {
+            isColor2Active = !isColor2Active;
+            document.getElementById('circle2').style.display = isColor2Active ? 'block' : 'none';
+            document.getElementById('btnRemoveColor2').style.display = isColor2Active ? 'inline-block' : 'none';
+            document.getElementById('btnToggleColor2').style.display = isColor2Active ? 'none' : 'inline-block';
+            if (isColor2Active) markCustomColorUsed();
+        };
+
+        window.clearCustomColors = function() {
+            document.getElementById('fHasCustomColors').value = "false";
+            document.getElementById('fColorHex1').value = "#ffffff"; updateCircle(1);
+            document.getElementById('fColorHex2').value = "#ffffff"; updateCircle(2);
+            isColor2Active = false;
+            document.getElementById('circle2').style.display = 'none';
+            document.getElementById('btnRemoveColor2').style.display = 'none';
+            document.getElementById('btnToggleColor2').style.display = 'inline-block';
+            checkResetBtnVisibility();
+        };
+
+        function loadPhotoWithSpinner(imgElement, loaderElement, src, blurElement) {
+            imgElement.style.opacity = '0';
+            if (loaderElement) loaderElement.style.display = 'block';
+            imgElement.onload = function() {
+                if (loaderElement) loaderElement.style.display = 'none';
+                imgElement.style.opacity = '1';
+            };
+            imgElement.src = src;
+            if (blurElement) blurElement.style.backgroundImage = 'url(' + src + ')';
+        }
+
+        var viewerImg = document.getElementById('viewerImg');
+        var viewerContainer = document.getElementById('viewerContainer');
+        var scale = 1, panX = 0, panY = 0, startPanX = 0, startPanY = 0, startScale = 1, startDistance = 0, focalX = 0, focalY = 0, isPanning = false, lastTap = 0;
+
+        function resetZoomState() {
+            scale = 1; panX = 0; panY = 0;
+            viewerImg.style.transition = 'transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)';
+            viewerImg.style.transform = "translate(0px, 0px) scale(1)";
+        }
+
+        window.openFullscreen = function(src) {
+            if(!src) return;
+            toggleBodyScroll(true);
+            resetZoomState();
+            var fLoader = document.getElementById('fullscreenLoader');
+            document.getElementById('imageViewer').classList.add('active');
+            loadPhotoWithSpinner(viewerImg, fLoader, src, null);
+        };
+        
+        window.closeFullscreen = function() { 
+            document.getElementById('imageViewer').classList.remove('active'); 
+            if (document.getElementById('itemModal').classList.contains('active') || document.getElementById('generatorModal').classList.contains('active')) {
+                toggleBodyScroll(true);
+            } else {
+                toggleBodyScroll(false);
+            }
+        };
+
+        viewerContainer.addEventListener('touchstart', function(e) {
+            viewerImg.style.transition = 'none';
+            if (e.touches.length === 2) {
+                isPanning = false; 
+                startDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                startScale = scale; startPanX = panX; startPanY = panY;
+                focalX = (e.touches[0].clientX + e.touches[1].clientX) / 2; focalY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+            } else if (e.touches.length === 1 && scale > 1) {
+                isPanning = true; startPanX = panX; startPanY = panY; focalX = e.touches[0].clientX; focalY = e.touches[0].clientY;
+            }
+        }, {passive: false});
+
+        viewerContainer.addEventListener('touchmove', function(e) {
+            e.preventDefault(); 
+            var rect = viewerContainer.getBoundingClientRect(); 
+            var centerX = rect.left + rect.width / 2; var centerY = rect.top + rect.height / 2;
+            
+            if (e.touches.length === 2) {
+                var currentDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                var newScale = Math.max(1, Math.min(startScale * (currentDistance / startDistance), 5));
+                var currentFocalX = (e.touches[0].clientX + e.touches[1].clientX) / 2; var currentFocalY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+                panX = currentFocalX - centerX - (focalX - centerX - startPanX) * (newScale / startScale); 
+                panY = currentFocalY - centerY - (focalY - centerY - startPanY) * (newScale / startScale);
+                scale = newScale; viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")";
+            } else if (e.touches.length === 1 && isPanning && scale > 1) {
+                panX = startPanX + (e.touches[0].clientX - focalX); panY = startPanY + (e.touches[0].clientY - focalY); 
+                viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")";
+            }
+        }, {passive: false});
+
+        viewerContainer.addEventListener('touchend', function(e) {
+            if (e.touches.length < 2) isPanning = false;
+            if (e.touches.length === 0 && scale <= 1) { resetZoomState(); }
+            if (e.changedTouches.length === 1) {
+                var now = new Date().getTime();
+                if (now - lastTap < 300 && now - lastTap > 0) {
+                    e.preventDefault();
+                    if (scale > 1) { resetZoomState(); } else { 
+                        scale = 2.5; 
+                        var rect = viewerContainer.getBoundingClientRect(); 
+                        var centerX = rect.left + rect.width / 2; var centerY = rect.top + rect.height / 2; 
+                        var touchX = e.changedTouches[0].clientX; var touchY = e.changedTouches[0].clientY;
+                        panX = (centerX - touchX) * (scale - 1); panY = (centerY - touchY) * (scale - 1);
+                        viewerImg.style.transition = 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)'; 
+                        viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")"; 
+                    }
+                }
+                lastTap = now;
+            }
+            if (e.touches.length === 1 && scale > 1) { isPanning = true; startPanX = panX; startPanY = panY; focalX = e.touches[0].clientX; focalY = e.touches[0].clientY; }
+        });
 
         // ==========================================================================
-        // ШТОРКИ И СВОЙСТВА ВЕЩИ
+        // МОДАЛЬНОЕ ОКНО ВЕЩИ И СОХРАНЕНИЕ
         // ==========================================================================
-        window.openSheet = function(title, options, selectedValue, callback) { ... } // Duplicate implementation removed, use the one defined earlier
+        window.requestDelete = function() {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            document.getElementById('confirmDialog').classList.add('active');
+        };
 
-        window.updateCircle = function(num) { var hex = document.getElementById('fColorHex' + num).value; document.getElementById('circle' + num).style.backgroundColor = hex; };
-        function checkResetBtnVisibility() { var isCustom = document.getElementById('fHasCustomColors').value === "true"; document.getElementById('btnClearColors').style.display = isCustom ? 'inline-block' : 'none'; }
-        window.markCustomColorUsed = function() { document.getElementById('fHasCustomColors').value = "true"; checkResetBtnVisibility(); };
-        window.toggleColor2 = function() { isColor2Active = !isColor2Active; document.getElementById('circle2').style.display = isColor2Active ? 'block' : 'none'; document.getElementById('btnRemoveColor2').style.display = isColor2Active ? 'inline-block' : 'none'; document.getElementById('btnToggleColor2').style.display = isColor2Active ? 'none' : 'inline-block'; if (isColor2Active) markCustomColorUsed(); };
-        window.clearCustomColors = function() { document.getElementById('fHasCustomColors').value = "false"; document.getElementById('fColorHex1').value = "#ffffff"; updateCircle(1); document.getElementById('fColorHex2').value = "#ffffff"; updateCircle(2); isColor2Active = false; document.getElementById('circle2').style.display = 'none'; document.getElementById('btnRemoveColor2').style.display = 'none'; document.getElementById('btnToggleColor2').style.display = 'inline-block'; checkResetBtnVisibility(); };
+        window.executeDelete = function() {
+            document.getElementById('confirmDialog').classList.remove('active');
+            if (!editingId) return;
+            
+            items = items.filter(function(i) { return String(i.id) !== String(editingId); });
+            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); 
+            syncGrid(); 
+            closeModal();
+            
+            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
+        };
 
-        var viewerImg = document.getElementById('viewerImg'); var viewerContainer = document.getElementById('viewerContainer'); var scale = 1, panX = 0, panY = 0, startPanX = 0, startPanY = 0, startScale = 1, startDistance = 0, focalX = 0, focalY = 0, isPanning = false, lastTap = 0;
-        function resetZoomState() { scale = 1; panX = 0; panY = 0; viewerImg.style.transition = 'transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)'; viewerImg.style.transform = "translate(0px, 0px) scale(1)"; }
-        window.openFullscreen = function(src) { if(!src) return; toggleBodyScroll(true); resetZoomState(); var fLoader = document.getElementById('fullscreenLoader'); document.getElementById('imageViewer').classList.add('active'); loadPhotoWithSpinner(viewerImg, fLoader, src, null); };
-        window.closeFullscreen = function() { document.getElementById('imageViewer').classList.remove('active'); if (document.getElementById('itemModal').classList.contains('active') || document.getElementById('generatorModal').classList.contains('active')) { toggleBodyScroll(true); } else { toggleBodyScroll(false); } };
-
-        viewerContainer.addEventListener('touchstart', function(e) { viewerImg.style.transition = 'none'; if (e.touches.length === 2) { isPanning = false; startDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); startScale = scale; startPanX = panX; startPanY = panY; focalX = (e.touches[0].clientX + e.touches[1].clientX) / 2; focalY = (e.touches[0].clientY + e.touches[1].clientY) / 2; } else if (e.touches.length === 1 && scale > 1) { isPanning = true; startPanX = panX; startPanY = panY; focalX = e.touches[0].clientX; focalY = e.touches[0].clientY; } }, {passive: false});
-        viewerContainer.addEventListener('touchmove', function(e) { e.preventDefault(); var rect = viewerContainer.getBoundingClientRect(); var centerX = rect.left + rect.width / 2; var centerY = rect.top + rect.height / 2; if (e.touches.length === 2) { var currentDistance = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); var newScale = Math.max(1, Math.min(startScale * (currentDistance / startDistance), 5)); var currentFocalX = (e.touches[0].clientX + e.touches[1].clientX) / 2; var currentFocalY = (e.touches[0].clientY + e.touches[1].clientY) / 2; panX = currentFocalX - centerX - (focalX - centerX - startPanX) * (newScale / startScale); panY = currentFocalY - centerY - (focalY - centerY - startPanY) * (newScale / startScale); scale = newScale; viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")"; } else if (e.touches.length === 1 && isPanning && scale > 1) { panX = startPanX + (e.touches[0].clientX - focalX); panY = startPanY + (e.touches[0].clientY - focalY); viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")"; } }, {passive: false});
-        viewerContainer.addEventListener('touchend', function(e) { if (e.touches.length < 2) isPanning = false; if (e.touches.length === 0 && scale <= 1) { resetZoomState(); } if (e.changedTouches.length === 1) { var now = new Date().getTime(); if (now - lastTap < 300 && now - lastTap > 0) { e.preventDefault(); if (scale > 1) { resetZoomState(); } else { scale = 2.5; var rect = viewerContainer.getBoundingClientRect(); var centerX = rect.left + rect.width / 2; var centerY = rect.top + rect.height / 2; var touchX = e.changedTouches[0].clientX; var touchY = e.changedTouches[0].clientY; panX = (centerX - touchX) * (scale - 1); panY = (centerY - touchY) * (scale - 1); viewerImg.style.transition = 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)'; viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")"; } } lastTap = now; } if (e.touches.length === 1 && scale > 1) { isPanning = true; startPanX = panX; startPanY = panY; focalX = e.touches[0].clientX; focalY = e.touches[0].clientY; } });
-
-        window.requestDeletePrompt = function() { if (tg) tg.HapticFeedback.impactOccurred('light'); document.getElementById('confirmDialog').classList.add('active'); };
+        window.switchToEditMode = function() {
+            document.getElementById('viewMode').style.display = 'none';
+            document.getElementById('editMode').style.display = 'flex';
+            updateCropUIState(!!currentPhotoData);
+        };
 
         window.openModal = function(id) {
             if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
             toggleBodyScroll(true);
             editingId = id || null;
             
-            var prev = document.getElementById('photoPreview'); var placeholder = document.getElementById('photoPlaceholder'); var changeBtn = document.getElementById('btnChangePhoto');
-            var viewImg = document.getElementById('viewPhotoImg'); var viewBlur = document.getElementById('viewBlurBg'); var loader = document.getElementById('viewPhotoLoader');
+            var prev = document.getElementById('photoPreview');
+            var placeholder = document.getElementById('photoPlaceholder');
+            var viewImg = document.getElementById('viewPhotoImg');
+            var viewBlur = document.getElementById('viewBlurBg');
+            var loader = document.getElementById('viewPhotoLoader');
 
-            viewImg.onload = null; viewImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; viewBlur.style.backgroundImage = 'none'; viewImg.style.opacity = '0';
+            viewImg.onload = null;
+            viewBlur.style.backgroundImage = 'none';
+            viewImg.style.opacity = '0';
 
             if (id) {
                 var item = items.find(function(i) { return String(i.id) === String(id); });
-                var cObj = parseColorField(item.color); var pCat = parseCategoryField(item.category); currentItemTags = parseTagsField(item.tags);
+                if (!item) return;
+                var cObj = parseColorField(item.color);
+                var pCat = parseCategoryField(item.category);
                 currentCrop = { x: pCat.crop.x, y: pCat.crop.y, s: pCat.crop.s, r: pCat.crop.r || 0 };
+                currentItemTags = pCat.tags.slice();
                 
                 document.getElementById('modalTitle').innerText = "Информация о вещи";
                 document.getElementById('viewName').innerText = item.name || "Без названия";
@@ -1598,95 +2436,184 @@
                 currentPhotoData = item.photo || ""; 
                 if (currentPhotoData) {
                     viewImg.style.display = 'block';
-                    applyCropToImgElement(viewImg, currentCrop);
                     loadPhotoWithSpinner(viewImg, loader, currentPhotoData, viewBlur);
-                } else { viewImg.style.display = 'none'; }
+                } else {
+                    viewImg.style.display = 'none';
+                }
 
                 document.getElementById('viewCatTag').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path></svg>' + (pCat.name || "Нет категории");
                 document.getElementById('viewColorTag').innerHTML = cObj.dot + '<span>' + (cObj.text || "Цвет не указан") + '</span>';
                 
-                // Рендер тегов в просмотре
-                var tagsContainer = document.getElementById('viewSeasonTags');
-                if(currentItemTags.length > 0) {
-                    tagsContainer.style.display = 'flex';
-                    tagsContainer.innerHTML = currentItemTags.map(function(t){ return '<div class="view-tag">'+t+'</div>'; }).join('');
-                } else { tagsContainer.style.display = 'none'; }
+                var vTagsEl = document.getElementById('viewSeasonTags');
+                if (currentItemTags.length > 0) {
+                    vTagsEl.style.display = 'flex';
+                    vTagsEl.innerHTML = currentItemTags.map(function(t) { return '<div class="view-tag">' + t + '</div>'; }).join('');
+                } else {
+                    vTagsEl.style.display = 'none';
+                }
 
                 document.getElementById('viewBrand').innerText = item.brand || "Не указан";
-                var statusText = item.status === "IN_CLOSET" ? "В шкафу" : (item.status === "WASHING" ? "В стирке" : "На сушилке"); document.getElementById('viewStatus').innerText = statusText;
+                var statusText = item.status === "IN_CLOSET" ? "В шкафу" : (item.status === "WASHING" ? "В стирке" : "На сушилке");
+                document.getElementById('viewStatus').innerText = statusText;
                 document.getElementById('viewNotes').innerText = item.notes || "—";
 
-                document.getElementById('fName').value = item.name || ""; document.getElementById('fRole').value = pCat.role;
+                document.getElementById('fName').value = item.name || "";
+                document.getElementById('fRole').value = pCat.role;
+                
                 var roleLabels = {"UNASSIGNED":"Без роли","TOP":"Верх (База)","OUTER":"Верх (Второй слой)","BOTTOM":"Низ","SHOES":"Обувь","ACCESSORY":"Аксессуары"};
                 document.getElementById('fRoleText').innerText = roleLabels[pCat.role] || "Без роли";
-                document.getElementById('fCategory').value = pCat.name; document.getElementById('fStatus').value = item.status || "IN_CLOSET";
-                var statusLabels = {"IN_CLOSET":"В шкафу","WASHING":"В стирке","DRYING":"На сушилке"}; document.getElementById('fStatusText').innerText = statusLabels[item.status] || "В шкафу";
                 
-                document.getElementById('fBrand').value = item.brand || ""; document.getElementById('fNotes').value = item.notes || "";
-                document.getElementById('fColorText').value = cObj.text; document.getElementById('fColorHex1').value = cObj.hex1; updateCircle(1); document.getElementById('fColorHex2').value = cObj.hex2; updateCircle(2);
-                document.getElementById('fHasCustomColors').value = cObj.hasCustom ? "true" : "false"; isColor2Active = cObj.isColor2Active;
-                document.getElementById('circle2').style.display = isColor2Active ? 'block' : 'none'; document.getElementById('btnRemoveColor2').style.display = isColor2Active ? 'inline-block' : 'none'; document.getElementById('btnToggleColor2').style.display = isColor2Active ? 'none' : 'inline-block'; checkResetBtnVisibility();
+                document.getElementById('fCategory').value = pCat.name;
+                document.getElementById('fStatus').value = item.status || "IN_CLOSET";
+                
+                var statusLabels = {"IN_CLOSET":"В шкафу","WASHING":"В стирке","DRYING":"На сушилке"};
+                document.getElementById('fStatusText').innerText = statusLabels[item.status] || "В шкафу";
+                
+                document.getElementById('fBrand').value = item.brand || "";
+                document.getElementById('fNotes').value = item.notes || "";
+                
+                document.getElementById('fColorText').value = cObj.text;
+                document.getElementById('fColorHex1').value = cObj.hex1; updateCircle(1);
+                document.getElementById('fColorHex2').value = cObj.hex2; updateCircle(2);
+                
+                document.getElementById('fHasCustomColors').value = cObj.hasCustom ? "true" : "false";
+                isColor2Active = cObj.isColor2Active;
+                
+                document.getElementById('circle2').style.display = isColor2Active ? 'block' : 'none';
+                document.getElementById('btnRemoveColor2').style.display = isColor2Active ? 'inline-block' : 'none';
+                document.getElementById('btnToggleColor2').style.display = isColor2Active ? 'none' : 'inline-block';
+                checkResetBtnVisibility();
+                renderEditSeasonTags();
 
-                if (currentPhotoData) { prev.src = currentPhotoData; prev.style.display = "block"; placeholder.style.display = "none"; changeBtn.style.display = "flex"; updateCropUIState(true); } 
-                else { prev.style.display = "none"; placeholder.style.display = "flex"; changeBtn.style.display = "none"; updateCropUIState(false); }
-                
-                renderItemTagsUI();
-                document.getElementById('btnDelete').style.display = "block"; document.getElementById('viewMode').style.display = 'flex'; document.getElementById('editMode').style.display = 'none';
+                if (currentPhotoData) { 
+                    prev.src = currentPhotoData; 
+                    prev.style.display = "block"; 
+                    placeholder.style.display = "none"; 
+                    updateCropUIState(true);
+                } else {
+                    prev.style.display = "none"; 
+                    placeholder.style.display = "flex"; 
+                    updateCropUIState(false);
+                }
+                document.getElementById('btnDelete').style.display = "block";
+
+                document.getElementById('viewMode').style.display = 'flex';
+                document.getElementById('editMode').style.display = 'none';
             } else {
-                currentCrop = { x: 50, y: 50, s: 1, r: 0 }; cropBase90 = 0; cropTilt = 0; currentItemTags = [];
-                document.getElementById('modalTitle').innerText = "Добавление вещи"; document.getElementById('fName').value = ""; document.getElementById('fRole').value = "UNASSIGNED"; document.getElementById('fRoleText').innerText = "Без роли"; document.getElementById('fCategory').value = ""; document.getElementById('fStatus').value = currentTab; 
-                var statusLabels = {"IN_CLOSET":"В шкафу","WASHING":"В стирке","DRYING":"На сушилке"}; document.getElementById('fStatusText').innerText = statusLabels[currentTab] || "В шкафу";
-                document.getElementById('fBrand').value = ""; document.getElementById('fColorText').value = ""; document.getElementById('fNotes').value = ""; document.getElementById('fColorHex1').value = "#ffffff"; updateCircle(1); document.getElementById('fColorHex2').value = "#ffffff"; updateCircle(2); document.getElementById('fHasCustomColors').value = "false"; isColor2Active = false; document.getElementById('circle2').style.display = 'none'; document.getElementById('btnRemoveColor2').style.display = 'none'; document.getElementById('btnToggleColor2').style.display = 'inline-block'; checkResetBtnVisibility();
+                currentCrop = { x: 50, y: 50, s: 1, r: 0 };
+                cropBase90 = 0;
+                cropTilt = 0;
+                currentItemTags = [];
+                renderEditSeasonTags();
 
-                currentPhotoData = ""; prev.style.display = "none"; placeholder.style.display = "flex"; changeBtn.style.display = "none";
-                document.getElementById('btnDelete').style.display = "none"; updateCropUIState(false); renderItemTagsUI();
-                document.getElementById('viewMode').style.display = 'none'; document.getElementById('editMode').style.display = 'flex';
+                document.getElementById('modalTitle').innerText = "Добавление вещи";
+                document.getElementById('fName').value = ""; 
+                document.getElementById('fRole').value = "UNASSIGNED"; 
+                document.getElementById('fRoleText').innerText = "Без роли";
+                document.getElementById('fCategory').value = ""; 
+                document.getElementById('fStatus').value = currentTab; 
+                
+                var statusLabels = {"IN_CLOSET":"В шкафу","WASHING":"В стирке","DRYING":"На сушилке"};
+                document.getElementById('fStatusText').innerText = statusLabels[currentTab] || "В шкафу";
+                
+                document.getElementById('fBrand').value = ""; 
+                document.getElementById('fColorText').value = ""; 
+                document.getElementById('fNotes').value = "";
+                
+                document.getElementById('fColorHex1').value = "#ffffff"; updateCircle(1);
+                document.getElementById('fColorHex2').value = "#ffffff"; updateCircle(2);
+                
+                document.getElementById('fHasCustomColors').value = "false";
+                isColor2Active = false;
+                document.getElementById('circle2').style.display = 'none';
+                document.getElementById('btnRemoveColor2').style.display = 'none';
+                document.getElementById('btnToggleColor2').style.display = 'inline-block';
+                checkResetBtnVisibility();
+
+                currentPhotoData = ""; 
+                prev.style.display = "none"; 
+                placeholder.style.display = "flex"; 
+                document.getElementById('btnDelete').style.display = "none";
+                updateCropUIState(false);
+
+                document.getElementById('viewMode').style.display = 'none';
+                document.getElementById('editMode').style.display = 'flex';
             }
             
             var sheet = document.querySelector('#itemModal .modal-sheet');
-            sheet.style.transition = 'none'; sheet.style.transform = 'translateY(100%)';
-            setTimeout(function() { sheet.style.transition = ''; sheet.style.transform = ''; document.getElementById('itemModal').classList.add('active'); }, 10);
+            sheet.style.transition = 'none';
+            sheet.style.transform = 'translateY(100%)';
+            
+            setTimeout(function() {
+                sheet.style.transition = '';
+                sheet.style.transform = '';
+                document.getElementById('itemModal').classList.add('active');
+            }, 10);
         };
 
-        window.closeModal = function() { document.getElementById('itemModal').classList.remove('active'); if(!document.getElementById('generatorModal').classList.contains('active')) toggleBodyScroll(false); };
+        window.closeModal = function() { 
+            document.getElementById('itemModal').classList.remove('active'); 
+            if(!document.getElementById('generatorModal').classList.contains('active')) toggleBodyScroll(false); 
+        };
 
         window.handlePhotoSelect = function(e) {
-            var file = e.target.files[0]; if (!file) return;
-            var reader = new FileReader(); var eLoader = document.getElementById('editPhotoLoader'); eLoader.style.display = 'block'; document.getElementById('photoPreview').style.opacity = '0';
+            var file = e.target.files[0]; 
+            if (!file) return;
+            var reader = new FileReader();
             
             reader.onload = function(ev) {
                 var img = new Image();
                 img.onload = function() {
-                    var canvas = document.createElement('canvas'); var w = img.width, h = img.height;
-                    if (w > 1000 || h > 1000) { if (w > h) { h = Math.round(h * 1000 / w); w = 1000; } else { w = Math.round(w * 1000 / h); h = 1000; } }
-                    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    var canvas = document.createElement('canvas');
+                    var w = img.width, h = img.height;
+                    
+                    if (w > 1000 || h > 1000) { 
+                        if (w > h) { h = Math.round(h * 1000 / w); w = 1000; } 
+                        else { w = Math.round(w * 1000 / h); h = 1000; } 
+                    }
+                    
+                    canvas.width = w; canvas.height = h; 
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
                     currentPhotoData = canvas.toDataURL('image/jpeg', 0.86);
-                    currentCrop = { x: 50, y: 50, s: 1, r: 0 }; cropBase90 = 0; cropTilt = 0;
+                    currentCrop = { x: 50, y: 50, s: 1, r: 0 };
+                    cropBase90 = 0;
+                    cropTilt = 0;
                     
                     var prev = document.getElementById('photoPreview');
-                    prev.src = currentPhotoData; prev.style.display = "block"; prev.style.opacity = "1"; document.getElementById('photoPlaceholder').style.display = "none";
-                    document.getElementById('btnChangePhoto').style.display = "flex"; eLoader.style.display = 'none';
+                    prev.src = currentPhotoData; 
+                    prev.style.display = "block"; 
+                    document.getElementById('photoPlaceholder').style.display = "none";
                     updateCropUIState(true);
                 };
                 img.src = ev.target.result;
             };
-            reader.readAsDataURL(file); e.target.value = "";
+            reader.readAsDataURL(file); 
+            e.target.value = "";
         };
 
         window.saveCurrentItem = async function() {
-            if (!currentPhotoData) { alert("Добавьте фотографию вещи!"); return; }
+            if (!currentPhotoData) {
+                alert("Добавьте фотографию вещи!");
+                return;
+            }
             if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
 
             var colorText = document.getElementById('fColorText').value.trim();
             var finalColorField = colorText;
+            
             if (document.getElementById('fHasCustomColors').value === "true") {
                 var h1 = document.getElementById('fColorHex1').value;
-                if (isColor2Active) { var h2 = document.getElementById('fColorHex2').value; finalColorField = colorText + "||" + h1 + "||" + h2; } else { finalColorField = colorText + "||" + h1; }
+                if (isColor2Active) {
+                    var h2 = document.getElementById('fColorHex2').value;
+                    finalColorField = colorText + "||" + h1 + "||" + h2;
+                } else {
+                    finalColorField = colorText + "||" + h1;
+                }
             }
 
-            var hasCropChanges = (currentCrop.x !== 50 || currentCrop.y !== 50 || currentCrop.s !== 1 || currentCrop.r !== 0);
-            var cropSuffix = hasCropChanges ? ("||" + currentCrop.x + "," + currentCrop.y + "," + currentCrop.s + "," + (currentCrop.r || 0)) : "";
-            var finalCategory = document.getElementById('fRole').value + "||" + document.getElementById('fCategory').value.trim() + cropSuffix;
+            var cropStr = currentCrop.x + "," + currentCrop.y + "," + currentCrop.s + "," + (currentCrop.r || 0);
+            var tagsStr = currentItemTags.join(';');
+            var finalCategory = document.getElementById('fRole').value + "||" + document.getElementById('fCategory').value.trim() + "||" + cropStr + "||" + tagsStr;
 
             var itemObj = {
                 id: editingId ? String(editingId) : String(Date.now()),
@@ -1696,19 +2623,38 @@
                 status: document.getElementById('fStatus').value,
                 brand: document.getElementById('fBrand').value.trim(),
                 color: finalColorField,
-                notes: document.getElementById('fNotes').value.trim(),
-                tags: currentItemTags.join(',') // V5 Save Tags
+                notes: document.getElementById('fNotes').value.trim()
             };
 
-            if (editingId) { var idx = items.findIndex(function(i) { return String(i.id) === String(editingId); }); if (idx !== -1) items[idx] = itemObj; } 
-            else { items.unshift(itemObj); }
+            if (editingId) { 
+                var idx = items.findIndex(function(i) { return String(i.id) === String(editingId); });
+                if (idx !== -1) items[idx] = itemObj; 
+            } else { 
+                items.unshift(itemObj); 
+            }
 
             localStorage.setItem(CACHE_KEY, JSON.stringify(items)); 
-            syncGrid(); closeModal(); showSync("Сохранение данных...");
+            syncGrid(); 
+            if (document.getElementById('generatorModal').classList.contains('active')) renderGenerator(false);
+            closeModal(); 
+            showSync("Сохранение...");
             
-            fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "save", item: itemObj, user_id: myTgId }) })
-            .then(function(res) { return res.json(); }).then(function(result) {
-                if (result.ok && result.photoUrl) { for(var j=0; j<items.length; j++) { if(String(items[j].id) === String(itemObj.id)) { items[j].photo = result.photoUrl; localStorage.setItem(CACHE_KEY, JSON.stringify(items)); break; } } syncGrid(); }
+            fetch(API_URL, { 
+                method: "POST", 
+                body: JSON.stringify({ action: "save", item: itemObj, user_id: myTgId }) 
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(result) {
+                if (result.ok && result.photoUrl) { 
+                    for(var j=0; j<items.length; j++) {
+                        if(String(items[j].id) === String(itemObj.id)) { 
+                            items[j].photo = result.photoUrl; 
+                            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); 
+                            break; 
+                        }
+                    }
+                    syncGrid();
+                }
                 showSync("");
             }).catch(function() { showSync(""); });
         };
