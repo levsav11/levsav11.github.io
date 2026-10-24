@@ -22,13 +22,12 @@
             --active-accent: var(--theme-closet); 
             --active-accent-rgb: 249, 115, 22;
 
-            /* Элегантная светлая тема (никакого чистого белого) */
             --bg-base: #f0f0f5; 
             --card: #fcfcfd;
             --card-footer: #f4f4f7;
             
             --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(0, 0, 0, 0.08); /* Четкие тонкие рамки */
+            --glass-border: rgba(0, 0, 0, 0.08); 
             --glass-shadow: 0 8px 24px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
             --text: #1c1c1e; 
             --subtext: #8e8e93; 
@@ -39,7 +38,6 @@
             --skeleton-a: #e5e5ea;
             --skeleton-b: #f2f2f7;
             
-            /* Белый градиент для слияния со светлым Telegram */
             --blend-start: #ffffff;
             --blend-end: rgba(255, 255, 255, 0);
         }
@@ -53,7 +51,6 @@
                 --active-accent: var(--theme-closet);
                 --active-accent-rgb: 255, 159, 10;
 
-                /* Глубокая темная тема */
                 --bg-base: #000000;
                 --card: #1c1c1e;
                 --card-footer: #242426;
@@ -69,7 +66,6 @@
                 --skeleton-a: #2c2c2e; 
                 --skeleton-b: #3a3a3c;
 
-                /* Черный градиент для слияния с темным Telegram */
                 --blend-start: #000000;
                 --blend-end: rgba(0, 0, 0, 0);
             }
@@ -100,9 +96,10 @@
             background-color: var(--bg-base); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased;
         }
 
-        /* ТЕЛЕГРАМ-ГРАДИЕНТ (Никакого перекрытия поиска) */
+        /* ТЕЛЕГРАМ-ГРАДИЕНТ АДАПТИРОВАННЫЙ ПОД FULLSCREEN */
         .tg-header-blend {
-            position: fixed; top: 0; left: 0; right: 0; height: 18px;
+            position: fixed; top: 0; left: 0; right: 0; 
+            height: calc(env(safe-area-inset-top, 20px) + 44px);
             background: linear-gradient(to bottom, var(--blend-start) 30%, var(--blend-end) 100%);
             z-index: 9999; pointer-events: none;
         }
@@ -137,8 +134,13 @@
             animation: spin 0.8s linear infinite; z-index: 2; display: none;
         }
 
-        /* HEADER (Увеличен padding-top для смещения вниз от градиента) */
-        .header { background: var(--glass-bg); backdrop-filter: blur(var(--blur)) saturate(200%); -webkit-backdrop-filter: blur(var(--blur)) saturate(200%); padding: 18px 14px 14px; position: sticky; top: 0; z-index: 50; border-bottom: 0.5px solid var(--glass-border); transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
+        /* HEADER */
+        .header { 
+            background: var(--glass-bg); backdrop-filter: blur(var(--blur)) saturate(200%); -webkit-backdrop-filter: blur(var(--blur)) saturate(200%); 
+            padding: calc(env(safe-area-inset-top, 20px) + 44px) 14px 14px; 
+            position: sticky; top: 0; z-index: 50; border-bottom: 0.5px solid var(--glass-border); 
+            transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1); 
+        }
         .search-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
         .search-row-inner { display: flex; gap: 8px; }
         .search-input { flex: 1; padding: 10px 14px; border: 0.5px solid var(--glass-border); border-radius: 12px; font-size: 15px; font-weight: 500; background-color: var(--input-bg); color: var(--text); outline: none; transition: 0.3s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
@@ -272,7 +274,7 @@
         .field input:focus { border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.2); }
 
         .color-controls { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
-        .color-circle { width: 44px; height: 44px; flex-shrink: 0; position: relative; overflow: hidden; border: 2px solid var(--circle-border); box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 50%; background-clip: padding-box; }
+        .color-circle { width: 44px; height: 44px; flex-shrink: 0; position: relative; overflow: hidden; border: 2.5px solid var(--circle-border); box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 22px; }
         .color-circle input[type="color"] { position: absolute; top: -10px; left: -10px; width: 64px; height: 64px; opacity: 0; cursor: pointer; }
         .btn-color-action { background: var(--input-bg); color: var(--text); border: 1px solid var(--glass-border); border-radius: 12px; padding: 12px 16px; font-size: 13px; cursor: pointer; font-weight: 600; transition: 0.2s; }
         .btn-color-action:active { transform: scale(0.95); opacity: 0.8; }
@@ -298,7 +300,7 @@
         .gen-item-meta { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--subtext); font-weight: 500; white-space: nowrap; }
         .gen-item-meta span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; flex: 1; }
         .gen-actions { display: flex; flex-direction: column; gap: 10px; }
-        .gen-btn { width: 36px; height: 36px; border-radius: 18px; border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; background: var(--bg-base); color: var(--text); cursor: pointer; transition: 0.2s; }
+        .gen-btn { width: 36px; height: 36px; border-radius: 18px; border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; background: var(--bg-base); color: var(--text); cursor: pointer; transition: 0.2s; border: none; }
         .gen-btn.locked { background: var(--active-accent); color: #fff; border-color: transparent;}
         .gen-btn:active { transform: scale(0.85); opacity: 0.8; }
         .gen-empty { text-align: center; color: var(--subtext); font-size: 14px; width: 100%; padding: 16px 0; font-weight: 500; }
@@ -315,7 +317,7 @@
         /* ИСПРАВЛЕННЫЙ ПОЛНОЭКРАННЫЙ ZOOM */
         #imageViewer { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 999; flex-direction: column; transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.4s; overscroll-behavior: none; }
         #imageViewer.active { visibility: visible; opacity: 1; pointer-events: auto; }
-        .viewer-header { height: 70px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; background: linear-gradient(rgba(0,0,0,0.3), transparent); z-index: 1001; }
+        .viewer-header { height: 90px; padding: calc(env(safe-area-inset-top, 20px) + 20px) 20px 20px; display: flex; justify-content: flex-end; align-items: center; background: linear-gradient(rgba(0,0,0,0.3), transparent); z-index: 1001; }
         .viewer-close { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 10px 20px; border-radius: 14px; font-size: 15px; cursor: pointer; font-weight: 600; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1); }
         .viewer-close:active { transform: scale(0.9); }
         .viewer-img-container { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; touch-action: none; }
@@ -336,14 +338,14 @@
     <!-- ГРАДИЕНТНАЯ ПОЛОСА ДЛЯ СВЯЗИ С TELEGRAM -->
     <div class="tg-header-blend"></div>
 
-    <!-- ЗАСТАВКА 4.6 Pro -->
+    <!-- ЗАСТАВКА 4.7 Pro -->
     <div id="splashScreen">
         <svg class="splash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
         </svg>
         <div class="splash-title">Мой Гардероб</div>
         <div class="splash-progress-container"><div class="splash-progress-bar" id="splashProgressBar"></div></div>
-        <div class="splash-version">Версия 4.6 Pro</div>
+        <div class="splash-version">Версия 4.7 Pro</div>
     </div>
 
     <!-- ПОЛНОЭКРАННЫЙ VIEWER -->
@@ -549,7 +551,7 @@
         
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         var myTgId = typeof tg !== 'undefined' && tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "default_user";
-        var CACHE_KEY = "wardrobe_v46_" + myTgId;
+        var CACHE_KEY = "wardrobe_v47_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var currentCat = "ALL";
@@ -947,7 +949,7 @@
                 requestAnimationFrame(function() {
                     filteredCards.forEach(function(item, index) {
                         item.elem.style.animation = 'none';
-                        void item.elem.offsetWidth; // Force Reflow
+                        void item.elem.offsetWidth; 
                         item.elem.style.animation = 'scaleInCard 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards';
                         item.elem.style.animationDelay = (index * 0.025) + 's';
                         item.elem.classList.add('show');
