@@ -13,31 +13,50 @@
         }
     </script>
     <style>
-        /* ЦВЕТОВЫЕ ТЕМЫ & LIQUID GLASS ПРЕМИУМ iOS STYLE */
+        /* ==========================================================================
+           ПАЛИТРА iOS 27 LIQUID GLASS (БЕЗ ЧИСТОГО БЕЛОГО В ИНТЕРФЕЙСЕ)
+           ========================================================================== */
         :root { 
-            --theme-closet: #f97316;     
-            --theme-washing: #32ade6; 
-            --theme-drying: #af52de;     
+            --theme-closet: #ea6c12;     
+            --theme-closet-rgb: 234, 108, 18;
+            --theme-washing: #1d9bf0; 
+            --theme-washing-rgb: 29, 155, 240;
+            --theme-drying: #9d4edd;     
+            --theme-drying-rgb: 157, 78, 221;
             
             --active-accent: var(--theme-closet); 
-            --active-accent-rgb: 249, 115, 22;
+            --active-accent-rgb: 234, 108, 18;
 
-            --bg-base: #f0f0f5; 
-            --card: #fcfcfd;
-            --card-footer: #f4f4f7;
+            /* Светлая тема: благородный сатин и жемчужный камень (никакого #ffffff в карточках) */
+            --bg-base: #e4e6ef; 
+            --card: #f3f4f8;
+            --card-elevated: #f7f8fb;
+            --card-well: #e8eaf2;
+            --card-border: rgba(15, 23, 42, 0.11);
+            --card-inner-shine: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+            --card-shadow: 0 10px 26px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(15, 23, 42, 0.04);
             
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(0, 0, 0, 0.08); 
-            --glass-shadow: 0 8px 24px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
-            --text: #1c1c1e; 
-            --subtext: #8e8e93; 
-            --input-bg: rgba(255, 255, 255, 0.65);
-            --overlay: rgba(0, 0, 0, 0.45);
-            --circle-border: rgba(0, 0, 0, 0.25);
-            --blur: 25px;
-            --skeleton-a: #e5e5ea;
-            --skeleton-b: #f2f2f7;
+            --glass-bg: rgba(235, 237, 245, 0.84);
+            --glass-border: rgba(15, 23, 42, 0.10);
+            --control-bg: #dadce8;
+            --control-hover: #d0d3e2;
+            --control-border: rgba(15, 23, 42, 0.13);
+            --active-pill-bg: #f3f4f8;
+            --active-pill-shadow: 0 3px 10px rgba(15, 23, 42, 0.10), 0 1px 2px rgba(15, 23, 42, 0.06);
+
+            --text: #14161f; 
+            --subtext: #686d80; 
+            --overlay: rgba(15, 18, 28, 0.48);
+            --blur: 28px;
             
+            --skeleton-a: #dcdfe9;
+            --skeleton-b: #eceef5;
+
+            /* Двойное кольцо для идеальной контрастности любого цвета кружка */
+            --dot-outer-ring: rgba(15, 23, 42, 0.32);
+            --dot-inner-ring: rgba(255, 255, 255, 0.65);
+            
+            /* Единственное место с чистым белым — переход к белой шапке Telegram */
             --blend-start: #ffffff;
             --blend-end: rgba(255, 255, 255, 0);
         }
@@ -45,26 +64,40 @@
         @media (prefers-color-scheme: dark) {
             :root { 
                 --theme-closet: #ff9f0a; 
-                --theme-washing: #64d2ff; 
+                --theme-closet-rgb: 255, 159, 10;
+                --theme-washing: #5ac8fa; 
+                --theme-washing-rgb: 90, 200, 250;
                 --theme-drying: #bf5af2;
+                --theme-drying-rgb: 191, 90, 242;
                 
                 --active-accent: var(--theme-closet);
                 --active-accent-rgb: 255, 159, 10;
 
-                --bg-base: #000000;
-                --card: #1c1c1e;
-                --card-footer: #242426;
+                --bg-base: #090a0f;
+                --card: #161821;
+                --card-elevated: #1e202b;
+                --card-well: #101219;
+                --card-border: rgba(255, 255, 255, 0.09);
+                --card-inner-shine: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+                --card-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.25);
 
-                --glass-bg: rgba(28, 28, 30, 0.85);
-                --glass-border: rgba(255, 255, 255, 0.1);
-                --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-                --text: #ffffff; 
-                --subtext: #98989d; 
-                --input-bg: rgba(118, 118, 128, 0.24);
-                --overlay: rgba(0, 0, 0, 0.75);
-                --circle-border: rgba(255, 255, 255, 0.35);
-                --skeleton-a: #2c2c2e; 
-                --skeleton-b: #3a3a3c;
+                --glass-bg: rgba(20, 22, 30, 0.82);
+                --glass-border: rgba(255, 255, 255, 0.09);
+                --control-bg: rgba(255, 255, 255, 0.08);
+                --control-hover: rgba(255, 255, 255, 0.13);
+                --control-border: rgba(255, 255, 255, 0.12);
+                --active-pill-bg: #252836;
+                --active-pill-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+                --text: #f2f3f7; 
+                --subtext: #8e93a6; 
+                --overlay: rgba(0, 0, 0, 0.76);
+                
+                --skeleton-a: #1d202b; 
+                --skeleton-b: #282c3a;
+
+                --dot-outer-ring: rgba(255, 255, 255, 0.45);
+                --dot-inner-ring: rgba(0, 0, 0, 0.45);
 
                 --blend-start: #000000;
                 --blend-end: rgba(0, 0, 0, 0);
@@ -72,280 +105,428 @@
         }
 
         html.dark-theme { 
-            color-scheme: dark; --bg-base: #000000; --card: #1c1c1e; --card-footer: #242426; 
-            --glass-bg: rgba(28, 28, 30, 0.85); --glass-border: rgba(255, 255, 255, 0.1); --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-            --text: #ffffff; --subtext: #98989d; --input-bg: rgba(118, 118, 128, 0.24);
-            --overlay: rgba(0, 0, 0, 0.75); --circle-border: rgba(255, 255, 255, 0.35);
-            --skeleton-a: #2c2c2e; --skeleton-b: #3a3a3c;
-            --theme-closet: #ff9f0a; --theme-washing: #64d2ff; --theme-drying: #bf5af2;
+            color-scheme: dark;
+            --theme-closet: #ff9f0a; --theme-closet-rgb: 255, 159, 10;
+            --theme-washing: #5ac8fa; --theme-washing-rgb: 90, 200, 250;
+            --theme-drying: #bf5af2; --theme-drying-rgb: 191, 90, 242;
+            --bg-base: #090a0f; --card: #161821; --card-elevated: #1e202b; --card-well: #101219;
+            --card-border: rgba(255, 255, 255, 0.09); --card-inner-shine: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            --card-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.25);
+            --glass-bg: rgba(20, 22, 30, 0.82); --glass-border: rgba(255, 255, 255, 0.09);
+            --control-bg: rgba(255, 255, 255, 0.08); --control-hover: rgba(255, 255, 255, 0.13);
+            --control-border: rgba(255, 255, 255, 0.12); --active-pill-bg: #252836;
+            --active-pill-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            --text: #f2f3f7; --subtext: #8e93a6; --overlay: rgba(0, 0, 0, 0.76);
+            --skeleton-a: #1d202b; --skeleton-b: #282c3a;
+            --dot-outer-ring: rgba(255, 255, 255, 0.45); --dot-inner-ring: rgba(0, 0, 0, 0.45);
             --blend-start: #000000; --blend-end: rgba(0, 0, 0, 0);
         }
 
-        html.dark-theme body.tab-IN_CLOSET { --active-accent: var(--theme-closet); --active-accent-rgb: 255, 159, 10; }
-        html.dark-theme body.tab-WASHING { --active-accent: var(--theme-washing); --active-accent-rgb: 100, 210, 255; }
-        html.dark-theme body.tab-DRYING { --active-accent: var(--theme-drying); --active-accent-rgb: 191, 90, 242; }
-
-        body.tab-IN_CLOSET { --active-accent: var(--theme-closet); --active-accent-rgb: 249, 115, 22; }
-        body.tab-WASHING { --active-accent: var(--theme-washing); --active-accent-rgb: 50, 173, 230; }
-        body.tab-DRYING { --active-accent: var(--theme-drying); --active-accent-rgb: 175, 82, 222; }
+        body.tab-IN_CLOSET { --active-accent: var(--theme-closet); --active-accent-rgb: var(--theme-closet-rgb); }
+        body.tab-WASHING { --active-accent: var(--theme-washing); --active-accent-rgb: var(--theme-washing-rgb); }
+        body.tab-DRYING { --active-accent: var(--theme-drying); --active-accent-rgb: var(--theme-drying-rgb); }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
-            margin: 0; font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif; 
-            background-color: var(--bg-base); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased;
+            margin: 0; 
+            font-family: -apple-system, "SF Pro Display", "SF Pro Text", BlinkMacSystemFont, "Helvetica Neue", sans-serif; 
+            background-color: var(--bg-base); color: var(--text); overflow-x: hidden; 
+            -webkit-font-smoothing: antialiased; letter-spacing: -0.01em;
         }
 
-        /* ТЕЛЕГРАМ-ГРАДИЕНТ АДАПТИРОВАННЫЙ ПОД FULLSCREEN */
+        /* Тонкий градиентный переход к шапке оболочки Telegram */
         .tg-header-blend {
-            position: fixed; top: 0; left: 0; right: 0; 
-            height: calc(env(safe-area-inset-top, 20px) + 44px);
-            background: linear-gradient(to bottom, var(--blend-start) 30%, var(--blend-end) 100%);
+            position: fixed; top: 0; left: 0; right: 0; height: 14px;
+            background: linear-gradient(to bottom, var(--blend-start) 0%, var(--blend-end) 100%);
             z-index: 9999; pointer-events: none;
         }
 
         #mainWrapper { 
             opacity: 0; pointer-events: none;
             background-color: var(--bg-base);
-            background-image: radial-gradient(circle at 0% 0%, rgba(var(--active-accent-rgb), 0.12), transparent 60%), radial-gradient(circle at 100% 100%, rgba(var(--active-accent-rgb), 0.08), transparent 60%);
-            background-attachment: fixed; min-height: 100vh; padding-bottom: 100px; transform-origin: 50% 0%; 
-            transition: filter 0.4s cubic-bezier(0.32, 0.72, 0, 1), transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.5s ease;
+            background-image: 
+                radial-gradient(circle at 8% 0%, rgba(var(--active-accent-rgb), 0.16), transparent 52%), 
+                radial-gradient(circle at 92% 100%, rgba(var(--active-accent-rgb), 0.11), transparent 52%);
+            background-attachment: fixed; min-height: 100vh; padding-bottom: 108px; transform-origin: 50% 0%; 
+            transition: filter 0.42s cubic-bezier(0.22, 1, 0.36, 1), transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
         }
 
         body.modal-open { overflow: hidden; overscroll-behavior: none; }
-        body.modal-open #mainWrapper { filter: brightness(0.65) blur(3px); transform: scale(0.96) translateY(5px); pointer-events: none; border-radius: 20px; }
-        body.modal-open .fab { opacity: 0; transform: scale(0.8) translateY(20px); pointer-events: none; }
+        body.modal-open #mainWrapper { filter: brightness(0.68) blur(4px); transform: scale(0.965) translateY(6px); pointer-events: none; border-radius: 24px; }
+        body.modal-open .fab { opacity: 0; transform: scale(0.75) translateY(24px); pointer-events: none; }
 
         /* ЗАСТАВКА */
-        #splashScreen { visibility: visible; opacity: 1; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-base); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.5s; }
-        .splash-icon { width: 64px; height: 64px; color: var(--text); margin-bottom: 16px; opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.32, 0.72, 0, 1) forwards; }
-        .splash-title { font-size: 24px; font-weight: 800; color: var(--text); opacity: 0; animation: fadeUp 0.6s cubic-bezier(0.32, 0.72, 0, 1) 0.1s forwards; }
-        .splash-progress-container { width: 180px; height: 4px; background: rgba(142, 142, 147, 0.2); border-radius: 4px; margin-top: 30px; overflow: hidden; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
-        .splash-progress-bar { width: 0%; height: 100%; background: var(--text); border-radius: 4px; transition: width 0.3s cubic-bezier(0.32, 0.72, 0, 1); }
-        .splash-version { position: absolute; bottom: 24px; font-size: 14px; font-weight: 600; color: var(--subtext); opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; letter-spacing: 1px;}
+        #splashScreen { visibility: visible; opacity: 1; position: fixed; inset: 0; background: var(--bg-base); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.45s; }
+        .splash-logo-wrap { width: 76px; height: 76px; border-radius: 22px; background: var(--card); border: 1px solid var(--card-border); box-shadow: var(--card-shadow), var(--card-inner-shine); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; opacity: 0; animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        .splash-icon { width: 40px; height: 40px; color: var(--active-accent); }
+        .splash-title { font-size: 23px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; opacity: 0; animation: fadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards; }
+        .splash-progress-container { width: 190px; height: 5px; background: var(--control-bg); border-radius: 99px; margin-top: 26px; overflow: hidden; opacity: 0; animation: fadeUp 0.55s ease 0.14s forwards; border: 0.5px solid var(--control-border); }
+        .splash-progress-bar { width: 0%; height: 100%; background: var(--active-accent); border-radius: 99px; transition: width 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
+        .splash-version { position: absolute; bottom: 26px; font-size: 13px; font-weight: 700; color: var(--subtext); opacity: 0; animation: fadeUp 0.55s ease 0.2s forwards; letter-spacing: 0.06em; text-transform: uppercase; }
         
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes shimmer { 0% { background-position: -200px 0; } 100% { background-position: calc(200px + 100%) 0; } }
 
         .image-loader {
             position: absolute; top: 50%; left: 50%; margin-top: -15px; margin-left: -15px; width: 30px; height: 30px; 
-            border: 3px solid var(--glass-border); border-top-color: var(--active-accent); border-radius: 50%;
-            animation: spin 0.8s linear infinite; z-index: 2; display: none;
+            border: 3px solid var(--control-border); border-top-color: var(--active-accent); border-radius: 50%;
+            animation: spin 0.75s linear infinite; z-index: 2; display: none;
         }
 
-        /* HEADER */
+        /* ==========================================================================
+           ШАПКА И ТАКТИЛЬНЫЕ ЭЛЕМЕНТЫ УПРАВЛЕНИЯ (iOS 27 LIQUID GLASS)
+           ========================================================================== */
         .header { 
-            background: var(--glass-bg); backdrop-filter: blur(var(--blur)) saturate(200%); -webkit-backdrop-filter: blur(var(--blur)) saturate(200%); 
-            padding: calc(env(safe-area-inset-top, 20px) + 44px) 14px 14px; 
-            position: sticky; top: 0; z-index: 50; border-bottom: 0.5px solid var(--glass-border); 
-            transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1); 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(var(--blur)) saturate(190%); -webkit-backdrop-filter: blur(var(--blur)) saturate(190%); 
+            padding: 16px 14px 12px; position: sticky; top: 0; z-index: 50; 
+            border-bottom: 1px solid var(--glass-border); 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
         }
-        .search-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+        .search-container { display: flex; flex-direction: column; gap: 9px; margin-bottom: 11px; }
+        
+        .search-input-wrap { position: relative; display: flex; align-items: center; width: 100%; }
+        .search-icon { position: absolute; left: 13px; width: 16px; height: 16px; color: var(--subtext); pointer-events: none; }
+        .search-clear { position: absolute; right: 10px; width: 20px; height: 20px; border-radius: 50%; background: var(--subtext); color: var(--card); border: none; display: none; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; cursor: pointer; padding: 0; opacity: 0.75; }
+        .search-clear:active { transform: scale(0.9); }
+        
+        .search-input { 
+            width: 100%; padding: 10px 36px 10px 36px; 
+            border: 1px solid var(--control-border); border-radius: 13px; 
+            font-size: 15px; font-weight: 500; background-color: var(--control-bg); color: var(--text); 
+            outline: none; transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1); 
+            box-shadow: var(--card-inner-shine);
+        }
+        .search-input::placeholder { color: var(--subtext); }
+        .search-input:focus { background-color: var(--card); border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.18); }
+        
         .search-row-inner { display: flex; gap: 8px; }
-        .search-input { flex: 1; padding: 10px 14px; border: 0.5px solid var(--glass-border); border-radius: 12px; font-size: 15px; font-weight: 500; background-color: var(--input-bg); color: var(--text); outline: none; transition: 0.3s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-        .search-input:focus { border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.2); }
-        
-        .custom-select { flex: 1; padding: 10px 14px; border: 0.5px solid var(--glass-border); border-radius: 12px; font-size: 15px; font-weight: 500; background-color: var(--input-bg); color: var(--text); display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.3s; white-space: nowrap; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-        .custom-select:active { transform: scale(0.97); }
+        .custom-select { 
+            flex: 1; padding: 10px 12px; 
+            border: 1px solid var(--control-border); border-radius: 13px; 
+            font-size: 14px; font-weight: 600; background-color: var(--control-bg); color: var(--text); 
+            display: flex; align-items: center; justify-content: space-between; gap: 6px;
+            cursor: pointer; transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1); 
+            white-space: nowrap; overflow: hidden; box-shadow: var(--card-inner-shine);
+        }
+        .custom-select:active { transform: scale(0.96); background-color: var(--control-hover); }
         .custom-select-text { overflow: hidden; text-overflow: ellipsis; }
-        .custom-select svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--subtext); }
+        .custom-select svg { width: 15px; height: 15px; flex-shrink: 0; color: var(--subtext); }
 
-        /* TABS */
-        .tabs { display: flex; position: relative; background: rgba(118, 118, 128, 0.12); padding: 3px; border-radius: 10px; }
-        .tab-indicator { position: absolute; top: 3px; bottom: 3px; left: 3px; width: calc(33.333% - 4px); background: var(--card); border-radius: 7px; box-shadow: 0 3px 8px rgba(0,0,0,0.12), 0 3px 1px rgba(0,0,0,0.04); transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1); z-index: 1; }
-        body.tab-IN_CLOSET .tab-indicator { transform: translateX(0); } body.tab-WASHING .tab-indicator { transform: translateX(calc(100% + 3px)); } body.tab-DRYING .tab-indicator { transform: translateX(calc(200% + 6px)); }
-        .tab { flex: 1; padding: 6px 4px; font-weight: 500; font-size: 13px; color: var(--text); opacity: 0.7; cursor: pointer; position: relative; z-index: 2; transition: color 0.3s ease, opacity 0.3s ease; display: flex; align-items: center; justify-content: center; height: 100%; white-space: nowrap; }
-        .tab.active { opacity: 1; font-weight: 600; color: var(--text); }
-        .badge-count { display: inline-flex; align-items: center; justify-content: center; padding: 2px 6px; border-radius: 10px; font-size: 11px; margin-left: 4px; background: rgba(var(--active-accent-rgb), 0.15); color: var(--text); flex-shrink: 0; font-weight: 700; transition: background 0.3s; }
+        /* СЕГМЕНТИРОВАННЫЙ ПЕРЕКЛЮЧАТЕЛЬ ВКЛАДОК */
+        .tabs { 
+            display: flex; position: relative; 
+            background: var(--control-bg); border: 1px solid var(--control-border);
+            padding: 3px; border-radius: 12px; 
+        }
+        .tab-indicator { 
+            position: absolute; top: 3px; bottom: 3px; left: 3px; 
+            width: calc(33.333% - 2px); background: var(--active-pill-bg); 
+            border-radius: 9px; box-shadow: var(--active-pill-shadow);
+            transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1); z-index: 1; 
+        }
+        body.tab-IN_CLOSET .tab-indicator { transform: translateX(0); } 
+        body.tab-WASHING .tab-indicator { transform: translateX(100%); } 
+        body.tab-DRYING .tab-indicator { transform: translateX(200%); }
+        
+        .tab { 
+            flex: 1; padding: 7px 4px; font-weight: 600; font-size: 13px; color: var(--subtext); 
+            cursor: pointer; position: relative; z-index: 2; 
+            transition: color 0.25s ease; display: flex; align-items: center; justify-content: center; 
+            white-space: nowrap; user-select: none;
+        }
+        .tab.active { font-weight: 700; color: var(--text); }
+        .badge-count { 
+            display: inline-flex; align-items: center; justify-content: center; 
+            padding: 2px 6px; border-radius: 99px; font-size: 11px; margin-left: 5px; 
+            background: rgba(var(--active-accent-rgb), 0.16); color: var(--active-accent); 
+            flex-shrink: 0; font-weight: 800; transition: all 0.3s ease; 
+        }
 
-        /* ПЛАВНАЯ ПЛАШКА */
-        .bulk-bar { display: flex; justify-content: space-between; align-items: center; padding: 0 14px; background: rgba(var(--active-accent-rgb), 0.1); backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); font-size: 14px; font-weight: 600; color: var(--active-accent); max-height: 0; opacity: 0; overflow: hidden; border-bottom: 0px solid var(--glass-border); transition: max-height 0.4s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.25s ease, padding 0.4s ease, color 0.4s ease, background-color 0.4s ease; }
-        .bulk-bar.visible { max-height: 80px; opacity: 1; padding: 12px 14px; border-bottom: 0.5px solid var(--glass-border); }
-        .bulk-btn { background: var(--active-accent); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.2s, background-color 0.4s ease; box-shadow: 0 4px 12px rgba(var(--active-accent-rgb), 0.3); }
-        .bulk-btn:active { transform: scale(0.95); opacity: 0.8; }
+        /* ПЛАВНАЯ ПЛАШКА МАССОВЫХ ДЕЙСТВИЙ */
+        .bulk-bar { 
+            display: flex; justify-content: space-between; align-items: center; padding: 0 14px; 
+            background: rgba(var(--active-accent-rgb), 0.12); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
+            font-size: 14px; font-weight: 700; color: var(--active-accent); 
+            max-height: 0; opacity: 0; overflow: hidden; border-bottom: 0px solid var(--glass-border); 
+            transition: max-height 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease, padding 0.28s ease, color 0.35s ease, background-color 0.35s ease; 
+        }
+        .bulk-bar.visible { max-height: 72px; opacity: 1; padding: 11px 14px; border-bottom: 1px solid var(--glass-border); }
+        .bulk-btn { 
+            background: var(--active-accent); color: #fff; border: none; padding: 8px 14px; 
+            border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; 
+            transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.35s ease; 
+            box-shadow: 0 4px 12px rgba(var(--active-accent-rgb), 0.3); 
+        }
+        .bulk-btn:active { transform: scale(0.95); }
 
-        /* СЕТКА И КАРТОЧКИ */
+        /* ==========================================================================
+           СЕТКА И КАРТОЧКИ ВЕЩЕЙ
+           ========================================================================== */
         .grid { display: flex; flex-wrap: wrap; gap: 12px; padding: 14px; align-items: flex-start; }
-        @keyframes scaleInCard { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         
-        .card { width: calc(50% - 6px); background: var(--card); border-radius: 20px; overflow: hidden; box-shadow: var(--glass-shadow); display: flex; flex-direction: column; border: 1px solid var(--glass-border); transform: translateZ(0); opacity: 0; transition: transform 0.2s; }
-        .card.show { opacity: 1; }
-        .card:active { transform: scale(0.97); }
+        .card { 
+            width: calc(50% - 6px); background: var(--card); border-radius: 22px; overflow: hidden; 
+            box-shadow: var(--card-shadow), var(--card-inner-shine); 
+            display: flex; flex-direction: column; border: 1px solid var(--card-border); 
+            transform: translateZ(0); transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1); 
+        }
+        .card:active { transform: scale(0.975); }
         
-        .img-wrap { position: relative; width: 100%; height: 185px; background: var(--bg-base); cursor: pointer; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .img-wrap { 
+            position: relative; width: 100%; height: 188px; background: var(--card-well); 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; overflow: hidden; 
+            border-bottom: 1px solid var(--card-border);
+        }
         .skeleton-loader { position: absolute; inset: 0; background: linear-gradient(90deg, var(--skeleton-a) 25%, var(--skeleton-b) 50%, var(--skeleton-a) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite linear; z-index: 1; }
-        .img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); z-index: 2; position: relative; }
-        .card:hover .img-wrap img { transform: scale(1.05); }
+        .img-wrap img { 
+            width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; 
+            transition: opacity 0.35s ease; z-index: 2; position: relative; pointer-events: none;
+        }
         
-        .placeholder-img { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--bg-base); color: var(--subtext); z-index: 2; position: relative; }
-        .placeholder-img svg { width: 40px; height: 40px; opacity: 0.3; }
-        .cat-pill { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); backdrop-filter: blur(12px) saturate(180%); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; z-index: 3; }
+        .placeholder-img { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--card-well); color: var(--subtext); z-index: 2; position: relative; }
+        .placeholder-img svg { width: 42px; height: 42px; opacity: 0.35; }
+        .cat-pill { 
+            position: absolute; top: 10px; left: 10px; 
+            background: rgba(18, 20, 28, 0.58); backdrop-filter: blur(12px) saturate(180%); -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: 0.5px solid rgba(255, 255, 255, 0.22); color: #f5f6fa; 
+            padding: 4px 10px; border-radius: 9px; font-size: 11px; font-weight: 700; letter-spacing: 0.02em; z-index: 3; 
+        }
         
-        /* КАРТОЧКА: ИНФОРМАЦИЯ */
-        .card-body { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; cursor: pointer; background: var(--card); overflow: hidden; }
-        .card-title { font-weight: 700; font-size: 15px; line-height: 1.25; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; letter-spacing: -0.2px; }
-        .card-meta { font-size: 12px; color: var(--subtext); display: flex; align-items: center; gap: 6px; overflow: hidden; width: 100%; font-weight: 500; white-space: nowrap; }
+        .card-body { padding: 11px 12px 9px; flex-grow: 1; display: flex; flex-direction: column; gap: 5px; cursor: pointer; background: var(--card); overflow: hidden; }
+        .card-title { font-weight: 700; font-size: 15px; line-height: 1.22; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; letter-spacing: -0.02em; }
+        .card-meta { font-size: 12.5px; color: var(--subtext); display: flex; align-items: center; gap: 7px; overflow: hidden; width: 100%; font-weight: 600; white-space: nowrap; }
         .card-meta span.meta-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; flex: 1; }
         
-        /* КОНТРАСТНЫЕ КРУЖКИ */
-        .color-dot, .color-circle { border-radius: 50%; display: block; background-clip: padding-box; transform: translateZ(0); }
-        .color-dot { width: 16px; height: 16px; flex: 0 0 16px; border: 1.5px solid var(--circle-border); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        
-        /* ИДЕАЛЬНЫЕ ДВУХСТРОЧНЫЕ КНОПКИ ДЕЙСТВИЙ С ТИПОГРАФИКОЙ iOS */
-        .move-bar { display: flex; border-top: 1px solid var(--glass-border); background: var(--card-footer); }
-        .move-btn { 
-            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-            padding: 10px 4px; font-size: 12px; font-weight: 800; border: none; background: transparent; 
-            cursor: pointer; border-right: 1px solid var(--glass-border); transition: background 0.2s ease, transform 0.1s; 
-            text-transform: uppercase; letter-spacing: 0.8px; white-space: nowrap; line-height: 1.1;
+        /* ИДЕАЛЬНО КРУГЛЫЕ КОНТРАСТНЫЕ ИНДИКАТОРЫ ЦВЕТА (БЕЗ БАГА WEBKIT С BORDER) */
+        .color-dot { 
+            width: 17px; height: 17px; min-width: 17px; min-height: 17px; flex: 0 0 17px; 
+            border-radius: 999px; aspect-ratio: 1 / 1; display: inline-block; 
+            box-shadow: inset 0 0 0 1.5px var(--dot-inner-ring), 0 0 0 1.5px var(--dot-outer-ring), 0 2px 4px rgba(0,0,0,0.12); 
         }
-        .move-btn span:first-child { font-size: 9px; opacity: 0.85; font-weight: 700; letter-spacing: 0.5px; }
-        .move-btn:last-child { border-right: none; }
-        .move-btn:active { background: rgba(0,0,0,0.05); transform: scale(0.96); }
         
-        .move-btn.to-closet { color: var(--theme-closet); }
-        .move-btn.to-washing { color: var(--theme-washing); }
-        .move-btn.to-drying { color: var(--theme-drying); }
+        /* КАПСУЛЬНЫЕ КНОПКИ ПЕРЕМЕЩЕНИЯ В СТИЛЕ iOS 27 */
+        .move-bar { 
+            display: flex; gap: 7px; padding: 4px 9px 9px; 
+            background: var(--card); 
+        }
+        .move-btn { 
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+            padding: 7px 4px; border-radius: 12px; cursor: pointer; 
+            transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), filter 0.18s ease; 
+            text-transform: uppercase; white-space: nowrap; line-height: 1.12;
+        }
+        .move-btn span:first-child { font-size: 8.5px; opacity: 0.82; font-weight: 700; letter-spacing: 0.06em; }
+        .move-btn span:last-child { font-size: 10.5px; font-weight: 800; letter-spacing: 0.05em; }
+        .move-btn:active { transform: scale(0.93); filter: brightness(0.92); }
+        
+        .move-btn.to-closet { 
+            color: var(--theme-closet); 
+            background: rgba(var(--theme-closet-rgb), 0.12); 
+            border: 1px solid rgba(var(--theme-closet-rgb), 0.28); 
+        }
+        .move-btn.to-washing { 
+            color: var(--theme-washing); 
+            background: rgba(var(--theme-washing-rgb), 0.12); 
+            border: 1px solid rgba(var(--theme-washing-rgb), 0.28); 
+        }
+        .move-btn.to-drying { 
+            color: var(--theme-drying); 
+            background: rgba(var(--theme-drying-rgb), 0.12); 
+            border: 1px solid rgba(var(--theme-drying-rgb), 0.28); 
+        }
 
-        .fab { position: fixed; right: 20px; width: 56px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center; border: 0.5px solid rgba(255,255,255,0.3); z-index: 90; cursor: pointer; transition: opacity 0.4s ease, transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), box-shadow 0.4s ease; color: #fff; backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); background: rgba(var(--active-accent-rgb), 0.95); box-shadow: 0 10px 24px rgba(var(--active-accent-rgb), 0.4); }
+        /* ПЛАВАЮЩИЕ КНОПКИ (FAB) */
+        .fab { 
+            position: fixed; right: 18px; width: 56px; height: 56px; border-radius: 28px; 
+            display: flex; align-items: center; justify-content: center; 
+            border: 1px solid rgba(255,255,255,0.32); z-index: 90; cursor: pointer; 
+            transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.35s ease, box-shadow 0.35s ease; 
+            color: #fff; backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); 
+            background: rgba(var(--active-accent-rgb), 0.94); 
+            box-shadow: 0 10px 26px rgba(var(--active-accent-rgb), 0.42), inset 0 1px 0 rgba(255,255,255,0.35); 
+        }
         .fab:active { transform: scale(0.9); }
-        .fab-add { bottom: 24px; } .fab-add svg { width: 26px; height: 26px; stroke-width: 2.2; }
-        .fab-gen { bottom: 94px; } .fab-gen svg { width: 24px; height: 24px; stroke-width: 2.2; fill: currentColor; }
+        .fab-add { bottom: 24px; } .fab-add svg { width: 26px; height: 26px; stroke-width: 2.3; }
+        .fab-gen { bottom: 92px; } .fab-gen svg { width: 24px; height: 24px; stroke-width: 2.2; fill: currentColor; }
 
-        /* ВСПЛЫВАЮЩИЕ ШТОРКИ */
+        /* ==========================================================================
+           МОДАЛЬНЫЕ ОКНА И ШТОРКИ
+           ========================================================================== */
         #bottomSheet { z-index: 220; }
         #bottomSheet .modal-sheet { height: auto; max-height: 80vh; padding-bottom: 20px; }
-        .sheet-options { overflow-y: auto; max-height: 60vh; padding: 0 20px; }
-        .sheet-option { padding: 16px 0; border-bottom: 0.5px solid var(--glass-border); font-size: 16px; font-weight: 500; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
-        .sheet-option:last-child { border-bottom: none; }
-        .sheet-option:active { background: var(--input-bg); }
-        .sheet-option svg { width: 20px; height: 20px; color: var(--active-accent); opacity: 0; }
+        .sheet-options { overflow-y: auto; max-height: 60vh; padding: 6px 16px 10px; display: flex; flex-direction: column; gap: 6px; }
+        .sheet-option { 
+            padding: 14px 16px; border-radius: 14px; background: var(--card); border: 1px solid var(--card-border);
+            font-size: 15px; font-weight: 600; color: var(--text); cursor: pointer; 
+            display: flex; justify-content: space-between; align-items: center; transition: transform 0.15s ease, background 0.2s; 
+        }
+        .sheet-option:active { transform: scale(0.98); background: var(--control-bg); }
+        .sheet-option svg { width: 19px; height: 19px; color: var(--active-accent); opacity: 0; }
         .sheet-option.selected svg { opacity: 1; }
-        .sheet-option.selected { color: var(--active-accent); font-weight: 600; }
+        .sheet-option.selected { color: var(--active-accent); border-color: rgba(var(--active-accent-rgb), 0.4); background: rgba(var(--active-accent-rgb), 0.08); font-weight: 700; }
 
-        /* МОДАЛЬНЫЕ ОКНА */
-        .modal { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: var(--overlay); z-index: 200; align-items: flex-end; justify-content: center; transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.4s; overscroll-behavior: none; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+        .modal { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: var(--overlay); z-index: 200; align-items: flex-end; justify-content: center; transition: opacity 0.36s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.36s; overscroll-behavior: none; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
         .modal.active { visibility: visible; opacity: 1; pointer-events: auto; }
         
-        .modal-sheet { background: var(--bg-base); width: 100%; max-width: 500px; height: 92vh; border-radius: 32px 32px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); border-top: 0.5px solid var(--glass-border); box-shadow: 0 -10px 40px rgba(0,0,0,0.2); overscroll-behavior: none; }
+        .modal-sheet { background: var(--bg-base); width: 100%; max-width: 500px; height: 92vh; border-radius: 30px 30px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1); border-top: 1px solid var(--card-border); box-shadow: 0 -12px 44px rgba(0,0,0,0.28); overscroll-behavior: none; }
         .modal.active .modal-sheet { transform: translateY(0); }
-        #generatorModal .modal-sheet { height: 96vh; }
+        #generatorModal .modal-sheet { height: 95vh; }
         
-        .modal-drag-pill { width: 40px; height: 5px; border-radius: 3px; background: var(--text); opacity: 0.2; margin: 12px auto 0; cursor: grab; flex-shrink: 0; }
-        .modal-drag-pill:active { cursor: grabbing; }
-        
-        .modal-header { padding: 12px 20px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid var(--glass-border); flex-shrink: 0; }
-        .modal-header h3 { margin: 0; font-size: 18px; font-weight: 700; color: var(--text); }
-        .close-btn-icon { background: var(--input-bg); display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 15px; color: var(--subtext); cursor: pointer; transition: 0.2s; border: 1px solid var(--glass-border); }
-        .close-btn-icon:active { transform: scale(0.85); opacity: 0.7; }
-        .modal-footer { padding: 14px 20px 24px; border-top: 0.5px solid var(--glass-border); background: var(--bg-base); display: flex; gap: 12px; flex-shrink: 0; }
+        .modal-drag-pill { width: 40px; height: 5px; border-radius: 3px; background: var(--text); opacity: 0.22; margin: 11px auto 0; cursor: grab; flex-shrink: 0; }
+        .modal-header { padding: 12px 20px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); flex-shrink: 0; }
+        .modal-header h3 { margin: 0; font-size: 18px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+        .close-btn-icon { background: var(--control-bg); display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 16px; color: var(--text); cursor: pointer; transition: 0.2s; border: 1px solid var(--control-border); }
+        .close-btn-icon:active { transform: scale(0.86); }
+        .modal-footer { padding: 14px 20px 24px; border-top: 1px solid var(--card-border); background: var(--card); display: flex; gap: 12px; flex-shrink: 0; }
 
         .view-mode, .edit-mode { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; min-height: 0; }
         .edit-mode { display: none; }
 
-        .view-photo-area { position: relative; width: 100%; height: 300px; background: var(--card); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; border-bottom: 0.5px solid var(--glass-border); }
-        .view-blur-bg { position: absolute; inset: -30px; background-size: cover; background-position: center; filter: blur(25px); opacity: 0.6; z-index: 0; }
-        .view-photo-area img { position: relative; z-index: 2; max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.15)); transition: opacity 0.3s; opacity: 0; }
+        .view-photo-area { position: relative; width: 100%; height: 290px; background: var(--card-well); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; border-bottom: 1px solid var(--card-border); }
+        .view-blur-bg { position: absolute; inset: -30px; background-size: cover; background-position: center; filter: blur(26px); opacity: 0.55; z-index: 0; }
+        .view-photo-area img { position: relative; z-index: 2; max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.18)); transition: opacity 0.3s; opacity: 0; }
         
-        .view-info-area, .gen-scroll-area, .modal-body { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; flex-grow: 1; overscroll-behavior: contain; }
-        .view-title { font-size: 24px; font-weight: 700; color: var(--text); margin: 0; line-height: 1.2; letter-spacing: -0.5px; }
+        .view-info-area, .gen-scroll-area, .modal-body { padding: 18px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; flex-grow: 1; overscroll-behavior: contain; }
+        .view-title { font-size: 24px; font-weight: 800; color: var(--text); margin: 0; line-height: 1.2; letter-spacing: -0.03em; }
         .view-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-        .view-tag { background: var(--input-bg); backdrop-filter: blur(12px); color: var(--text); font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--glass-border); display: flex; align-items: center; gap: 6px; }
-        .view-details { background: var(--input-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
-        .detail-row { display: flex; justify-content: space-between; font-size: 15px; }
-        .detail-label { color: var(--subtext); font-weight: 500; }
-        .detail-value { color: var(--text); font-weight: 600; text-align: right; }
+        .view-tag { background: var(--card); color: var(--text); font-size: 13px; font-weight: 600; padding: 8px 14px; border-radius: 12px; border: 1px solid var(--card-border); display: flex; align-items: center; gap: 7px; box-shadow: var(--card-inner-shine); }
+        .view-details { background: var(--card); border: 1px solid var(--card-border); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 13px; box-shadow: var(--card-inner-shine); }
+        .detail-row { display: flex; justify-content: space-between; font-size: 15px; gap: 12px; }
+        .detail-label { color: var(--subtext); font-weight: 600; }
+        .detail-value { color: var(--text); font-weight: 700; text-align: right; }
         
-        .btn-edit-mode, .btn-gen-all { background: var(--active-accent); color: #fff; border: none; padding: 16px; border-radius: 14px; font-weight: 600; font-size: 17px; cursor: pointer; width: 100%; transition: 0.2s; box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.3); display: flex; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; }
+        .btn-edit-mode, .btn-gen-all { background: var(--active-accent); color: #fff; border: none; padding: 16px; border-radius: 15px; font-weight: 700; font-size: 16px; cursor: pointer; width: 100%; transition: 0.2s; box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.32); display: flex; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; }
         .btn-edit-mode:active, .btn-gen-all:active { transform: scale(0.96); opacity: 0.9; }
 
-        .modal-top { padding: 16px 20px; flex-shrink: 0; background: transparent; border-bottom: 0.5px solid var(--glass-border); }
-        .photo-preview-box { width: 100%; height: 160px; border-radius: 16px; background: var(--input-bg); border: 1.5px dashed rgba(var(--active-accent-rgb), 0.4); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; transition: 0.3s ease; }
-        .photo-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
-        .photo-placeholder { color: var(--active-accent); font-size: 14px; font-weight: 600; text-align: center; cursor: pointer; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.2s; }
-        .photo-placeholder svg { width: 32px; height: 32px; margin-bottom: 8px; opacity: 0.8; }
-        .btn-change-photo { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.6); color: #fff; border: none; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; backdrop-filter: blur(15px); cursor: pointer; display: flex; align-items: center; gap: 6px; z-index: 3;}
+        /* ==========================================================================
+           ИНТЕРАКТИВНОЕ КАДРИРОВАНИЕ ОБЛОЖКИ В РЕДАКТОРЕ
+           ========================================================================== */
+        .modal-top { padding: 14px 20px; flex-shrink: 0; background: var(--card); border-bottom: 1px solid var(--card-border); display: flex; flex-direction: column; gap: 10px; }
+        .photo-preview-box { 
+            width: 100%; height: 185px; border-radius: 18px; background: var(--card-well); 
+            border: 1.5px dashed rgba(var(--active-accent-rgb), 0.45); 
+            display: flex; align-items: center; justify-content: center; 
+            position: relative; overflow: hidden; touch-action: none; user-select: none;
+        }
+        .photo-preview-box.has-photo { border-style: solid; border-color: var(--card-border); cursor: grab; }
+        .photo-preview-box.has-photo:active { cursor: grabbing; }
+        .photo-preview-box img { 
+            width: 100%; height: 100%; object-fit: cover; pointer-events: none; 
+            transition: opacity 0.25s ease; z-index: 2; position: relative;
+        }
+        /* Сетка третей при перетаскивании обложки */
+        .crop-grid-overlay {
+            position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.35) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.35) 1px, transparent 1px);
+            background-size: 33.333% 33.333%;
+            box-shadow: inset 0 0 0 2px var(--active-accent);
+        }
+        .photo-preview-box.dragging .crop-grid-overlay { opacity: 1; }
+        .crop-hint-badge {
+            position: absolute; top: 10px; left: 10px; z-index: 4; pointer-events: none;
+            background: rgba(15, 18, 28, 0.62); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            color: #f5f6fa; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px;
+            border: 0.5px solid rgba(255,255,255,0.2); display: none;
+        }
+        .photo-placeholder { color: var(--active-accent); font-size: 14px; font-weight: 700; text-align: center; cursor: pointer; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; }
+        .photo-placeholder svg { width: 32px; height: 32px; margin-bottom: 6px; opacity: 0.85; }
+        .btn-change-photo { position: absolute; bottom: 10px; right: 10px; background: rgba(15, 18, 28, 0.72); color: #fff; border: 0.5px solid rgba(255,255,255,0.25); padding: 7px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; backdrop-filter: blur(12px); cursor: pointer; display: flex; align-items: center; gap: 5px; z-index: 4; }
+        
+        .crop-controls-bar { display: none; align-items: center; gap: 10px; background: var(--control-bg); padding: 7px 12px; border-radius: 12px; border: 1px solid var(--control-border); }
+        .crop-controls-bar span { font-size: 11px; font-weight: 700; color: var(--subtext); text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+        .crop-zoom-slider { flex: 1; accent-color: var(--active-accent); height: 4px; cursor: pointer; }
+        .crop-reset-btn { background: var(--card); color: var(--text); border: 1px solid var(--card-border); border-radius: 8px; padding: 4px 9px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+        .crop-reset-btn:active { transform: scale(0.94); }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .field { display: flex; flex-direction: column; gap: 6px; }
-        .field label { font-size: 11px; font-weight: 600; color: var(--subtext); text-transform: uppercase; margin-left: 4px; }
-        .field input { padding: 14px 16px; border: 1px solid var(--glass-border); border-radius: 14px; font-size: 15px; font-weight: 500; background: var(--input-bg); color: var(--text); outline: none; width: 100%; transition: 0.3s; }
-        .field input:focus { border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.2); }
+        .field label { font-size: 11px; font-weight: 700; color: var(--subtext); text-transform: uppercase; letter-spacing: 0.04em; margin-left: 4px; }
+        .field input { padding: 13px 15px; border: 1px solid var(--control-border); border-radius: 14px; font-size: 15px; font-weight: 500; background: var(--control-bg); color: var(--text); outline: none; width: 100%; transition: 0.25s; box-shadow: var(--card-inner-shine); }
+        .field input:focus { background: var(--card); border-color: var(--active-accent); box-shadow: 0 0 0 3px rgba(var(--active-accent-rgb), 0.2); }
 
         .color-controls { display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
-        .color-circle { width: 44px; height: 44px; flex-shrink: 0; position: relative; overflow: hidden; border: 2.5px solid var(--circle-border); box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 22px; }
-        .color-circle input[type="color"] { position: absolute; top: -10px; left: -10px; width: 64px; height: 64px; opacity: 0; cursor: pointer; }
-        .btn-color-action { background: var(--input-bg); color: var(--text); border: 1px solid var(--glass-border); border-radius: 12px; padding: 12px 16px; font-size: 13px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-        .btn-color-action:active { transform: scale(0.95); opacity: 0.8; }
+        .color-circle { 
+            width: 44px; height: 44px; min-width: 44px; min-height: 44px; flex: 0 0 44px; 
+            position: relative; overflow: hidden; border-radius: 999px; aspect-ratio: 1 / 1;
+            box-shadow: inset 0 0 0 2px var(--dot-inner-ring), 0 0 0 2px var(--dot-outer-ring), 0 4px 12px rgba(0,0,0,0.12); 
+        }
+        .color-circle input[type="color"] { position: absolute; top: -12px; left: -12px; width: 68px; height: 68px; opacity: 0; cursor: pointer; }
+        .btn-color-action { background: var(--control-bg); color: var(--text); border: 1px solid var(--control-border); border-radius: 12px; padding: 11px 15px; font-size: 13px; cursor: pointer; font-weight: 700; transition: 0.2s; }
+        .btn-color-action:active { transform: scale(0.95); }
         .btn-color-action.danger { color: #ff3b30; border-color: rgba(255,59,48,0.3); background: rgba(255,59,48,0.1); }
 
-        .btn-primary, .btn-danger { padding: 16px; border: none; border-radius: 14px; font-weight: 600; font-size: 17px; cursor: pointer; transition: 0.2s; }
+        .btn-primary, .btn-danger { padding: 15px; border: none; border-radius: 15px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; }
         .btn-primary { flex: 2; background: var(--active-accent); color: #fff; box-shadow: 0 8px 24px rgba(var(--active-accent-rgb), 0.3); }
-        .btn-danger { flex: 1; background: rgba(255,59,48,0.1); color: #ff3b30; }
-        .btn-primary:active, .btn-danger:active { transform: scale(0.95); opacity: 0.8; }
+        .btn-danger { flex: 1; background: rgba(255,59,48,0.12); color: #ff3b30; border: 1px solid rgba(255,59,48,0.28); }
+        .btn-primary:active, .btn-danger:active { transform: scale(0.95); opacity: 0.85; }
 
-        .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(28,28,30,0.85); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; font-weight: 600; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .empty { width: 100%; text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 15px; font-weight: 500; display: none; }
+        .sync-indicator { position: fixed; bottom: 16px; left: 16px; background: rgba(20, 22, 30, 0.88); color: #f5f6fa; padding: 8px 16px; border-radius: 20px; font-size: 12px; display: none; z-index: 100; font-weight: 700; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+        .empty { width: 100%; text-align: center; padding: 60px 20px; color: var(--subtext); font-size: 15px; font-weight: 600; display: none; }
 
         /* ГЕНЕРАТОР ОБРАЗОВ */
-        .gen-header-options { padding: 10px 20px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 0.5px solid var(--glass-border); }
-        .gen-scroll-area { padding: 20px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 16px; overscroll-behavior: contain; }
-        .gen-slot { background: var(--card); border-radius: 20px; display: flex; align-items: center; padding: 14px; border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); position: relative; }
-        .gen-slot-title { position: absolute; top: -10px; left: 20px; background: var(--card); color: var(--active-accent); font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 8px; border: 1px solid var(--glass-border); transition: color 0.4s ease; }
-        .gen-img-wrap { width: 80px; height: 80px; border-radius: 12px; background: var(--bg-base); flex-shrink: 0; border: 1px solid var(--glass-border); position: relative; overflow: hidden; cursor: pointer; }
-        .gen-img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.3s; z-index: 2; position: relative; }
-        .gen-info { flex-grow: 1; padding: 0 16px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; cursor: pointer; }
-        .gen-item-title { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px; }
-        .gen-item-meta { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--subtext); font-weight: 500; white-space: nowrap; }
+        .gen-header-options { padding: 10px 20px 14px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); }
+        .gen-slot { background: var(--card); border-radius: 20px; display: flex; align-items: center; padding: 14px; border: 1px solid var(--card-border); box-shadow: var(--card-shadow), var(--card-inner-shine); position: relative; }
+        .gen-slot-title { position: absolute; top: -10px; left: 18px; background: var(--card-elevated); color: var(--active-accent); font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 4px 10px; border-radius: 8px; border: 1px solid var(--card-border); letter-spacing: 0.05em; }
+        .gen-img-wrap { width: 82px; height: 82px; border-radius: 14px; background: var(--card-well); flex-shrink: 0; border: 1px solid var(--card-border); position: relative; overflow: hidden; cursor: pointer; }
+        .gen-img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.3s; z-index: 2; position: relative; }
+        .gen-info { flex-grow: 1; padding: 0 15px; overflow: hidden; display: flex; flex-direction: column; justify-content: center; cursor: pointer; }
+        .gen-item-title { font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 6px; color: var(--text); }
+        .gen-item-meta { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--subtext); font-weight: 600; white-space: nowrap; }
         .gen-item-meta span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; flex: 1; }
-        .gen-actions { display: flex; flex-direction: column; gap: 10px; }
-        .gen-btn { width: 36px; height: 36px; border-radius: 18px; border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; background: var(--bg-base); color: var(--text); cursor: pointer; transition: 0.2s; border: none; }
-        .gen-btn.locked { background: var(--active-accent); color: #fff; border-color: transparent;}
-        .gen-btn:active { transform: scale(0.85); opacity: 0.8; }
-        .gen-empty { text-align: center; color: var(--subtext); font-size: 14px; width: 100%; padding: 16px 0; font-weight: 500; }
+        .gen-actions { display: flex; flex-direction: column; gap: 8px; }
+        .gen-btn { width: 36px; height: 36px; border-radius: 12px; border: 1px solid var(--control-border); display: flex; align-items: center; justify-content: center; background: var(--control-bg); color: var(--text); cursor: pointer; transition: 0.2s; }
+        .gen-btn.locked { background: var(--active-accent); color: #fff; border-color: transparent; }
+        .gen-btn:active { transform: scale(0.86); }
+        .gen-empty { text-align: center; color: var(--subtext); font-size: 14px; width: 100%; padding: 16px 0; font-weight: 600; }
 
-        .toggle-container { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; }
+        .toggle-container { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; }
         .toggle-switch { position: relative; width: 50px; height: 30px; display: inline-block; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #e5e5ea; transition: .3s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 30px; border: 1px solid rgba(0,0,0,0.1); }
-        body.dark-theme .toggle-slider { background-color: #39393d; border-color: rgba(255,255,255,0.1); }
-        .toggle-slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 1px; bottom: 1px; background-color: white; transition: .3s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .toggle-slider { position: absolute; cursor: pointer; inset: 0; background-color: var(--control-bg); transition: .3s cubic-bezier(0.22, 1, 0.36, 1); border-radius: 30px; border: 1px solid var(--control-border); }
+        .toggle-slider:before { position: absolute; content: ""; height: 24px; width: 24px; left: 2px; bottom: 2px; background-color: var(--card-elevated); transition: .3s cubic-bezier(0.22, 1, 0.36, 1); border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.22); }
         .toggle-switch input:checked + .toggle-slider { background-color: #34c759; border-color: transparent; }
-        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
+        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); background-color: #fff; }
 
-        /* ИСПРАВЛЕННЫЙ ПОЛНОЭКРАННЫЙ ZOOM */
-        #imageViewer { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 999; flex-direction: column; transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.4s; overscroll-behavior: none; }
+        /* ПОЛНОЭКРАННЫЙ ZOOM */
+        #imageViewer { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: rgba(8, 10, 15, 0.92); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 999; flex-direction: column; transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.35s; overscroll-behavior: none; }
         #imageViewer.active { visibility: visible; opacity: 1; pointer-events: auto; }
-        .viewer-header { height: 90px; padding: calc(env(safe-area-inset-top, 20px) + 20px) 20px 20px; display: flex; justify-content: flex-end; align-items: center; background: linear-gradient(rgba(0,0,0,0.3), transparent); z-index: 1001; }
-        .viewer-close { background: rgba(255,255,255,0.2); color: #fff; border: none; padding: 10px 20px; border-radius: 14px; font-size: 15px; cursor: pointer; font-weight: 600; transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1); }
-        .viewer-close:active { transform: scale(0.9); }
+        .viewer-header { height: 70px; display: flex; justify-content: flex-end; align-items: center; padding: 0 20px; z-index: 1001; }
+        .viewer-close { background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.22); padding: 9px 18px; border-radius: 14px; font-size: 14px; cursor: pointer; font-weight: 700; transition: transform 0.2s; }
+        .viewer-close:active { transform: scale(0.92); }
         .viewer-img-container { flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; touch-action: none; }
         .viewer-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; transform-origin: 50% 50%; transition: transform 0.1s linear, opacity 0.3s; opacity: 0; }
 
         /* ОКНО ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ */
-        #confirmDialog { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: var(--overlay); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 300; align-items: center; justify-content: center; transition: opacity 0.3s cubic-bezier(0.32, 0.72, 0, 1), visibility 0.3s; overscroll-behavior: none; }
+        #confirmDialog { visibility: hidden; opacity: 0; pointer-events: none; display: flex; position: fixed; inset: 0; background: var(--overlay); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 300; align-items: center; justify-content: center; transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.3s; overscroll-behavior: none; }
         #confirmDialog.active { visibility: visible; opacity: 1; pointer-events: auto; }
-        .confirm-box { background: var(--bg-base); border: 1px solid var(--glass-border); padding: 28px; border-radius: 20px; width: 300px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+        .confirm-box { background: var(--card); border: 1px solid var(--card-border); padding: 26px; border-radius: 24px; width: 310px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.35); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
         #confirmDialog.active .confirm-box { transform: scale(1); }
-        .confirm-box h3 { margin: 0 0 12px 0; color: var(--text); font-size: 18px; font-weight: 600; }
-        .confirm-box p { color: var(--subtext); font-size: 14px; margin-bottom: 24px; line-height: 1.4; font-weight: 400; }
-        .confirm-buttons { display: flex; gap: 12px; }
+        .confirm-box h3 { margin: 0 0 10px 0; color: var(--text); font-size: 18px; font-weight: 800; }
+        .confirm-box p { color: var(--subtext); font-size: 14px; margin-bottom: 22px; line-height: 1.45; font-weight: 500; }
+        .confirm-buttons { display: flex; gap: 10px; }
     </style>
 </head>
 <body class="tab-IN_CLOSET">
 
-    <!-- ГРАДИЕНТНАЯ ПОЛОСА ДЛЯ СВЯЗИ С TELEGRAM -->
+    <!-- ГРАДИЕНТНЫЙ ПЕРЕХОД К ШАПКЕ TELEGRAM -->
     <div class="tg-header-blend"></div>
 
-    <!-- ЗАСТАВКА 4.7 Pro -->
+    <!-- ЗАСТАВКА 4.9 Pro -->
     <div id="splashScreen">
-        <svg class="splash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
-        </svg>
+        <div class="splash-logo-wrap">
+            <svg class="splash-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.38 3.46L16 2a8.5 8.5 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
+            </svg>
+        </div>
         <div class="splash-title">Мой Гардероб</div>
         <div class="splash-progress-container"><div class="splash-progress-bar" id="splashProgressBar"></div></div>
-        <div class="splash-version">Версия 4.71 Pro</div>
+        <div class="splash-version">Версия 4.9 Pro</div>
     </div>
 
     <!-- ПОЛНОЭКРАННЫЙ VIEWER -->
@@ -363,7 +544,7 @@
             <h3>Удаление вещи</h3>
             <p>Вы уверены, что хотите удалить данную вещь? Это действие необратимо.</p>
             <div class="confirm-buttons">
-                <button class="btn-primary" style="background:var(--input-bg); color:var(--text); flex:1; box-shadow:none; border: 1px solid var(--glass-border);" onclick="document.getElementById('confirmDialog').classList.remove('active')">Отмена</button>
+                <button class="btn-primary" style="background:var(--control-bg); color:var(--text); flex:1; box-shadow:none; border: 1px solid var(--control-border);" onclick="document.getElementById('confirmDialog').classList.remove('active')">Отмена</button>
                 <button class="btn-danger" style="flex:1;" onclick="executeDelete()">Удалить</button>
             </div>
         </div>
@@ -376,7 +557,7 @@
             <div class="modal-header">
                 <h3 id="sheetTitle">Выбор</h3>
                 <button class="close-btn-icon" onclick="closeSheet()">
-                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
             <div class="sheet-options" id="sheetOptions"></div>
@@ -387,15 +568,19 @@
     <div id="mainWrapper">
         <div class="header">
             <div class="search-container">
-                <input type="text" id="searchInput" class="search-input" placeholder="Поиск по гардеробу..." oninput="applyFilters(true)">
+                <div class="search-input-wrap">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="searchInput" class="search-input" placeholder="Поиск по гардеробу..." oninput="onSearchInput()">
+                    <button id="searchClearBtn" class="search-clear" onclick="clearSearch()">✕</button>
+                </div>
                 <div class="search-row-inner">
                     <div class="custom-select" onclick="openCatSheet()">
                         <span id="catSelectText" class="custom-select-text">Все категории</span>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
                     <div class="custom-select" onclick="openSortSheet()">
                         <span id="sortSelectText" class="custom-select-text">Сначала новые</span>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                     </div>
                 </div>
             </div>
@@ -423,14 +608,14 @@
     
     <div id="syncStatus" class="sync-indicator">Синхронизация...</div>
 
-    <!-- ГЕНЕРАТОР -->
+    <!-- ГЕНЕРАТОР ОБРАЗОВ -->
     <div class="modal gen-modal" id="generatorModal">
         <div class="modal-sheet">
             <div class="modal-drag-pill"></div>
             <div class="modal-header">
                 <h3 id="genTitle">Генератор образов</h3>
                 <button class="close-btn-icon" onclick="closeGenerator()">
-                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
             <div class="gen-header-options">
@@ -456,7 +641,7 @@
             <div class="modal-header">
                 <h3 id="modalTitle">Свойства вещи</h3>
                 <button class="close-btn-icon" onclick="closeModal()">
-                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
 
@@ -480,7 +665,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn-edit-mode" onclick="switchToEditMode()">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                         Редактировать
                     </button>
                 </div>
@@ -489,14 +674,21 @@
             <div class="edit-mode" id="editMode">
                 <div class="modal-top">
                     <div class="photo-preview-box" id="photoBox">
+                        <div class="crop-grid-overlay"></div>
+                        <div class="crop-hint-badge" id="cropHintBadge">Тяните фото для кадра обложки</div>
                         <div class="photo-placeholder" id="photoPlaceholder" onclick="document.getElementById('photoInput').click()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 4.5a2.5 2.5 0 0 0-2.5 2.5v.5L3 13a1 1 0 0 0 .7 1.7h16.6a1 1 0 0 0 .7-1.7L14.5 7.5v-.5A2.5 2.5 0 0 0 12 4.5z"></path><path d="M12 7v10"></path><path d="M9 17h6"></path></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 4.5a2.5 2.5 0 0 0-2.5 2.5v.5L3 13a1 1 0 0 0 .7 1.7h16.6a1 1 0 0 0 .7-1.7L14.5 7.5v-.5A2.5 2.5 0 0 0 12 4.5z"></path><path d="M12 7v10"></path><path d="M9 17h6"></path></svg>
                             <span>Добавить фотографию</span>
                         </div>
                         <div class="image-loader" id="editPhotoLoader" style="z-index:3;"></div>
-                        <img id="photoPreview" style="display:none;" alt="Preview" onclick="openFullscreen(this.src)">
-                        <button id="btnChangePhoto" class="btn-change-photo" style="display:none;" onclick="document.getElementById('photoInput').click()">Изменить</button>
+                        <img id="photoPreview" style="display:none;" alt="Preview">
+                        <button id="btnChangePhoto" class="btn-change-photo" style="display:none;" onclick="document.getElementById('photoInput').click()">Изменить фото</button>
                         <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)">
+                    </div>
+                    <div class="crop-controls-bar" id="cropControlsBar">
+                        <span>Масштаб</span>
+                        <input type="range" id="cropZoomRange" class="crop-zoom-slider" min="1" max="2.4" step="0.05" value="1" oninput="onCropZoomChange(this.value)">
+                        <button type="button" class="crop-reset-btn" onclick="resetCropFraming()">Сброс</button>
                     </div>
                 </div>
                 <div class="modal-body">
@@ -506,18 +698,18 @@
                             <label>Роль в образе</label>
                             <div class="custom-select" onclick="openRoleSheet()">
                                 <span id="fRoleText" class="custom-select-text">Без роли</span>
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                             </div>
                             <input type="hidden" id="fRole" value="UNASSIGNED">
                         </div>
-                        <div class="field"><label>Категория</label><input type="text" id="fCategory" placeholder="Свой вариант..."></div>
+                        <div class="field"><label>Категория</label><input type="text" id="fCategory" placeholder="Футболка, Брюки..."></div>
                     </div>
                     <div class="form-row">
                         <div class="field">
                             <label>Расположение</label>
                             <div class="custom-select" onclick="openStatusSheet()">
                                 <span id="fStatusText" class="custom-select-text">В шкафу</span>
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                             </div>
                             <input type="hidden" id="fStatus" value="IN_CLOSET">
                         </div>
@@ -531,7 +723,7 @@
                             <div class="color-circle" id="circle2" style="background-color: #ffffff; display:none;"><input type="color" id="fColorHex2" value="#ffffff" oninput="updateCircle(2)" onchange="markCustomColorUsed()"></div>
                             <button id="btnRemoveColor2" class="btn-color-action danger" style="display:none;" onclick="toggleColor2()">- Убрать</button>
                         </div>
-                        <input type="text" id="fColorText" placeholder="Описание цвета (Например: Темно-синий)">
+                        <input type="text" id="fColorText" placeholder="Описание цвета (Например: Белый)">
                         <button id="btnClearColors" class="btn-color-action danger" style="display:none; width: 100%; margin-top: 8px;" onclick="clearCustomColors()">Сбросить ручные настройки</button>
                         <input type="hidden" id="fHasCustomColors" value="false">
                     </div>
@@ -546,12 +738,12 @@
     </div>
 
     <script>
-        var NO_PHOTO_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="%239ca3af"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>';
+        var NO_PHOTO_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5a2.5 2.5 0 0 0-2.5 2.5v.5L3 13a1 1 0 0 0 .7 1.7h16.6a1 1 0 0 0 .7-1.7L14.5 7.5v-.5A2.5 2.5 0 0 0 12 4.5z"></path><path d="M12 7v10"></path><path d="M9 17h6"></path></svg>';
         var CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
         
         var API_URL = "https://script.google.com/macros/s/AKfycbwcOpE2mAJnEmj4sjZfnB1womgZwOLueOai_y14g9OcTAM0vI9Yoo_egLHwndi4W4dZIQ/exec";
         var myTgId = typeof tg !== 'undefined' && tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : "default_user";
-        var CACHE_KEY = "wardrobe_v47_" + myTgId;
+        var CACHE_KEY = "wardrobe_v49_" + myTgId;
         var items = [];
         var currentTab = "IN_CLOSET";
         var currentCat = "ALL";
@@ -560,11 +752,22 @@
         var currentPhotoData = "";
         var isColor2Active = false;
 
-        var COLOR_MAP = { "черный": "#111827", "белый": "#ffffff", "серый": "#9ca3af", "синий": "#2563eb", "голубой": "#38bdf8", "небесный": "#0ea5e9", "красный": "#ef4444", "зеленый": "#10b981", "желтый": "#facc15", "коричневый": "#78350f", "розовый": "#ec4899", "фиолетовый": "#7c3aed", "оранжевый": "#f97316", "бордовый": "#881337", "хаки": "#78716c", "оливковый": "#65a30d" };
+        // Координаты кадрирования обложки (X%, Y%, Масштаб)
+        var currentCrop = { x: 50, y: 50, s: 1 };
+
+        var COLOR_MAP = { 
+            "черный": "#14161f", "белый": "#f5f6fa", "серый": "#8e93a6", "светло-серый": "#c5c8d4", "темно-серый": "#4a4e5d", "графитовый": "#343742",
+            "синий": "#2563eb", "темно-синий": "#1e3a8a", "голубой": "#38bdf8", "небесный": "#0ea5e9", "бирюзовый": "#14b8a6",
+            "красный": "#ef4444", "бордовый": "#881337", "коралловый": "#fb7185", "розовый": "#ec4899",
+            "зеленый": "#10b981", "темно-зеленый": "#14532d", "оливковый": "#65a30d", "хаки": "#6b705c", "мятный": "#6ee7b7",
+            "желтый": "#facc15", "горчичный": "#ca8a04", "оранжевый": "#f97316", "терракотовый": "#c2410c",
+            "коричневый": "#78350f", "бежевый": "#d6ccc2", "серо-бежевый": "#9a8c82", "молочный": "#f3efe6", "кремовый": "#efe6d5",
+            "фиолетовый": "#7c3aed", "сиреневый": "#c084fc", "лавандовый": "#a78bfa", "золотой": "#eab308", "серебряный": "#94a3b8"
+        };
 
         function updateProgress(percent) {
             var bar = document.getElementById('splashProgressBar');
-            if(bar) bar.style.width = percent + '%';
+            if(bar) bar.style.width = Math.min(100, Math.round(percent)) + '%';
         }
 
         function toggleBodyScroll(lock) {
@@ -572,6 +775,100 @@
             else document.body.classList.remove('modal-open');
         }
 
+        // ==========================================================================
+        // ИНТЕРАКТИВНОЕ КАДРИРОВАНИЕ ОБЛОЖКИ В РЕДАКТОРЕ
+        // ==========================================================================
+        function applyCropToImgElement(imgEl, crop) {
+            if (!imgEl) return;
+            var cx = crop && !isNaN(crop.x) ? crop.x : 50;
+            var cy = crop && !isNaN(crop.y) ? crop.y : 50;
+            var cs = crop && !isNaN(crop.s) ? crop.s : 1;
+            imgEl.style.objectPosition = cx + '% ' + cy + '%';
+            imgEl.style.transformOrigin = cx + '% ' + cy + '%';
+            imgEl.style.transform = cs !== 1 ? 'scale(' + cs + ')' : 'none';
+        }
+
+        function initCoverCropDrag() {
+            var box = document.getElementById('photoBox');
+            var prevImg = document.getElementById('photoPreview');
+            var dragging = false;
+            var startX = 0, startY = 0, startCropX = 50, startCropY = 50;
+
+            function startDrag(clientX, clientY, target) {
+                if (!currentPhotoData || target.closest('button') || target.closest('input')) return;
+                dragging = true;
+                startX = clientX;
+                startY = clientY;
+                startCropX = currentCrop.x;
+                startCropY = currentCrop.y;
+                box.classList.add('dragging');
+            }
+
+            function moveDrag(clientX, clientY) {
+                if (!dragging) return;
+                var rect = box.getBoundingClientRect();
+                var sensitivity = 100 / Math.max(1, currentCrop.s * 0.85);
+                var dx = ((clientX - startX) / rect.width) * sensitivity;
+                var dy = ((clientY - startY) / rect.height) * sensitivity;
+                currentCrop.x = Math.max(0, Math.min(100, Math.round(startCropX - dx)));
+                currentCrop.y = Math.max(0, Math.min(100, Math.round(startCropY - dy)));
+                applyCropToImgElement(prevImg, currentCrop);
+            }
+
+            function endDrag() {
+                if (!dragging) return;
+                dragging = false;
+                box.classList.remove('dragging');
+            }
+
+            box.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 1) startDrag(e.touches[0].clientX, e.touches[0].clientY, e.target);
+            }, {passive: true});
+
+            box.addEventListener('touchmove', function(e) {
+                if (!dragging) return;
+                if (e.cancelable) e.preventDefault();
+                moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+            }, {passive: false});
+
+            box.addEventListener('touchend', endDrag);
+            box.addEventListener('mousedown', function(e) { startDrag(e.clientX, e.clientY, e.target); });
+            window.addEventListener('mousemove', function(e) { moveDrag(e.clientX, e.clientY); });
+            window.addEventListener('mouseup', endDrag);
+        }
+
+        window.onCropZoomChange = function(val) {
+            currentCrop.s = parseFloat(val) || 1;
+            applyCropToImgElement(document.getElementById('photoPreview'), currentCrop);
+        };
+
+        window.resetCropFraming = function() {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            currentCrop = { x: 50, y: 50, s: 1 };
+            document.getElementById('cropZoomRange').value = 1;
+            applyCropToImgElement(document.getElementById('photoPreview'), currentCrop);
+        };
+
+        function updateCropUIState(hasPhoto) {
+            var box = document.getElementById('photoBox');
+            var bar = document.getElementById('cropControlsBar');
+            var hint = document.getElementById('cropHintBadge');
+            if (hasPhoto) {
+                box.classList.add('has-photo');
+                bar.style.display = 'flex';
+                hint.style.display = 'block';
+                document.getElementById('cropZoomRange').value = currentCrop.s || 1;
+                applyCropToImgElement(document.getElementById('photoPreview'), currentCrop);
+            } else {
+                box.classList.remove('has-photo');
+                bar.style.display = 'none';
+                hint.style.display = 'none';
+            }
+        }
+
+        // ==========================================================================
+        // SWIPE-TO-CLOSE
+        // ==========================================================================
         function enableSwipeToClose(modalId, closeAction) {
             var modal = document.getElementById(modalId);
             var sheet = modal.querySelector('.modal-sheet');
@@ -579,7 +876,7 @@
             
             sheet.addEventListener('touchstart', function(e) {
                 var target = e.target;
-                if (target.closest('button, input, .custom-select, .toggle-switch, .color-circle')) return;
+                if (target.closest('button, input, .custom-select, .toggle-switch, .color-circle, .photo-preview-box')) return;
                 var scrollArea = target.closest('.modal-body, .view-info-area, .gen-scroll-area, .sheet-options');
                 if (scrollArea && scrollArea.scrollTop > 0) return;
                 
@@ -604,13 +901,13 @@
             sheet.addEventListener('touchend', function() {
                 if (!isDragging) return;
                 isDragging = false;
-                sheet.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
+                sheet.style.transition = 'transform 0.38s cubic-bezier(0.22, 1, 0.36, 1)';
                 if (currentY > 100) {
                     sheet.style.transform = 'translateY(100%)';
                     setTimeout(function() {
                         closeAction();
                         sheet.style.transform = ''; 
-                    }, 300);
+                    }, 280);
                 } else {
                     sheet.style.transform = '';
                 }
@@ -623,16 +920,24 @@
             enableSwipeToClose('itemModal', closeModal);
             enableSwipeToClose('generatorModal', closeGenerator);
             enableSwipeToClose('bottomSheet', closeSheet);
+            initCoverCropDrag();
             
             updateProgress(15);
-            try { var saved = localStorage.getItem(CACHE_KEY); if(saved) items = JSON.parse(saved); if(!Array.isArray(items)) items = []; } catch(e) {}
+            try { 
+                var saved = localStorage.getItem(CACHE_KEY) || localStorage.getItem("wardrobe_v47_" + myTgId) || localStorage.getItem("wardrobe_v46_" + myTgId); 
+                if(saved) items = JSON.parse(saved); 
+                if(!Array.isArray(items)) items = []; 
+            } catch(e) {}
             fetchFromCloud();
         });
 
         async function fetchFromCloud() {
             updateProgress(35);
             try {
-                const res = await fetch(API_URL + "?user_id=" + myTgId);
+                var controller = new AbortController();
+                var timeoutId = setTimeout(function() { controller.abort(); }, 4500);
+                const res = await fetch(API_URL + "?user_id=" + myTgId, { signal: controller.signal });
+                clearTimeout(timeoutId);
                 const data = await res.json();
                 if (Array.isArray(data)) { 
                     items = data; 
@@ -650,7 +955,7 @@
                 else { item.isPriority = false; }
             });
 
-            initGrid(); 
+            syncGrid(); 
             
             await preloadPriorityImages();
             updateProgress(100);
@@ -659,61 +964,55 @@
                 var splash = document.getElementById('splashScreen');
                 if(splash) {
                     splash.style.opacity = '0';
-                    setTimeout(() => splash.style.display = 'none', 500);
-                    document.getElementById('mainWrapper').style.opacity = '1';
-                    document.getElementById('mainWrapper').style.pointerEvents = 'auto';
+                    setTimeout(function() { splash.style.display = 'none'; }, 450);
+                    var mainWrap = document.getElementById('mainWrapper');
+                    mainWrap.style.opacity = '1';
+                    mainWrap.style.pointerEvents = 'auto';
                 }
-                
                 backgroundLoadRemainingImages();
-            }, 300);
+            }, 220);
         }
 
         function preloadPriorityImages() {
-            return new Promise(resolve => {
+            return new Promise(function(resolve) {
                 var priorityImgs = Array.from(document.querySelectorAll('.priority-img'));
                 if(priorityImgs.length === 0) return resolve();
                 
-                let loaded = 0;
-                let isDone = false;
+                var loaded = 0;
+                var isDone = false;
                 
-                const finish = () => {
-                    if(!isDone) {
-                        isDone = true;
-                        resolve();
-                    }
+                var finish = function() {
+                    if(!isDone) { isDone = true; resolve(); }
                 };
                 
-                const check = () => {
+                var check = function() {
                     if(isDone) return;
                     loaded++;
                     updateProgress(60 + (loaded / priorityImgs.length) * 40);
-                    if(loaded >= priorityImgs.length) { 
-                        finish(); 
-                    }
+                    if(loaded >= priorityImgs.length) finish();
                 };
                 
-                setTimeout(finish, 2500); 
+                setTimeout(finish, 2400); 
 
-                priorityImgs.forEach(img => {
-                    if (img.complete) {
-                        check();
-                    } else {
-                        img.addEventListener('load', check);
-                        img.addEventListener('error', check);
+                priorityImgs.forEach(function(img) {
+                    if (img.complete) check();
+                    else {
+                        img.addEventListener('load', check, { once: true });
+                        img.addEventListener('error', check, { once: true });
                     }
                 });
             });
         }
 
         function backgroundLoadRemainingImages() {
-            var remaining = items.filter(i => !i.isPriority && i.photo).map(i => i.photo.replace('sz=w1000', 'sz=w400'));
+            var remaining = items.filter(function(i) { return !i.isPriority && i.photo; }).map(function(i) { return i.photo.replace('sz=w1000', 'sz=w400'); });
             var index = 0;
             function loadNext() {
                 if(index >= remaining.length) return;
                 var img = new Image();
                 img.onload = img.onerror = function() {
                     index++;
-                    setTimeout(loadNext, 100); 
+                    setTimeout(loadNext, 90); 
                 };
                 img.src = remaining[index];
             }
@@ -726,6 +1025,22 @@
             el.innerText = text; el.style.display = 'block';
         }
 
+        window.onSearchInput = function() {
+            var val = document.getElementById('searchInput').value;
+            document.getElementById('searchClearBtn').style.display = val.length > 0 ? 'flex' : 'none';
+            applyFilters(false);
+        };
+
+        window.clearSearch = function() {
+            if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchClearBtn').style.display = 'none';
+            applyFilters(true);
+        };
+
+        // ==========================================================================
+        // ШТОРКИ ВЫБОРА (CUSTOM SELECT SHEETS)
+        // ==========================================================================
         var currentSheetCallback = null;
         function openSheet(title, options, selectedValue, callback) {
             if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
@@ -757,7 +1072,7 @@
             if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
             if(currentSheetCallback) currentSheetCallback(value, label);
             closeSheet();
-        }
+        };
 
         window.openCatSheet = function() {
             var uniqueCats = [];
@@ -767,7 +1082,7 @@
             }
             uniqueCats.sort();
             var opts = [{value: "ALL", label: "Все категории"}];
-            uniqueCats.forEach(function(c) { opts.push({value: c, label: c}); });
+            uniqueCats.forEach(function(c) { opts.push({value: c.toLowerCase(), label: c}); });
             openSheet("Категория", opts, currentCat, function(val, label) {
                 currentCat = val;
                 document.getElementById('catSelectText').innerText = label;
@@ -808,6 +1123,9 @@
             });
         };
 
+        // ==========================================================================
+        // ПАРСИНГ ЦВЕТОВ, КАТЕГОРИЙ И КООРДИНАТ ОБЛОЖКИ
+        // ==========================================================================
         function parseColorField(colorStr) {
             if (!colorStr) return { text: "", dot: "", hex1: "#ffffff", hex2: "#ffffff", hasCustom: false, isColor2Active: false };
             var parts = colorStr.split("||");
@@ -817,22 +1135,40 @@
             
             if (isTwo) bgStyle = "background: linear-gradient(135deg, " + h1 + " 50%, " + h2 + " 50%)";
             else if (h1) bgStyle = "background: " + h1;
-            else { var clean = text.toLowerCase().trim().replace(/ё/g, "е"); if (COLOR_MAP[clean]) bgStyle = "background: " + COLOR_MAP[clean]; }
+            else { 
+                var clean = text.toLowerCase().trim().replace(/ё/g, "е"); 
+                if (COLOR_MAP[clean]) bgStyle = "background: " + COLOR_MAP[clean]; 
+                else {
+                    var firstWord = clean.split(/[\s,]+/)[0];
+                    if (COLOR_MAP[firstWord]) bgStyle = "background: " + COLOR_MAP[firstWord];
+                }
+            }
             
-            var dotHtml = bgStyle ? '<div class="color-dot" style="' + bgStyle + '"></div>' : '';
+            var dotHtml = bgStyle ? '<span class="color-dot" style="' + bgStyle + '"></span>' : '';
             return { text: text, dot: dotHtml, hex1: h1 || "#ffffff", hex2: h2 || "#ffffff", hasCustom: !!h1, isColor2Active: isTwo, style: bgStyle };
         }
 
         function parseCategoryField(catRaw) {
-            if (!catRaw) return { role: 'UNASSIGNED', name: '' };
-            if (catRaw.indexOf('||') !== -1) { var p = catRaw.split('||'); return { role: p[0], name: p[1] || '' }; }
+            var defaultCrop = { x: 50, y: 50, s: 1 };
+            if (!catRaw) return { role: 'UNASSIGNED', name: '', crop: defaultCrop };
+            if (catRaw.indexOf('||') !== -1) { 
+                var p = catRaw.split('||'); 
+                var cropObj = defaultCrop;
+                if (p[2]) {
+                    var cp = p[2].split(',');
+                    if (cp.length === 3) {
+                        cropObj = { x: parseFloat(cp[0]) || 50, y: parseFloat(cp[1]) || 50, s: parseFloat(cp[2]) || 1 };
+                    }
+                }
+                return { role: p[0], name: p[1] || '', crop: cropObj }; 
+            }
             var lower = catRaw.toLowerCase(); var role = 'UNASSIGNED';
             if (/(футб|рубаш|майк|топ|блуз|поло)/i.test(lower)) role = 'TOP';
             else if (/(худи|свит|свитер|пиджак|куртк|кофт|пальт|кардиган|жилет)/i.test(lower)) role = 'OUTER';
             else if (/(штан|джинс|брюк|шорт|юбк|треник)/i.test(lower)) role = 'BOTTOM';
             else if (/(обув|кросс|ботинк|туфл|кед|сапог|тапок)/i.test(lower)) role = 'SHOES';
             else if (/(шапк|шарф|сумк|рем|очк|аксес)/i.test(lower)) role = 'ACCESSORY';
-            return { role: role, name: catRaw };
+            return { role: role, name: catRaw, crop: defaultCrop };
         }
 
         function generateMoveButtons(id, status) {
@@ -854,8 +1190,8 @@
             document.getElementById('cnt-WASHING').innerText = cntWASH; 
             document.getElementById('cnt-DRYING').innerText = cntDRY;
 
-            const bulkBar = document.getElementById('bulkBar');
-            const currentCount = items.filter(i => i.status === currentTab).length;
+            var bulkBar = document.getElementById('bulkBar');
+            var currentCount = items.filter(function(i) { return i.status === currentTab; }).length;
             
             if (currentTab === "WASHING" && currentCount > 0) {
                 bulkBar.classList.add('visible'); 
@@ -870,45 +1206,112 @@
             }
         }
 
-        function initGrid() {
-            var grid = document.getElementById('grid');
-            var htmlResult = '';
-            
-            for(var k = 0; k < items.length; k++) {
-                var item = items[k]; 
-                var colorObj = parseColorField(item.color); 
-                var pCat = parseCategoryField(item.category);
-                
-                var safeName = (item.name || '').toLowerCase().replace(/"/g, '&quot;');
-                var safeCat = (pCat.name).toLowerCase().replace(/"/g, '&quot;');
-                var safeBrand = (item.brand || '').toLowerCase().replace(/"/g, '&quot;');
-                var searchStr = (safeName + " " + safeBrand + " " + safeCat).replace(/"/g, '&quot;');
-                
-                var moveButtons = generateMoveButtons(item.id, item.status);
-                var isPriority = item.isPriority;
-                var lazyAttr = isPriority ? '' : 'loading="lazy"';
-                var imgClass = isPriority ? 'priority-img' : '';
-                
-                var imgContent = item.photo ? `<div class="skeleton-loader"></div><img src="${item.photo.replace('sz=w1000', 'sz=w400')}" class="${imgClass}" ${lazyAttr} onload="this.style.opacity=1; this.previousElementSibling.style.display='none';">` : `<div class="placeholder-img">${NO_PHOTO_SVG}</div>`;
-                var metaLabel = (item.brand || '') + (item.brand && colorObj.text ? ' ' : '') + colorObj.text;
+        // ==========================================================================
+        // PERSISTENT DOM ENGINE (0% МОРГАНИЯ ФОТОГРАФИЙ)
+        // ==========================================================================
+        function getCropStyleString(crop) {
+            if (!crop) return '';
+            var cx = !isNaN(crop.x) ? crop.x : 50;
+            var cy = !isNaN(crop.y) ? crop.y : 50;
+            var cs = !isNaN(crop.s) ? crop.s : 1;
+            return `object-position:${cx}% ${cy}%; transform-origin:${cx}% ${cy}%;` + (cs !== 1 ? ` transform:scale(${cs});` : '');
+        }
 
-                htmlResult += `<div class="card card-item show" id="card-${item.id}" data-status="${item.status}" data-category="${safeCat}" data-search="${searchStr}" data-name="${safeName}" data-brand="${safeBrand}">` +
-                            `<div class="img-wrap" onclick="openModal('${item.id}')">${imgContent}<span class="cat-pill">${pCat.name || 'Без категории'}</span></div>` +
-                            `<div class="card-body" onclick="openModal('${item.id}')"><div class="card-title">${item.name || 'Без названия'}</div><div class="card-meta">${colorObj.dot}<span class="meta-text">${metaLabel}</span></div></div>` +
-                            `<div class="move-bar">${moveButtons}</div></div>`;
+        function syncGrid() {
+            var grid = document.getElementById('grid');
+            var existingMap = {};
+            Array.from(grid.querySelectorAll('.card-item')).forEach(function(el) {
+                existingMap[el.id.replace('card-', '')] = el;
+            });
+
+            var activeIds = {};
+
+            for (var k = 0; k < items.length; k++) {
+                var item = items[k];
+                var idStr = String(item.id);
+                activeIds[idStr] = true;
+
+                var colorObj = parseColorField(item.color);
+                var pCat = parseCategoryField(item.category);
+                var safeName = (item.name || '').toLowerCase();
+                var safeCat = (pCat.name || '').toLowerCase();
+                var safeBrand = (item.brand || '').toLowerCase();
+                var searchStr = safeName + " " + safeBrand + " " + safeCat;
+                var metaLabel = (item.brand || '') + (item.brand && colorObj.text ? ' · ' : '') + colorObj.text;
+                var thumbSrc = item.photo ? item.photo.replace('sz=w1000', 'sz=w400') : '';
+                var cropStyle = getCropStyleString(pCat.crop);
+
+                var card = existingMap[idStr];
+                if (card) {
+                    // Точечное обновление существующей карточки БЕЗ пересоздания <img>
+                    card.setAttribute('data-status', item.status);
+                    card.setAttribute('data-category', safeCat);
+                    card.setAttribute('data-search', searchStr);
+                    card.setAttribute('data-name', safeName);
+                    card.setAttribute('data-brand', safeBrand);
+
+                    var pill = card.querySelector('.cat-pill');
+                    if (pill) pill.innerText = pCat.name || 'Без категории';
+
+                    var titleEl = card.querySelector('.card-title');
+                    if (titleEl) titleEl.innerText = item.name || 'Без названия';
+
+                    var metaEl = card.querySelector('.card-meta');
+                    if (metaEl) metaEl.innerHTML = colorObj.dot + '<span class="meta-text">' + metaLabel + '</span>';
+
+                    var moveBar = card.querySelector('.move-bar');
+                    if (moveBar) moveBar.innerHTML = generateMoveButtons(item.id, item.status);
+
+                    var existingImg = card.querySelector('.img-wrap img');
+                    if (thumbSrc) {
+                        if (existingImg && existingImg.getAttribute('data-raw-src') === thumbSrc) {
+                            applyCropToImgElement(existingImg, pCat.crop);
+                        } else {
+                            var wrap = card.querySelector('.img-wrap');
+                            wrap.innerHTML = `<div class="skeleton-loader"></div><img src="${thumbSrc}" data-raw-src="${thumbSrc}" style="${cropStyle}" onload="this.style.opacity=1; if(this.previousElementSibling) this.previousElementSibling.style.display='none';"><span class="cat-pill">${pCat.name || 'Без категории'}</span>`;
+                        }
+                    }
+                } else {
+                    // Создание новой карточки
+                    var newCard = document.createElement('div');
+                    newCard.className = 'card card-item';
+                    newCard.id = 'card-' + item.id;
+                    newCard.setAttribute('data-status', item.status);
+                    newCard.setAttribute('data-category', safeCat);
+                    newCard.setAttribute('data-search', searchStr);
+                    newCard.setAttribute('data-name', safeName);
+                    newCard.setAttribute('data-brand', safeBrand);
+
+                    var isPriority = item.isPriority;
+                    var lazyAttr = isPriority ? '' : 'loading="lazy"';
+                    var imgClass = isPriority ? 'priority-img' : '';
+                    var imgContent = thumbSrc 
+                        ? `<div class="skeleton-loader"></div><img src="${thumbSrc}" data-raw-src="${thumbSrc}" class="${imgClass}" ${lazyAttr} style="${cropStyle}" onload="this.style.opacity=1; if(this.previousElementSibling) this.previousElementSibling.style.display='none';">` 
+                        : `<div class="placeholder-img">${NO_PHOTO_SVG}</div>`;
+
+                    newCard.innerHTML = 
+                        `<div class="img-wrap" onclick="openModal('${item.id}')">${imgContent}<span class="cat-pill">${pCat.name || 'Без категории'}</span></div>` +
+                        `<div class="card-body" onclick="openModal('${item.id}')"><div class="card-title">${item.name || 'Без названия'}</div><div class="card-meta">${colorObj.dot}<span class="meta-text">${metaLabel}</span></div></div>` +
+                        `<div class="move-bar">${generateMoveButtons(item.id, item.status)}</div>`;
+                    grid.appendChild(newCard);
+                }
             }
-            grid.innerHTML = htmlResult;
+
+            // Удаляем карточки удаленных вещей
+            Object.keys(existingMap).forEach(function(idKey) {
+                if (!activeIds[idKey]) existingMap[idKey].remove();
+            });
+
             applyFilters(false);
         }
 
+        // Сортировка и фильтрация на месте (без перевставки в DOM!)
         window.applyFilters = function(animate) {
             updateCounts();
             var query = document.getElementById('searchInput').value.trim().toLowerCase();
             var cards = Array.from(document.querySelectorAll('.card-item'));
             var visibleCount = 0; 
             var filteredCards = [];
-            
-            var frag = document.createDocumentFragment();
             
             cards.forEach(function(card) {
                 var st = card.getAttribute('data-status');
@@ -922,8 +1325,6 @@
                     filteredCards.push({ elem: card, id: Number(card.id.replace('card-', '')), name: card.getAttribute('data-name'), brand: card.getAttribute('data-brand'), cat: c });
                 } else { 
                     card.style.display = 'none'; 
-                    card.classList.remove('show');
-                    frag.appendChild(card);
                 }
             });
             
@@ -938,26 +1339,23 @@
             });
             
             filteredCards.forEach(function(item, index) {
-                item.elem.style.display = 'flex';
-                item.elem.style.order = index;
-                frag.appendChild(item.elem);
-            });
-            
-            document.getElementById('grid').appendChild(frag);
-            
-            if (animate) {
-                requestAnimationFrame(function() {
-                    filteredCards.forEach(function(item, index) {
-                        item.elem.style.animation = 'none';
-                        void item.elem.offsetWidth; 
-                        item.elem.style.animation = 'scaleInCard 0.4s cubic-bezier(0.32, 0.72, 0, 1) forwards';
-                        item.elem.style.animationDelay = (index * 0.025) + 's';
-                        item.elem.classList.add('show');
+                var el = item.elem;
+                el.style.display = 'flex';
+                el.style.order = index;
+                el.style.opacity = '1';
+
+                if (animate && el.animate) {
+                    el.animate([
+                        { opacity: 0.01, transform: 'translateY(14px) scale(0.96)' },
+                        { opacity: 1, transform: 'translateY(0) scale(1)' }
+                    ], {
+                        duration: 340,
+                        delay: Math.min(index * 22, 240),
+                        easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                        fill: 'both'
                     });
-                });
-            } else {
-                filteredCards.forEach(function(item) { item.elem.classList.add('show'); });
-            }
+                }
+            });
             
             document.getElementById('emptyState').style.display = (visibleCount === 0) ? 'block' : 'none';
         };
@@ -966,17 +1364,11 @@
             if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
             if (currentTab === tab) return;
             
-            const bulkBar = document.getElementById('bulkBar');
-            bulkBar.classList.remove('visible');
+            document.getElementById('bulkBar').classList.remove('visible');
 
             var tabs = document.querySelectorAll('.tab');
-            tabs.forEach(t => t.classList.remove('active'));
-            document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
-            
-            var indicator = document.getElementById('tabIndicator');
-            if(tab === 'IN_CLOSET') indicator.style.transform = 'translateX(0)';
-            else if(tab === 'WASHING') indicator.style.transform = 'translateX(100%)';
-            else if(tab === 'DRYING') indicator.style.transform = 'translateX(200%)';
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+            document.querySelector('.tab[data-tab="' + tab + '"]').classList.add('active');
 
             currentTab = tab;
             document.body.className = document.body.className.replace(/tab-\w+/g, '');
@@ -989,31 +1381,31 @@
             if (event) event.stopPropagation(); 
             if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
             
-            const item = items.find(i => String(i.id) === String(id));
+            var item = items.find(function(i) { return String(i.id) === String(id); });
             if (!item) return;
             item.status = newStatus; 
             localStorage.setItem(CACHE_KEY, JSON.stringify(items)); 
             
-            const card = document.getElementById('card-' + id);
+            var card = document.getElementById('card-' + id);
             if (card) {
                 card.setAttribute('data-status', newStatus);
                 card.querySelector('.move-bar').innerHTML = generateMoveButtons(id, newStatus);
             }
             
-            applyFilters(true);
+            applyFilters(false);
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "statusBatch", ids: [id], status: newStatus, user_id: myTgId }) });
         };
 
         window.executeBulkAction = function() {
             if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
             var targetStatus = currentTab === "WASHING" ? "DRYING" : "IN_CLOSET";
-            var affectedIds = items.filter(i => i.status === currentTab).map(i => i.id);
+            var affectedIds = items.filter(function(i) { return i.status === currentTab; }).map(function(i) { return i.id; });
             if (affectedIds.length === 0) return;
             
-            items.forEach(i => { if (affectedIds.includes(i.id)) i.status = targetStatus; });
+            items.forEach(function(i) { if (affectedIds.includes(i.id)) i.status = targetStatus; });
             
-            affectedIds.forEach(id => {
-                const card = document.getElementById('card-' + id);
+            affectedIds.forEach(function(id) {
+                var card = document.getElementById('card-' + id);
                 if(card) {
                     card.setAttribute('data-status', targetStatus);
                     card.querySelector('.move-bar').innerHTML = generateMoveButtons(id, targetStatus);
@@ -1062,26 +1454,24 @@
         function loadPhotoWithSpinner(imgElement, loaderElement, src, blurElement) {
             imgElement.style.opacity = '0';
             if (loaderElement) loaderElement.style.display = 'block';
-            imgElement.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'; 
-            
-            setTimeout(function() {
-                imgElement.onload = function() {
-                    if (loaderElement) loaderElement.style.display = 'none';
-                    imgElement.style.opacity = '1';
-                };
-                imgElement.src = src;
-                if (blurElement) blurElement.style.backgroundImage = 'url(' + src + ')';
-            }, 50);
+            imgElement.onload = function() {
+                if (loaderElement) loaderElement.style.display = 'none';
+                imgElement.style.opacity = '1';
+            };
+            imgElement.src = src;
+            if (blurElement) blurElement.style.backgroundImage = 'url(' + src + ')';
         }
 
-        // ZOOM View Logic
+        // ==========================================================================
+        // ПОЛНОЭКРАННЫЙ ЗУМ (IMAGE VIEWER)
+        // ==========================================================================
         var viewerImg = document.getElementById('viewerImg');
         var viewerContainer = document.getElementById('viewerContainer');
         var scale = 1, panX = 0, panY = 0, startPanX = 0, startPanY = 0, startScale = 1, startDistance = 0, focalX = 0, focalY = 0, isPanning = false, lastTap = 0;
 
         function resetZoomState() {
             scale = 1; panX = 0; panY = 0;
-            viewerImg.style.transition = 'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)';
+            viewerImg.style.transition = 'transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)';
             viewerImg.style.transform = "translate(0px, 0px) scale(1)";
         }
 
@@ -1089,10 +1479,8 @@
             if(!src) return;
             toggleBodyScroll(true);
             resetZoomState();
-            
             var fLoader = document.getElementById('fullscreenLoader');
             document.getElementById('imageViewer').classList.add('active');
-            
             loadPhotoWithSpinner(viewerImg, fLoader, src, null);
         };
         
@@ -1148,7 +1536,7 @@
                         var centerX = rect.left + rect.width / 2; var centerY = rect.top + rect.height / 2; 
                         var touchX = e.changedTouches[0].clientX; var touchY = e.changedTouches[0].clientY;
                         panX = (centerX - touchX) * (scale - 1); panY = (centerY - touchY) * (scale - 1);
-                        viewerImg.style.transition = 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)'; 
+                        viewerImg.style.transition = 'transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)'; 
                         viewerImg.style.transform = "translate(" + panX + "px, " + panY + "px) scale(" + scale + ")"; 
                     }
                 }
@@ -1157,7 +1545,9 @@
             if (e.touches.length === 1 && scale > 1) { isPanning = true; startPanX = panX; startPanY = panY; focalX = e.touches[0].clientX; focalY = e.touches[0].clientY; }
         });
 
-        // GENERATOR LOGIC
+        // ==========================================================================
+        // ГЕНЕРАТОР ОБРАЗОВ
+        // ==========================================================================
         var lockedSlots = { TOP: false, OUTER: false, BOTTOM: false, SHOES: false };
         var currentOutfit = { TOP: null, OUTER: null, BOTTOM: null, SHOES: null };
         var useOuterwear = true;
@@ -1170,7 +1560,7 @@
             sheet.style.transition = 'none';
             sheet.style.transform = 'translateY(100%)';
             
-            setTimeout(() => {
+            setTimeout(function() {
                 sheet.style.transition = '';
                 sheet.style.transform = '';
                 document.getElementById('generatorModal').classList.add('active');
@@ -1194,10 +1584,7 @@
             if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
             var rolesToRoll = ['TOP', 'BOTTOM', 'SHOES'];
             if (useOuterwear) rolesToRoll.unshift('OUTER');
-            
-            rolesToRoll.forEach(function(role) { 
-                if (!lockedSlots[role]) rollSlot(role); 
-            });
+            rolesToRoll.forEach(function(role) { if (!lockedSlots[role]) rollSlot(role); });
             renderGenerator();
         };
 
@@ -1205,7 +1592,6 @@
             var available = items.filter(function(i) { 
                 return i.status === 'IN_CLOSET' && parseCategoryField(i.category).role === role; 
             });
-            
             if (available.length > 0) { 
                 currentOutfit[role] = available[Math.floor(Math.random() * available.length)]; 
             } else { 
@@ -1244,18 +1630,24 @@
                 
                 if (it) {
                     var cObj = parseColorField(it.color);
-                    var photo = it.photo ? (it.photo.indexOf('sz=w1000') !== -1 ? it.photo.replace('sz=w1000', 'sz=w400') : it.photo) : NO_PHOTO_SVG;
-                    var metaLabel = (it.brand || '') + (it.brand && cObj.text ? ' ' : '') + cObj.text;
+                    var pCat = parseCategoryField(it.category);
+                    var cropStyle = getCropStyleString(pCat.crop);
+                    var photo = it.photo ? (it.photo.indexOf('sz=w1000') !== -1 ? it.photo.replace('sz=w1000', 'sz=w400') : it.photo) : '';
+                    var metaLabel = (it.brand || '') + (it.brand && cObj.text ? ' · ' : '') + cObj.text;
                     
-                    html += '<div class="gen-img-wrap" onclick="openModal(\'' + it.id + '\')"><div class="image-loader" style="display:block;"></div><img src="' + photo + '" class="gen-img" onload="this.style.opacity=1; this.previousElementSibling.style.display=\'none\';"></div>'; 
+                    var imgBlock = photo 
+                        ? '<div class="image-loader" style="display:block;"></div><img src="' + photo + '" class="gen-img" style="' + cropStyle + '" onload="this.style.opacity=1; this.previousElementSibling.style.display=\'none\';">'
+                        : '<div class="placeholder-img">' + NO_PHOTO_SVG + '</div>';
+
+                    html += '<div class="gen-img-wrap" onclick="openModal(\'' + it.id + '\')">' + imgBlock + '</div>'; 
                     html += '<div class="gen-info" onclick="openModal(\'' + it.id + '\')">'; 
                     html += '<div class="gen-item-title">' + (it.name || 'Без названия') + '</div>'; 
-                    html += '<div class="gen-item-meta">' + cObj.dot + '<span>' + metaLabel + '</span></div>'; 
+                    html += '<div class="gen-item-meta">' + cObj.dot + '<span>' + (metaLabel || 'Без бренда') + '</span></div>'; 
                     html += '</div>'; 
                     
                     html += '<div class="gen-actions">'; 
-                    html += '<button class="gen-btn ' + (locked ? 'locked' : '') + '" onclick="toggleLock(\'' + r.id + '\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></button>'; 
-                    html += '<button class="gen-btn" onclick="refreshSlot(\'' + r.id + '\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg></button>'; 
+                    html += '<button class="gen-btn ' + (locked ? 'locked' : '') + '" onclick="toggleLock(\'' + r.id + '\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></button>'; 
+                    html += '<button class="gen-btn" onclick="refreshSlot(\'' + r.id + '\')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg></button>'; 
                     html += '</div>'; 
                 } else {
                     html += '<div class="gen-empty">В шкафу нет вещей для этой категории</div>';
@@ -1265,7 +1657,9 @@
             container.innerHTML = html;
         }
 
-        // --- PROPERTIES MODAL LOGIC ---
+        // ==========================================================================
+        // МОДАЛЬНОЕ ОКНО ВЕЩИ И СОХРАНЕНИЕ
+        // ==========================================================================
         window.requestDelete = function() {
             if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
             document.getElementById('confirmDialog').classList.add('active');
@@ -1275,15 +1669,9 @@
             document.getElementById('confirmDialog').classList.remove('active');
             if (!editingId) return;
             
-            var newItems = [];
-            for(var i=0; i<items.length; i++) { 
-                if(String(items[i].id) !== String(editingId)) newItems.push(items[i]); 
-            }
-            items = newItems;
-            
-            localDataStr = JSON.stringify(items);
-            localStorage.setItem(CACHE_KEY, localDataStr); 
-            initGrid(); 
+            items = items.filter(function(i) { return String(i.id) !== String(editingId); });
+            localStorage.setItem(CACHE_KEY, JSON.stringify(items)); 
+            syncGrid(); 
             closeModal();
             
             fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "delete", id: editingId, user_id: myTgId }) });
@@ -1292,6 +1680,7 @@
         window.switchToEditMode = function() {
             document.getElementById('viewMode').style.display = 'none';
             document.getElementById('editMode').style.display = 'flex';
+            updateCropUIState(!!currentPhotoData);
         };
 
         window.openModal = function(id) {
@@ -1307,19 +1696,14 @@
             var loader = document.getElementById('viewPhotoLoader');
 
             viewImg.onload = null;
-            viewImg.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
             viewBlur.style.backgroundImage = 'none';
             viewImg.style.opacity = '0';
 
             if (id) {
-                var item = null;
-                for(var i=0; i<items.length; i++) { 
-                    if(String(items[i].id) === String(id)) { item = items[i]; break; } 
-                }
-                
+                var item = items.find(function(i) { return String(i.id) === String(id); });
                 var cObj = parseColorField(item.color);
                 var pCat = parseCategoryField(item.category);
-                var metaLabel = (item.brand || '') + (item.brand && cObj.text ? ' ' : '') + cObj.text;
+                currentCrop = { x: pCat.crop.x, y: pCat.crop.y, s: pCat.crop.s };
                 
                 document.getElementById('modalTitle').innerText = "Информация о вещи";
                 document.getElementById('viewName').innerText = item.name || "Без названия";
@@ -1332,8 +1716,8 @@
                     viewImg.style.display = 'none';
                 }
 
-                document.getElementById('viewCatTag').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path></svg>' + (pCat.name || "Нет категории");
-                document.getElementById('viewColorTag').innerHTML = cObj.dot + (cObj.text || "Цвет не указан");
+                document.getElementById('viewCatTag').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path></svg>' + (pCat.name || "Нет категории");
+                document.getElementById('viewColorTag').innerHTML = cObj.dot + '<span>' + (cObj.text || "Цвет не указан") + '</span>';
                 document.getElementById('viewBrand').innerText = item.brand || "Не указан";
                 
                 var statusText = item.status === "IN_CLOSET" ? "В шкафу" : (item.status === "WASHING" ? "В стирке" : "На сушилке");
@@ -1356,10 +1740,8 @@
                 document.getElementById('fNotes').value = item.notes || "";
                 
                 document.getElementById('fColorText').value = cObj.text;
-                document.getElementById('fColorHex1').value = cObj.hex1; 
-                updateCircle(1);
-                document.getElementById('fColorHex2').value = cObj.hex2; 
-                updateCircle(2);
+                document.getElementById('fColorHex1').value = cObj.hex1; updateCircle(1);
+                document.getElementById('fColorHex2').value = cObj.hex2; updateCircle(2);
                 
                 document.getElementById('fHasCustomColors').value = cObj.hasCustom ? "true" : "false";
                 isColor2Active = cObj.isColor2Active;
@@ -1374,16 +1756,19 @@
                     prev.style.display = "block"; 
                     placeholder.style.display = "none"; 
                     changeBtn.style.display = "flex";
+                    updateCropUIState(true);
                 } else {
                     prev.style.display = "none"; 
                     placeholder.style.display = "flex"; 
                     changeBtn.style.display = "none";
+                    updateCropUIState(false);
                 }
                 document.getElementById('btnDelete').style.display = "block";
 
                 document.getElementById('viewMode').style.display = 'flex';
                 document.getElementById('editMode').style.display = 'none';
             } else {
+                currentCrop = { x: 50, y: 50, s: 1 };
                 document.getElementById('modalTitle').innerText = "Добавление вещи";
                 document.getElementById('fName').value = ""; 
                 document.getElementById('fRole').value = "UNASSIGNED"; 
@@ -1398,10 +1783,8 @@
                 document.getElementById('fColorText').value = ""; 
                 document.getElementById('fNotes').value = "";
                 
-                document.getElementById('fColorHex1').value = "#ffffff"; 
-                updateCircle(1);
-                document.getElementById('fColorHex2').value = "#ffffff"; 
-                updateCircle(2);
+                document.getElementById('fColorHex1').value = "#ffffff"; updateCircle(1);
+                document.getElementById('fColorHex2').value = "#ffffff"; updateCircle(2);
                 
                 document.getElementById('fHasCustomColors').value = "false";
                 isColor2Active = false;
@@ -1415,6 +1798,7 @@
                 placeholder.style.display = "flex"; 
                 changeBtn.style.display = "none";
                 document.getElementById('btnDelete').style.display = "none";
+                updateCropUIState(false);
 
                 document.getElementById('viewMode').style.display = 'none';
                 document.getElementById('editMode').style.display = 'flex';
@@ -1448,21 +1832,21 @@
                     var w = img.width, h = img.height;
                     
                     if (w > 1000 || h > 1000) { 
-                        if (w > h) { 
-                            h = Math.round(h * 1000 / w); w = 1000; 
-                        } else { 
-                            w = Math.round(w * 1000 / h); h = 1000; 
-                        } 
+                        if (w > h) { h = Math.round(h * 1000 / w); w = 1000; } 
+                        else { w = Math.round(w * 1000 / h); h = 1000; } 
                     }
                     
                     canvas.width = w; canvas.height = h; 
                     canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    currentPhotoData = canvas.toDataURL('image/jpeg', 0.88);
+                    currentPhotoData = canvas.toDataURL('image/jpeg', 0.86);
+                    currentCrop = { x: 50, y: 50, s: 1 };
                     
-                    document.getElementById('photoPreview').src = currentPhotoData; 
-                    document.getElementById('photoPreview').style.display = "block"; 
+                    var prev = document.getElementById('photoPreview');
+                    prev.src = currentPhotoData; 
+                    prev.style.display = "block"; 
                     document.getElementById('photoPlaceholder').style.display = "none";
                     document.getElementById('btnChangePhoto').style.display = "flex";
+                    updateCropUIState(true);
                 };
                 img.src = ev.target.result;
             };
@@ -1472,7 +1856,7 @@
 
         window.saveCurrentItem = async function() {
             if (!currentPhotoData) {
-                alert("Добавь фотографию вещи!");
+                alert("Добавьте фотографию вещи!");
                 return;
             }
             if (typeof tg !== 'undefined' && tg) tg.HapticFeedback.impactOccurred('light');
@@ -1490,7 +1874,10 @@
                 }
             }
 
-            var finalCategory = document.getElementById('fRole').value + "||" + document.getElementById('fCategory').value.trim();
+            var cropSuffix = (currentCrop.x !== 50 || currentCrop.y !== 50 || currentCrop.s !== 1) 
+                ? ("||" + currentCrop.x + "," + currentCrop.y + "," + currentCrop.s) 
+                : "";
+            var finalCategory = document.getElementById('fRole').value + "||" + document.getElementById('fCategory').value.trim() + cropSuffix;
 
             var itemObj = {
                 id: editingId ? String(editingId) : String(Date.now()),
@@ -1504,19 +1891,16 @@
             };
 
             if (editingId) { 
-                var idx = -1;
-                for(var i=0; i<items.length; i++) { 
-                    if(String(items[i].id) === String(editingId)) { idx = i; break; } 
-                }
+                var idx = items.findIndex(function(i) { return String(i.id) === String(editingId); });
                 if (idx !== -1) items[idx] = itemObj; 
             } else { 
                 items.unshift(itemObj); 
             }
 
             localStorage.setItem(CACHE_KEY, JSON.stringify(items)); 
-            initGrid(); 
+            syncGrid(); 
             closeModal(); 
-            showSync("Сохранение данных...");
+            showSync("Сохранение...");
             
             fetch(API_URL, { 
                 method: "POST", 
@@ -1532,10 +1916,10 @@
                             break; 
                         }
                     }
-                    initGrid();
+                    syncGrid();
                 }
                 showSync("");
-            }).catch(function(e) { showSync(""); });
+            }).catch(function() { showSync(""); });
         };
     </script>
 </body>
